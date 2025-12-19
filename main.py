@@ -24,26 +24,7 @@ characterSprites = [pygame.image.load(f"{characterPath}{characterDirection}Sprit
                 pygame.image.load(f"{characterPath}{characterDirection}Sprite2.png"),
                 pygame.image.load(f"{characterPath}{characterDirection}Sprite3.png")]
 
-
-def load_image(name):
-    # Joins the current directory path with the image name for cross-platform compatibility
-    fullname = os.path.join(os.path.dirname(__file__), name)
-    try:
-        image = pygame.image.load(fullname)
-        # Use convert_alpha() for images with transparency (like PNGs)
-        if name.endswith('.png'):
-            return image.convert_alpha()
-        else:
-            return image.convert() # Use convert() for opaque images
-    except pygame.error as message:
-        print(f"Cannot load image: {name}")
-        raise SystemExit(message)
-
-player_image = load_image('character.png')
-player_rect = player_image.get_rect()
-
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-player_rect.center = player_pos
 enemy_pos = pygame.Vector2(20, 20)
 
 
