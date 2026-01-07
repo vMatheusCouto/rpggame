@@ -1,0 +1,6 @@
+# Steps
+
+```
+source .venv/bin/activate.fish
+python main.py
+```
