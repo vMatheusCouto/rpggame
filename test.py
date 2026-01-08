@@ -47,10 +47,8 @@ text_rect.center = (screen.get_width() / 2, screen.get_height() / 2) # Center th
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 enemy_pos = pygame.Vector2(20, 20)
 
-background_image_original = pygame.image.load('./assets/background4.png').convert()
+background_image_original = pygame.image.load('./assets/background3.png').convert()
 background_image = pygame.transform.scale(background_image_original, GAME_RESOLUTION)
-nonPassableRange = [[[77,84], [180, 141]]]
-nonPassableTiles = [[[8, 5],[13, 8]],[[3,3],[9,7]],[[0, 0],[4, 17]],[[5,12],[5,17]],[[5,14],[4,17]],[[5,15],[13,17]]]
 
 mapArray = []
 
@@ -107,26 +105,12 @@ while running:
                     enemyCanMove = False
         print("enemypos: ", enemy_pos.x)
         print("playerpos", player_pos.x)
-        print("Pos X:", player_pos.x)
-        print("Pos Y:", player_pos.y)
-
-        tileX = 0
-        for i in range(30):
-            if player_pos.x >= (i+1) * GAME_RESOLUTION[0] / 30 and player_pos.x <= (i+2) * GAME_RESOLUTION[0] / 30:
-                tileX = i+1
-                break
-        print(tileX)
-
-        tileY = 0
-        for i in range(18):
-            if player_pos.y >= (i+1) * GAME_RESOLUTION[1] / 18 and player_pos.y <= (i+2) * GAME_RESOLUTION[1] / 18:
-                tileY = i+1
-                break
-        print(tileY)
 
         canMove = True
         """ grid tile based
         speed = 2
+        print("Pos X:", player_pos.x)
+        print("Pos Y:", player_pos.y)
         print("Screen X:", GAME_RESOLUTION[0])
         print("Screen Y:", GAME_RESOLUTION[1])
         print(GAME_RESOLUTION[0] % player_pos.x)
@@ -168,7 +152,7 @@ while running:
                     movingDirection = "right"
         """
         if keys[pygame.K_LSHIFT]:
-            speed = 50
+            speed = 40
 
         if keys[pygame.K_h]:
             hunting = True
@@ -179,6 +163,8 @@ while running:
             moving = True
             newDirection = "up"
         if keys[pygame.K_s] and player_pos.y < screen.get_height() - borderLimit:
+            print("pos ", player_pos.y)
+            print("height ", screen.get_height())
             player_pos.y += speed * dt
             canMove = False
             moving = True
@@ -193,56 +179,8 @@ while running:
             canMove = False
             moving = True
             newDirection = "right"
-
-        targetTileX = 0
-        for i in range(30):
-            if player_pos.x >= (i+1) * GAME_RESOLUTION[0] / 30 and player_pos.x <= (i+2) * GAME_RESOLUTION[0] / 30:
-                targetTileX = i+1
-                break
-        print(targetTileX)
-
-        targetTileY = 0
-        for i in range(18):
-            if player_pos.y >= (i+1) * GAME_RESOLUTION[1] / 18 and player_pos.y <= (i+2) * GAME_RESOLUTION[1] / 18:
-                targetTileY = i+1
-                break
-        print(targetTileY)
-        if targetTileX != tileX:
-            print("AGORA SIM")
-
-        if targetTileY != targetTileY:
-            print("AGORA SIM")
-
+        speed = 16
         if moving:
-            goBack = False
-            for positions in nonPassableTiles:
-                if goBack:
-                    break
-                print(positions[0][0])
-                print(positions[1][0])
-                if int(targetTileX) in range(positions[0][0], positions[1][0]):
-                    print("não pode passar 1")
-                    if int(targetTileY) in range(positions[0][1], positions[1][1]):
-                        goBack = True
-                        print("não pode passar 2")
-
-            if movingDirection == "up" and goBack:
-                player_pos.y += speed * dt
-                print(f"Speed: {speed}")
-
-            if movingDirection == "down" and goBack:
-                player_pos.y -= speed * dt
-                print(f"Speed: {speed}")
-
-            if movingDirection == "right" and goBack:
-                player_pos.x -= speed * dt
-                print(f"Speed: {speed}")
-
-            if movingDirection == "left" and goBack:
-                player_pos.x += speed * dt
-                print(f"Speed: {speed}")
-
-
             value += 1
             moving = False
 
@@ -252,8 +190,6 @@ while running:
             movingDirection = newDirection
             changeDirection()
             value = 0
-
-        speed = 32
         image = characterSprites[value]
 
         screen.blit(image, player_pos)
