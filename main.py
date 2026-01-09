@@ -51,7 +51,7 @@ text_rect.center = (screen.get_width() / 2, screen.get_height() / 2) # Center th
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 enemy_pos = pygame.Vector2(20, 20)
 
-background_image_original = pygame.image.load('./assets/background4.png').convert()
+background_image_original = pygame.image.load('./assets/background.png').convert()
 background_image = pygame.transform.scale(background_image_original, GAME_RESOLUTION)
 nonPassableRange = [[[77,84], [180, 141]]]
 nonPassableTiles = [[[8, 5],[13, 8]],[[3,3],[9,7]],[[0, 0],[4, 17]],[[5,12],[5,17]],[[5,14],[4,17]],[[5,15],[13,17]]]
