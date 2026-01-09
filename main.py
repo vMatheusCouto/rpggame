@@ -20,21 +20,25 @@ movingDirection = "down"
 value = 0
 paused = False
 newDirection = "down"
+movingStatus = "idle"
 
-characterPath = "./assets/character/"
-characterDirection = f"{movingDirection}/"
-characterSprites = [pygame.image.load(f"{characterPath}{characterDirection}Sprite1.png"),
-                pygame.image.load(f"{characterPath}{characterDirection}Sprite2.png"),
-                pygame.image.load(f"{characterPath}{characterDirection}Sprite3.png")]
-def changeDirection():
+characterSprites = []
+def loadSprites():
     global characterSprites
     characterPath = "./assets/character/"
+    characterStatus = f"{movingStatus}/"
     characterDirection = f"{movingDirection}/"
-    characterSprites = [
-        pygame.image.load(f"{characterPath}{characterDirection}Sprite1.png"),
-        pygame.image.load(f"{characterPath}{characterDirection}Sprite2.png"),
-        pygame.image.load(f"{characterPath}{characterDirection}Sprite3.png"),
-    ]
+    characterSprites = []
+    characterSpritesCount = 0
+    if movingStatus == "idle":
+        characterSpritesCount = 4
+    elif movingStatus == "walking":
+        characterSpritesCount = 6
+    for count in range(characterSpritesCount):
+        print(count)
+        characterSprites.append(pygame.image.load(f"{characterPath}{characterStatus}{characterDirection}characterbase{count+1}.png"))
+
+loadSprites()
 
 pygame.font.init()
 font = pygame.font.Font(None, 30) # None uses the default built-in font
@@ -109,7 +113,18 @@ while running:
         print("playerpos", player_pos.x)
         print("Pos X:", player_pos.x)
         print("Pos Y:", player_pos.y)
+        """
+        TILE_SIZE = 21
 
+        for y in range(0, GAME_RESOLUTION[1], TILE_SIZE):
+            for x in range(0, GAME_RESOLUTION[0], TILE_SIZE):
+                pygame.draw.rect(
+                    screen,
+                    (255, 0, 0),
+                    (x, y, TILE_SIZE, TILE_SIZE),
+                    1  # outline only
+                )
+        """
         tileX = 0
         for i in range(30):
             if player_pos.x >= (i+1) * GAME_RESOLUTION[0] / 30 and player_pos.x <= (i+2) * GAME_RESOLUTION[0] / 30:
@@ -172,26 +187,31 @@ while running:
 
         if keys[pygame.K_h]:
             hunting = True
+        movingStatus = "idle"
 
         if keys[pygame.K_w] and canMove and player_pos.y > borderLimit:
             player_pos.y -= speed * dt
             canMove = False
             moving = True
+            movingStatus = "walking"
             newDirection = "up"
         if keys[pygame.K_s] and player_pos.y < screen.get_height() - borderLimit:
             player_pos.y += speed * dt
             canMove = False
             moving = True
+            movingStatus = "walking"
             newDirection = "down"
         if keys[pygame.K_a] and canMove and player_pos.x > borderLimit:
             player_pos.x -= speed * dt
             canMove = False
             moving = True
+            movingStatus = "walking"
             newDirection = "left"
         if keys[pygame.K_d] and canMove and player_pos.x < screen.get_width() - borderLimit:
             player_pos.x += speed * dt
             canMove = False
             moving = True
+            movingStatus = "walking"
             newDirection = "right"
 
         targetTileX = 0
@@ -242,18 +262,20 @@ while running:
                 player_pos.x += speed * dt
                 print(f"Speed: {speed}")
 
-
-            value += 1
             moving = False
 
+        value += 1
         if value >= len(characterSprites):
             value = 0
         if newDirection != movingDirection:
             movingDirection = newDirection
-            changeDirection()
-            value = 0
 
+        loadSprites()
+        if value >= len(characterSprites):
+            value = 0
         speed = 32
+        print("Value",value)
+        print("Status",movingStatus)
         image = characterSprites[value]
 
         screen.blit(image, player_pos)
