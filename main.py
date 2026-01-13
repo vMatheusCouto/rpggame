@@ -280,11 +280,7 @@ while running:
 
         screen.blit(image, player_pos)
         pygame.display.update()
-
-        pygame.draw.circle(screen, "red", enemy_pos, 4)
-
         pygame.display.flip()
-
         dt = clock.tick(12) / 1000
 
 
