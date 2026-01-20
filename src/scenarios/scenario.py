@@ -17,6 +17,10 @@ class ScenarioOpenWorld(Scenario):
 
     def keyActions(self, keys):
         canMove = True
+        
+        props.setSpeed(35)
+        if keys[pygame.K_LSHIFT]:
+            props.setSpeed(60)
         if keys[pygame.K_w] and canMove:
             walkUp()
             canMove = False

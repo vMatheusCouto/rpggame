@@ -8,6 +8,7 @@ def currentFrameProps():
 
 def currentFrame(keys):
     props.setMoving(False)
+    props.setStatus("idle")
     world.current_map.keyActions(keys)
     world.player_pos
     screen = props.getScreen()

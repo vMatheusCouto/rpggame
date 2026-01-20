@@ -6,15 +6,16 @@ characterSprites = []
 def loadSprites():
     global characterSprites
     characterStatus = f"{props.getStatus()}/"
-    characterDirection = f"{props.getMoving()}/"
+    characterDirection = f"{props.getDirection()}/"
     characterSprites = []
     characterSpritesCount = 0
     if props.getStatus() == "idle":
+        characterDirection = "down"
         characterSpritesCount = 4
     elif props.getStatus() == "walking":
         characterSpritesCount = 6
     for count in range(characterSpritesCount):
-        characterSprites.append(pygame.image.load(CHARACTER_ASSETS / f"{props.getStatus()}/{props.getDirection()}/characterbase{count+1}.png"))
+        characterSprites.append(pygame.image.load(CHARACTER_ASSETS / f"{props.getStatus()}/{characterDirection}/characterbase{count+1}.png"))
 
 class sprites:
     def __init__(self):

@@ -2,5 +2,6 @@
 
 ```
 source .venv/bin/activate.fish
-python main.py
+pip install pygame
+python -m src.run
 ```

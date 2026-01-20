@@ -183,7 +183,7 @@ while running:
                     movingDirection = "right"
         """
         if keys[pygame.K_LSHIFT]:
-            speed = 50
+            speed = 60
 
         if keys[pygame.K_h]:
             hunting = True
@@ -213,7 +213,7 @@ while running:
             moving = True
             movingStatus = "walking"
             newDirection = "right"
-
+            
         targetTileX = 0
         for i in range(30):
             if player_pos.x >= (i+1) * GAME_RESOLUTION[0] / 30 and player_pos.x <= (i+2) * GAME_RESOLUTION[0] / 30:

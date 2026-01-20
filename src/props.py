@@ -47,7 +47,10 @@ class Props:
 
     def getSpeed(self):
         return self.speed
-
+    
+    def setSpeed(self, speed):
+        self.speed = speed
+    
     def getClock(self):
         return self.clock
 
@@ -74,5 +77,4 @@ screen = pygame.display.set_mode(
     GAME_RESOLUTION, pygame.FULLSCREEN | pygame.SCALED
 )
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-
 props = Props(screen, player_pos)
