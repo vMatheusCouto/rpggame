@@ -7,7 +7,10 @@ spawn_position = (160, 150)
 
 eventTiles = [
     [
-        [(10, 8),],
+        [(10, 8),
+        (9,8),
+        (9,7),
+        (10,7)],
         "mapevent",
         "spawn"
     ]
