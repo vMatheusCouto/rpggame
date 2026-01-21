@@ -24,11 +24,11 @@ def currentFrame(keys):
     if keys[pygame.K_q]:
         props.stopRunning()
     if keys[pygame.K_c]:
-        currentFrameProps()
         world.setMapByName("cave")
-    if keys[pygame.K_m]:
         currentFrameProps()
+    if keys[pygame.K_m]:
         world.setMapByName("spawn")
+        currentFrameProps()
 
     screen.blit(props.getBackground(), (0, 0))
 
