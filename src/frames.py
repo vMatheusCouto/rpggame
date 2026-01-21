@@ -31,7 +31,7 @@ def currentFrame(keys):
     screen.blit(props.getBackground(), (0, 0))
 
     (tileX, tileY) = getTilePos(props.getPlayerPos())
-    text_surface = font.render(f"x = {props.getPlayerPos().x} ({tileX}) z = {props.getPlayerPos().y} ({tileY})", True, (255, 255, 255)) # White text
+    text_surface = font.render(f"x = {props.getPlayerPos().x} ({tileX}) z = {props.getPlayerPos().y} ({tileY})", True, (255, 255, 255))
 
     text_rect = text_surface.get_rect()
     text_rect = (10, 10)
