@@ -6,12 +6,18 @@ def walk():
     props.setMoving(True)
     props.setStatus("walking")
 
+def stopped(direction):
+    props.setMoving(False)
+    props.setStatus("walking")
+    props.setDirection(direction)
+
 def walkUp(blockedTiles):
     walk()
     props.player_pos.y -= props.getSpeed() * props.getDT()
     props.setDirection("up")
     if not canWalk(blockedTiles):
         walkDown(blockedTiles)
+        stopped("up")
 
 def walkDown(blockedTiles):
     walk()
@@ -19,6 +25,7 @@ def walkDown(blockedTiles):
     props.setDirection("down")
     if not canWalk(blockedTiles):
         walkUp(blockedTiles)
+        stopped("down")
 
 def walkRight(blockedTiles):
     walk()
@@ -26,6 +33,7 @@ def walkRight(blockedTiles):
     props.setDirection("right")
     if not canWalk(blockedTiles):
         walkLeft(blockedTiles)
+        stopped("right")
 
 def walkLeft(blockedTiles):
     walk()
@@ -33,4 +41,5 @@ def walkLeft(blockedTiles):
     props.setDirection("left")
     if not canWalk(blockedTiles):
         walkRight(blockedTiles)
+        stopped("left")
 
