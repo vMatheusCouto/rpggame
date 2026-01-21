@@ -5,15 +5,12 @@ from src.frames import *
 
 pygame.init()
 
-# Display
 pygame.display.set_caption("RPG Game")
 pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 0)
 
 currentFrameProps()
 
-# Time
 clock = pygame.time.Clock()
-
 pygame.font.init()
 
 while props.getRunning():

@@ -10,6 +10,8 @@ class World:
 
     def setMap(self, map):
         self.current_map = map
+        props.player_pos.x = map.spawn_position[0]
+        props.player_pos.y = map.spawn_position[1]
 
     def setMapByName(self, map):
         if map == "cave":

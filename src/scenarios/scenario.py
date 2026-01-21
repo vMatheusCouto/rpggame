@@ -10,11 +10,12 @@ class Scenario(ABC):
         pass
 
 class ScenarioOpenWorld(Scenario):
-    def __init__(self, imagePath, blockedTiles, topLayerPath):
+    def __init__(self, imagePath, blockedTiles, topLayerPath, spawn_position):
         super().__init__(imagePath)
         self.blockedTiles = blockedTiles
         self.events = []
         self.topLayerPath = topLayerPath
+        self.spawn_position = spawn_position
 
     def keyActions(self, keys, blockedTiles):
         canMove = True

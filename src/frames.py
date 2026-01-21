@@ -9,9 +9,11 @@ def currentFrameProps():
     top_layer_image = pygame.image.load(world.current_map.topLayerPath).convert_alpha()
     props.setBackground(background_image)
     props.setTopLayer(top_layer_image)
+    props.player_pos.x = world.current_map.spawn_position[0]
+    props.player_pos.y = world.current_map.spawn_position[1]
 
 pygame.font.init()
-font = pygame.font.Font(None, 16) # None uses the default built-in font
+font = pygame.font.Font(None, 16)
 
 def currentFrame(keys):
     props.setMoving(False)
@@ -34,7 +36,7 @@ def currentFrame(keys):
     text_surface = font.render(f"x = {props.getPlayerPos().x} ({tileX}) z = {props.getPlayerPos().y} ({tileY})", True, (255, 255, 255)) # White text
 
     text_rect = text_surface.get_rect()
-    text_rect.center = (screen.get_width() / 2, screen.get_height() / 2) # Center the text on the screen
+    text_rect = (10, 10)
 
     screen.blit(text_surface, text_rect)
     screen.blit(sprite.getSprite(), (props.getPlayerPos().x - 16, props.getPlayerPos().y - 16))
