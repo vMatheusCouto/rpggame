@@ -3,7 +3,16 @@ from src.utils.paths import WORLD_ASSETS
 
 background_path = WORLD_ASSETS / "cave/background.png"
 top_layer_path = WORLD_ASSETS / "cave/toplayer.png"
-spawn_position = (160, 136)
+spawn_position = (160, 150)
+
+eventTiles = [
+    [
+        [(10, 8),],
+        "mapevent",
+        "spawn"
+    ]
+]
+
 nonPassableTiles = [
   (0, 0),
   (1, 0),
@@ -501,4 +510,4 @@ nonPassableTiles = [
   (29, 23),
   (30, 23)
 ]
-Cave = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position)
+Cave = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles)

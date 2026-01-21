@@ -18,17 +18,15 @@ font = pygame.font.Font(None, 16)
 def currentFrame(keys):
     props.setMoving(False)
     props.setStatus("idle")
-    world.current_map.keyActions(keys, world.current_map.blockedTiles)
+    event = world.current_map.keyActions(keys, world.current_map.blockedTiles, world.current_map.eventTiles)
+    if event:
+        if event[0] == "mapevent":
+            world.setMapByName(event[1])
+            currentFrameProps()
     screen = props.getScreen()
 
     if keys[pygame.K_q]:
         props.stopRunning()
-    if keys[pygame.K_c]:
-        world.setMapByName("cave")
-        currentFrameProps()
-    if keys[pygame.K_m]:
-        world.setMapByName("spawn")
-        currentFrameProps()
 
     screen.blit(props.getBackground(), (0, 0))
 
