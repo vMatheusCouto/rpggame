@@ -10,28 +10,29 @@ class Scenario(ABC):
         pass
 
 class ScenarioOpenWorld(Scenario):
-    def __init__(self, imagePath, blockedTiles):
+    def __init__(self, imagePath, blockedTiles, topLayerPath):
         super().__init__(imagePath)
         self.blockedTiles = blockedTiles
         self.events = []
+        self.topLayerPath = topLayerPath
 
-    def keyActions(self, keys):
+    def keyActions(self, keys, blockedTiles):
         canMove = True
-        
+
         props.setSpeed(35)
         if keys[pygame.K_LSHIFT]:
             props.setSpeed(60)
         if keys[pygame.K_w] and canMove:
-            walkUp()
+            walkUp(blockedTiles)
             canMove = False
         if keys[pygame.K_s] and canMove:
-            walkDown()
+            walkDown(blockedTiles)
             canMove = False
         if keys[pygame.K_a] and canMove:
-            walkLeft()
+            walkLeft(blockedTiles)
             canMove = False
         if keys[pygame.K_d] and canMove:
-            walkRight()
+            walkRight(blockedTiles)
             canMove = False
 
 class ScenarioDialogue(Scenario):

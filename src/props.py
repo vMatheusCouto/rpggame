@@ -7,6 +7,7 @@ class Props:
         self.screen = screen
         self.player_pos = player_pos
         self.background = None
+        self.topLayer = None
         self.running = True
         self.speed = 40
         self.clock = clock
@@ -39,6 +40,12 @@ class Props:
     def getBackground(self):
         return self.background
 
+    def setTopLayer(self, topLayer):
+        self.topLayer = topLayer
+
+    def getTopLayer(self):
+        return self.topLayer
+
     def getRunning(self):
         return self.running
 
@@ -47,10 +54,10 @@ class Props:
 
     def getSpeed(self):
         return self.speed
-    
+
     def setSpeed(self, speed):
         self.speed = speed
-    
+
     def getClock(self):
         return self.clock
 

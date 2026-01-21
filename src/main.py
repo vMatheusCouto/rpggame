@@ -9,12 +9,12 @@ pygame.init()
 pygame.display.set_caption("RPG Game")
 pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 0)
 
-
-background_image = pygame.image.load(currentFrameProps()).convert()
-props.setBackground(background_image)
+currentFrameProps()
 
 # Time
 clock = pygame.time.Clock()
+
+pygame.font.init()
 
 while props.getRunning():
     for event in pygame.event.get():
