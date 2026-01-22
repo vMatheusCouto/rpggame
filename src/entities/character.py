@@ -22,10 +22,9 @@ class Character():
         return dano_total
 
 class Player(Character):
-    def __init__(self, name, hp, damage, inventory):
+    def __init__(self, name, hp, damage):
         super().__init__(name, hp, damage)
         self.level = 1
-        self.inventory = inventory
         self.potions = 1
 
 

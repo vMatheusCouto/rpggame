@@ -534,4 +534,5 @@ nonPassableTiles = [
   (38, 23),
   (39, 23)
 ]
+
 Spawn = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles)
