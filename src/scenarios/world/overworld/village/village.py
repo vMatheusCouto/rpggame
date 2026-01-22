@@ -13,7 +13,7 @@ eventTiles = [
         (39,9)],
         "mapevent",
         "spawn",
-        (614, 226)
+        (25, 230)
     ]
 ]
 

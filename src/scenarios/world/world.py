@@ -6,7 +6,7 @@ import pygame
 
 class World:
     def __init__(self):
-        self.current_map = Village
+        self.current_map = Spawn
         self.player_pos = pygame.Vector2(props.getScreen().get_width() / 2, props.getScreen().get_height() / 2)
 
     def setMap(self, map):
