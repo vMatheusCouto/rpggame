@@ -18,6 +18,9 @@ class ScenarioOpenWorld(Scenario):
         self.spawn_position = spawn_position
         self.eventTiles = eventTiles
 
+    def setSpawnPosition(self, position):
+        self.spawn_position = position
+
     def keyActions(self, keys, blockedTiles, eventTiles):
         canMove = True
         event = None

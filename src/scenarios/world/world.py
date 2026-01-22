@@ -1,11 +1,12 @@
 from src.scenarios.world.overworld.spawn.spawn import Spawn
 from src.scenarios.world.overworld.cave.cave import Cave
+from src.scenarios.world.overworld.village.village import Village
 from src.props import props
 import pygame
 
 class World:
     def __init__(self):
-        self.current_map = Spawn
+        self.current_map = Village
         self.player_pos = pygame.Vector2(props.getScreen().get_width() / 2, props.getScreen().get_height() / 2)
 
     def setMap(self, map):
@@ -18,6 +19,7 @@ class World:
             self.setMap(Cave)
         elif map == "spawn":
             self.setMap(Spawn)
-            print ("spawn")
+        elif map == "village":
+            self.setMap(Village)
 
 world = World()

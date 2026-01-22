@@ -22,6 +22,7 @@ def currentFrame(keys):
     if event:
         if event[0] == "mapevent":
             world.setMapByName(event[1])
+            world.current_map.setSpawnPosition(event[2])
             currentFrameProps()
     screen = props.getScreen()
 

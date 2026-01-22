@@ -1,8 +1,6 @@
-# Example file showing a circle moving on screen
 import os
 import pygame
 
-# pygame setup
 pygame.init()
 GAME_RESOLUTION = (640, 384)
 pygame.display.set_caption("Pixel Art Game")
@@ -41,11 +39,11 @@ def loadSprites():
 loadSprites()
 
 pygame.font.init()
-font = pygame.font.Font(None, 30) # None uses the default built-in font
-text_surface = font.render("Paused", True, (255, 255, 255)) # White text
+font = pygame.font.Font(None, 30)
+text_surface = font.render("Paused", True, (255, 255, 255))
 
 text_rect = text_surface.get_rect()
-text_rect.center = (screen.get_width() / 2, screen.get_height() / 2) # Center the text on the screen
+text_rect.center = (screen.get_width() / 2, screen.get_height() / 2)
 
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
@@ -183,7 +181,7 @@ while running:
                     movingDirection = "right"
         """
         if keys[pygame.K_LSHIFT]:
-            speed = 60
+            speed = 50
 
         if keys[pygame.K_h]:
             hunting = True
@@ -213,7 +211,7 @@ while running:
             moving = True
             movingStatus = "walking"
             newDirection = "right"
-            
+
         targetTileX = 0
         for i in range(30):
             if player_pos.x >= (i+1) * GAME_RESOLUTION[0] / 30 and player_pos.x <= (i+2) * GAME_RESOLUTION[0] / 30:
@@ -282,7 +280,6 @@ while running:
         pygame.display.update()
         pygame.display.flip()
         dt = clock.tick(12) / 1000
-
 
 pygame.quit()
 

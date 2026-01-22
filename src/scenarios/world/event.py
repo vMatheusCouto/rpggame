@@ -14,6 +14,5 @@ def getEvent(eventTiles):
             if targetTiles == tile:
                 runEvent = True
         if runEvent:
-            event = (position[1], position[2])
-            print(event[0], event[1])
+            event = (position[1], position[2], position[3])
     return event
