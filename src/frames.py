@@ -38,5 +38,5 @@ def currentFrame(keys):
     text_rect = (10, 10)
 
     screen.blit(text_surface, text_rect)
-    screen.blit(sprite.getSprite(), (props.getPlayerPos().x - 16, props.getPlayerPos().y - 16))
+    screen.blit(sprite.getSprite(), (props.getPlayerPos().x - 16, props.getPlayerPos().y - 24))
     screen.blit(props.getTopLayer(), (0, 0))

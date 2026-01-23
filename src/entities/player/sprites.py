@@ -14,6 +14,8 @@ def loadSprites():
         characterSpritesCount = 4
     elif props.getStatus() == "walking":
         characterSpritesCount = 6
+    elif props.getStatus() == "running":
+        characterSpritesCount = 6
     for count in range(characterSpritesCount):
         characterSprites.append(pygame.image.load(CHARACTER_ASSETS / f"{props.getStatus()}/{characterDirection}/characterbase{count+1}.png"))
 

@@ -24,9 +24,11 @@ class ScenarioOpenWorld(Scenario):
     def keyActions(self, keys, blockedTiles, eventTiles):
         canMove = True
         event = None
+        running = False
         props.setSpeed(35)
         if keys[pygame.K_LSHIFT]:
             props.setSpeed(60)
+            running = True
         if keys[pygame.K_w] and canMove:
             event = walkUp(blockedTiles, eventTiles)
             canMove = False
@@ -39,6 +41,8 @@ class ScenarioOpenWorld(Scenario):
         if keys[pygame.K_d] and canMove:
             event = walkRight(blockedTiles, eventTiles)
             canMove = False
+        if not canMove and running:
+            props.setStatus("running")
         return event
 
 class ScenarioDialogue(Scenario):
@@ -46,3 +50,4 @@ class ScenarioDialogue(Scenario):
 
 class ScenarioBattle(Scenario):
     pass
+
