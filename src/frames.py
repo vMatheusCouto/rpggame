@@ -64,9 +64,8 @@ def currentFrame(keys):
     screen.blit(props.getBackground(), (0, 0))
 
     if ACTIVE_MODE == "battle":
-        
-        battle_scene.render(screen)
 
+        battle_scene.render(screen)
 
         if battle_scene.request_exit:
             ACTIVE_MODE = "world"
