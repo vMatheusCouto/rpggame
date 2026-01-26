@@ -63,14 +63,24 @@ def currentFrame(keys):
 
     screen.blit(props.getBackground(), (0, 0))
 
-    (tileX, tileY) = getTilePos(props.getPlayerPos())
-    text_surface = font.render(f"x = {props.getPlayerPos().x} ({tileX}) z = {props.getPlayerPos().y} ({tileY})", True, (255, 255, 255))
+    if ACTIVE_MODE == "battle":
 
-    text_rect = text_surface.get_rect()
-    text_rect = (10, 10)
+        battle_scene.render(screen)
 
-    screen.blit(text_surface, text_rect)
+        if battle_scene.request_exit:
+            ACTIVE_MODE = "world"
+            battle_scene = None
+            currentFrameProps()
+        return
+
+
+    text_surface = font.render(
+        f"x = {props.getPlayerPos().x} ({tileX}) z = {props.getPlayerPos().y} ({tileY})",
+        True, (255, 255, 255)
+    )
+    screen.blit(text_surface, (10, 10))
     screen.blit(sprite.getSprite(), (props.getPlayerPos().x - 16, props.getPlayerPos().y - 24))
     top = props.getTopLayer()
     if top is not None:
         screen.blit(top, (0, 0))
+
