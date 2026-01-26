@@ -74,13 +74,12 @@ def currentFrame(keys):
         return
 
 
-    (tileX, tileY) = getTilePos(props.getPlayerPos())
     text_surface = font.render(
         f"x = {props.getPlayerPos().x} ({tileX}) z = {props.getPlayerPos().y} ({tileY})",
         True, (255, 255, 255)
     )
     screen.blit(text_surface, (10, 10))
-    screen.blit(sprite.getSprite(), (props.getPlayerPos().x - 16, props.getPlayerPos().y - 16))
+    screen.blit(sprite.getSprite(), (props.getPlayerPos().x - 16, props.getPlayerPos().y - 24))
     top = props.getTopLayer()
     if top is not None:
         screen.blit(top, (0, 0))
