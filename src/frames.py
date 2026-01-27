@@ -73,7 +73,7 @@ def currentFrame(keys):
             currentFrameProps()
         return
 
-
+    (tileX, tileY) = props.getPlayerPos()
     text_surface = font.render(
         f"x = {props.getPlayerPos().x} ({tileX}) z = {props.getPlayerPos().y} ({tileY})",
         True, (255, 255, 255)
