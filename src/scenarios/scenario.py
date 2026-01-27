@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from src.scenarios.world.overworld.movement import *
-from src.entities.character import Character, Player
+from src.entities.character import Character, Player, player
 from src.entities.enemy.enemies import Enemy
 from src.utils.paths import BATTLE_ASSETS, CHARACTER_ASSETS
 import pygame
@@ -52,19 +52,18 @@ class ScenarioDialogue(Scenario):
     pass
 
 class ScenarioBattle(Scenario):
-    def __init__(self):
+    def __init__(self, player_battle):
         super().__init__(BATTLE_ASSETS/"forest/background2")
 
         from src.props import props
         self.screen_w = props.getScreen().get_width()
         self.screen_h = props.getScreen().get_height()
 
-        self.player_battler = Player("Heroi", 100, 15)
-        self.enemy_battler = Enemy("Goblin", 100, 15)
+        self.player_battler = player
+        self.enemy_battler = Enemy("Goblin", 100, 15, 30)
         self.player_sprite = pygame.image.load(
         CHARACTER_ASSETS/"idle/up/characterbase1.png"
 )       .convert_alpha()
-
         self.enemy_sprite = pygame.image.load(
         BATTLE_ASSETS/"enemy/enemy.png"
         ).convert_alpha()
@@ -188,6 +187,9 @@ class ScenarioBattle(Scenario):
         if self.enemy_battler.hp <= 0:
             self._push_msg("Inimigo derrotado!")
             self._push_msg("VITORIA!")
+            xp = self.enemy_battler.drop_xp
+            self.player_battler.take_xp(xp)
+            self._push_msg(f"Você ganhou {xp} pontos de experiencia")
             self.battle_over = True
             return
 
@@ -204,11 +206,9 @@ class ScenarioBattle(Scenario):
         enemy_y = 70
         screen.blit(self.enemy_sprite, (enemy_x, enemy_y))
 
-
         player_x = 90
         player_y = self.screen_h - 210
         screen.blit(self.player_sprite, (player_x, player_y))
-
 
         self._draw_hp_box(
             screen,
@@ -230,6 +230,12 @@ class ScenarioBattle(Scenario):
             battler=self.player_battler,
             box_w=240,
             box_h=72
+        )
+        self._draw_text(
+            screen,
+            f"XP: {self.player_battler.xp}/100",
+            30,
+            self.screen_h - 58
         )
 
         box = pygame.Rect(0, self.screen_h - 96, self.screen_w, 96)
