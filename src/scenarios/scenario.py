@@ -128,7 +128,6 @@ class ScenarioBattle(Scenario):
                 self._push_msg("DERROTA...")
                 self.battle_over = True
 
-
     def _hp_ratio(self, battler):
         if battler.max_hp <= 0:
             return 0
@@ -176,7 +175,7 @@ class ScenarioBattle(Scenario):
         self._draw_text(screen, f"{battler.hp}/{battler.max_hp}", x + box_w - 95, y + 46)
 
     def _fight_items(self):
-        move_names = [m["name"] for m in getattr(self.player_battler, "moves", [])]
+        move_names = [m.name for m in getattr(self.player_battler, "moves", [])]
         move_names = move_names[:4]
         return move_names + ["Voltar"]
 

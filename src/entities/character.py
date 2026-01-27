@@ -1,5 +1,5 @@
 import random
-
+from src.entities.attacks import Attack
 class Character():
     def __init__(self, name, hp, damage):
         self.name = name
@@ -32,36 +32,34 @@ class Player(Character):
         self.level = 1
         self.xp = 0
         self.potions = 1
-        self.moves = []
+        self.moves: list[Attack] = []
         self.learnset = [
-            (1, {"name": "Investida", "bonus": 0, "accuracy": 1}),
-            (5, {"name": "Golpe Rapido", "bonus": 3, "accuracy": 0.9}),
-            (8, {"name": "Corte", "bonus": 6, "accuracy": 0.75}),
-            (10, {"name": "Furia", "bonus": 10, "accuracy": 0.5}),
+            (1,  Attack("Investida", bonus=0,  accuracy=1.00)),
+            (5,  Attack("Golpe Rapido", bonus=3,  accuracy=0.90)),
+            (8,  Attack("Corte", bonus=6,  accuracy=0.75)),
+            (10, Attack("Furia", bonus=10, accuracy=0.50)),
         ]
-
+        self._learn_moves_for_current_level()
         self._learn_moves_for_current_level()
 
     def _learn_moves_for_current_level(self):
         for lvl_req, move in self.learnset:
-            if self.level >= lvl_req and not self.has_move(move["name"]):
+            if self.level >= lvl_req and not self.has_move(move.name):
                 if len(self.moves) < 4:
                     self.moves.append(move)
 
     def has_move(self, move_name: str) -> bool:
-        return any(m["name"] == move_name for m in self.moves)
+        return any(m.name == move_name for m in self.moves)
 
     def use_move(self, move_index: int, target):
         move = self.moves[move_index]
-        bonus = move["bonus"]
-        accuracy = move.get("accuracy", 1.0)
 
-        if random.random() > accuracy:
-            return move["name"], 0, False
+        if not move.roll_hit():
+            return move.name, 0, False
 
-        dano_total = max(1, self.damage + bonus + random.randint(-2, 2))
+        dano_total = max(1, self.damage + move.bonus + random.randint(-2, 2))
         target.hp -= dano_total
-        return move["name"], dano_total, True
+        return move.name, dano_total, True
 
     def take_xp(self, xp):
         self.xp += xp
