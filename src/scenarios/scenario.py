@@ -60,7 +60,7 @@ class ScenarioBattle(Scenario):
         self.screen_h = props.getScreen().get_height()
 
         self.player_battler = player
-        self.enemy_battler = Enemy("Goblin", 100, 15, 30)
+        self.enemy_battler = Enemy.enemyList[1]
         self.player_sprite = pygame.image.load(
         CHARACTER_ASSETS/"idle/up/characterbase1.png"
 )       .convert_alpha()
