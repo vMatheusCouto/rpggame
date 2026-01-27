@@ -54,9 +54,7 @@ class ScenarioBattle(Scenario):
         from src.props import props
         self.screen_w = props.getScreen().get_width()
         self.screen_h = props.getScreen().get_height()
-
         self.player_battler = player_battle
-
         self.enemy_battler = Enemy("Goblin", 100, 15, 500)
 
         self.player_sprite = pygame.image.load(
@@ -88,6 +86,11 @@ class ScenarioBattle(Scenario):
         # Controle de saída
         self.request_exit = False
         self.battle_over = False
+        # Tremor (shake) quando toma hit
+        self.player_hit_timer = 0
+        self.enemy_hit_timer = 0
+        self.shake_strength = 4   # pixels
+        self.pending_enemy_attack = False
 
         # Fonts
         pygame.font.init()
@@ -112,11 +115,30 @@ class ScenarioBattle(Scenario):
             self.message_queue.pop(0)
         if not self.message_queue:
             self.in_message = False
+        #contra ataque agendado
+        if not self.message_queue and self.pending_enemy_attack and not self.battle_over:
+            self.pending_enemy_attack = False
+
+            enemy_damage = self.enemy_battler.attack(self.player_battler)
+            self._push_msg(f"{self.enemy_battler.name} atacou!")
+            self._push_msg(f"Causou {enemy_damage} de dano!")
+            self.player_hit_timer = 10
+
+            if self.player_battler.hp <= 0:
+                self._push_msg("DERROTA...")
+                self.battle_over = True
+
 
     def _hp_ratio(self, battler):
         if battler.max_hp <= 0:
             return 0
         return max(0, min(1, battler.hp / battler.max_hp))
+
+    def _shake_offset(self, timer: int):
+        if timer <= 0:
+            return 0, 0
+        dx = self.shake_strength if (timer % 2 == 0) else -self.shake_strength
+        return dx, 0
 
     def _draw_panel(self, screen, rect, border=2):
         pygame.draw.rect(screen, (128, 128, 128), rect, border_radius=6)
@@ -154,7 +176,6 @@ class ScenarioBattle(Scenario):
         self._draw_text(screen, f"{battler.hp}/{battler.max_hp}", x + box_w - 95, y + 46)
 
     def _fight_items(self):
-        """Lista de golpes disponíveis (máx 4) + Voltar."""
         move_names = [m["name"] for m in getattr(self.player_battler, "moves", [])]
         move_names = move_names[:4]
         return move_names + ["Voltar"]
@@ -202,6 +223,7 @@ class ScenarioBattle(Scenario):
 
                 if hit:
                     self._push_msg(f"Causou {damage} de dano!")
+                    self.enemy_hit_timer = 10
                 else:
                     self._push_msg("Mas errou!")
 
@@ -221,10 +243,8 @@ class ScenarioBattle(Scenario):
                     self.battle_over = True
                     self.ui_mode = "main"
                     return
-
-                # Inimigo contra-ataca
-                enemy_damage = self.enemy_battler.attack(self.player_battler)
-                self._push_msg(f"{self.enemy_battler.name} causou {enemy_damage}!")
+                # agenda o contra-ataque
+                self.pending_enemy_attack = True
 
                 if self.player_battler.hp <= 0:
                     self._push_msg("DERROTA...")
@@ -262,11 +282,18 @@ class ScenarioBattle(Scenario):
         # Sprites
         enemy_x = self.screen_w - 190
         enemy_y = 70
-        screen.blit(self.enemy_sprite, (enemy_x, enemy_y))
+        dx, dy = self._shake_offset(self.enemy_hit_timer)
+        screen.blit(self.enemy_sprite, (enemy_x + dx, enemy_y + dy))
+
 
         player_x = 90
         player_y = self.screen_h - 210
-        screen.blit(self.player_sprite, (player_x, player_y))
+        dx, dy = self._shake_offset(self.player_hit_timer)
+        screen.blit(self.player_sprite, (player_x + dx, player_y + dy))
+        if self.enemy_hit_timer > 0:
+            self.enemy_hit_timer -= 1
+        if self.player_hit_timer > 0:
+            self.player_hit_timer -= 1
 
         # HUD inimigo
         self._draw_hp_box(
