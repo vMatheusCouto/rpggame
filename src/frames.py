@@ -59,6 +59,10 @@ def currentFrame(keys):
             world.setMapByName(event[1])
             world.current_map.setSpawnPosition(event[2])
             currentFrameProps()
+        if event[0] == "entityevent":
+            ACTIVE_MODE = "battle"
+            battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]])
+            currentFrameProps()
 
     screen = props.getScreen()
 
