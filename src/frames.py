@@ -39,7 +39,7 @@ def currentFrame(keys):
 
     if ACTIVE_MODE == "world" and keys[pygame.K_b]:
         ACTIVE_MODE = "battle"
-        battle_scene = ScenarioBattle(player, Enemy.enemyList[2])
+        battle_scene = ScenarioBattle(player, Enemy.enemyList[5])
         currentFrameProps()
         return
 

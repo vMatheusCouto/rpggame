@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from src.scenarios.world.overworld.movement import *
 from src.entities.character import Character, Player, player
 from src.entities.enemy.enemies import Enemy
-from src.utils.paths import BATTLE_ASSETS, CHARACTER_ASSETS
+from src.utils.paths import BATTLE_ASSETS, CHARACTER_ASSETS, ASSETS_DIR
 from src.props import props
 from src.entities.player.sprites import entitySprites
 import pygame
@@ -57,8 +57,11 @@ class ScenarioDialogue(Scenario):
 class ScenarioBattle(Scenario):
     def __init__(self, player_battle, enemy_battle):
         super().__init__(BATTLE_ASSETS / "forest/background2")
-
         from src.props import props
+        self.life_hud_img = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
+        self.life_hud_img_inverted = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
+        self.hudBar = (92,90)
+        self.enemyHudBar = (370,90)
         self.screen_w = props.getScreen().get_width()
         self.screen_h = props.getScreen().get_height()
         self.player_battler = player_battle
@@ -91,8 +94,8 @@ class ScenarioBattle(Scenario):
 
         # Fonts
         pygame.font.init()
-        self.font = pygame.font.Font(None, 18)
-        self.font_big = pygame.font.Font(None, 20)
+        self.font = pygame.font.Font(ASSETS_DIR / "Pixeled.ttf", 5)
+        self.font_big = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
 
     def _edge(self, key_name: str, is_down: bool) -> bool:
         """True só no frame em que a tecla foi pressionada (debounce)."""
@@ -150,30 +153,24 @@ class ScenarioBattle(Scenario):
 
     def _draw_hp_box(self, screen, x, y, name, level, battler, box_w=240, box_h=64):
         box = pygame.Rect(x, y, box_w, box_h)
-        self._draw_panel(screen, box)
 
-        self._draw_text(screen, f"{name}", x + 10, y + 8, big=True)
-        self._draw_text(screen, f"Lv {level}", x + box_w - 55, y + 10)
+        self._draw_text(screen, f"{name}", x + 2, y - 25, big=True)
+        # self._draw_text(screen, f"Lv {level}", x + 98, y - 25)
 
         bar_x = x + 10
         bar_y = y + 32
-        bar_w = box_w - 20
-        bar_h = 10
+        bar_w = 132
+        bar_h = 6
 
-        pygame.draw.rect(screen, (0, 0, 0), (bar_x, bar_y, bar_w, bar_h))
+        pygame.draw.rect(screen, (0, 0, 0), (x, y, bar_w, bar_h))
 
         ratio = self._hp_ratio(battler)
         fill_w = int(bar_w * ratio)
+        print(f"f{bar_w}")
 
-        if ratio > 0.5:
-            color = (60, 200, 80)
-        elif ratio > 0.2:
-            color = (220, 200, 60)
-        else:
-            color = (220, 70, 70)
-
-        pygame.draw.rect(screen, color, (bar_x, bar_y, fill_w, bar_h))
-        self._draw_text(screen, f"{battler.hp}/{battler.max_hp}", x + box_w - 95, y + 46)
+        color = (210, 14, 16)
+        pygame.draw.rect(screen, color, (x, y, fill_w, bar_h))
+        self._draw_text(screen, f"{battler.hp}/{battler.max_hp}", x + box_w - 140, y + 8)
 
     def _fight_items(self):
         move_names = [m.name for m in getattr(self.player_battler, "moves", [])]
@@ -183,7 +180,7 @@ class ScenarioBattle(Scenario):
     def keyActions(self, keys):
         up = self._edge("up", keys[pygame.K_w])
         down = self._edge("down", keys[pygame.K_s])
-        z = self._edge("z", keys[pygame.K_z])
+        z = self._edge("z", keys[pygame.K_RETURN])
         x = self._edge("x", keys[pygame.K_x])
 
         if self.in_message:
@@ -248,6 +245,7 @@ class ScenarioBattle(Scenario):
 
                 if self.player_battler.hp <= 0:
                     self._push_msg("DERROTA...")
+                    self.player_battle.hp = self.player_battle.max_hp
                     self.battle_over = True
 
                 self.ui_mode = "main"
@@ -280,8 +278,8 @@ class ScenarioBattle(Scenario):
 
     def render(self, screen):
         # Sprites
-        enemy_x = self.screen_w - 190
-        enemy_y = 70
+        enemy_x = self.screen_w - 230
+        enemy_y = 120
         dx, dy = self._shake_offset(self.enemy_hit_timer)
 
         enemy_frame = self.enemy_battler.getSprite().convert_alpha()
@@ -289,16 +287,17 @@ class ScenarioBattle(Scenario):
 
         screen.blit(enemy_sprite, (enemy_x + dx, enemy_y + dy))
 
-        player_x = 90
-        player_y = self.screen_h - 210
+        player_x = 130
+        player_y = 120
         props.setStatus("idle")
-        props.setDirection("up")
+        props.setDirection("right")
 
         player_frame = self.heroSprites.getSprite().convert_alpha()
         player_frame = pygame.transform.scale(player_frame, (96, 96))
 
         dx, dy = self._shake_offset(self.player_hit_timer)
         screen.blit(player_frame, (player_x + dx, player_y + dy))
+
 
         if self.enemy_hit_timer > 0:
             self.enemy_hit_timer -= 1
@@ -308,8 +307,8 @@ class ScenarioBattle(Scenario):
         # HUD inimigo
         self._draw_hp_box(
             screen,
-            x=self.screen_w - 260,
-            y=20,
+            x=self.enemyHudBar[0] + 21,
+            y=self.enemyHudBar[1] + 13,
             name=self.enemy_battler.name,
             level=3,
             battler=self.enemy_battler,
@@ -319,33 +318,33 @@ class ScenarioBattle(Scenario):
         # HUD player
         self._draw_hp_box(
             screen,
-            x=20,
-            y=self.screen_h - 150,
+            x=self.hudBar[0] + 21,
+            y=self.hudBar[1] + 13,
             name=self.player_battler.name,
             level=self.player_battler.level,
             battler=self.player_battler,
             box_w=240,
-            box_h=72
+            box_h=64
         )
-        # Caixa inferior (texto/menu)
-        box = pygame.Rect(0, self.screen_h - 96, self.screen_w, 96)
-        self._draw_panel(screen, box, border=3)
+
+        screen.blit(self.life_hud_img, self.hudBar)
+        screen.blit(self.life_hud_img_inverted, self.enemyHudBar)
 
         # Mostrar XP
         self._draw_text(
             screen,
             f"XP: {self.player_battler.xp}/100",
-            18,
-            self.screen_h - 58
+            x=self.enemyHudBar[0] - 260,
+            y=self.enemyHudBar[1] + 26,
         )
         # Mensagens ou menus
         if self.in_message and self.message_queue:
             msg = self.message_queue[0]
             self._draw_text(screen, msg, 18, self.screen_h - 80, big=True)
-            self._draw_text(screen, "Z: continuar", self.screen_w - 110, self.screen_h - 28)
+            self._draw_text(screen, "ENTER: continuar", self.screen_w - 110, self.screen_h - 28)
 
         elif self.battle_over:
-            self._draw_text(screen, "Z: voltar", self.screen_w - 95, self.screen_h - 28)
+            self._draw_text(screen, "ENTER: voltar", self.screen_w - 95, self.screen_h - 28)
 
         else:
             start_x = self.screen_w - 240
@@ -355,7 +354,7 @@ class ScenarioBattle(Scenario):
                 # Menu principal
                 for i, item in enumerate(self.menu_items):
                     y = start_y + i * 22
-                    prefix = "▶ " if i == self.menu_index else "  "
+                    prefix = "> " if i == self.menu_index else "  "
                     self._draw_text(screen, prefix + item, start_x + 50, y, big=True)
 
             elif self.ui_mode == "fight":
@@ -363,6 +362,6 @@ class ScenarioBattle(Scenario):
                 items = self._fight_items()
                 for i, item in enumerate(items):
                     y = start_y + i * 22
-                    prefix = "▶ " if i == self.fight_index else "  "
+                    prefix = "> " if i == self.fight_index else "  "
                     self._draw_text(screen, prefix + item, start_x + 10, y, big=True)
 
