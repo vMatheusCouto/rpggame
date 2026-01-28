@@ -1,9 +1,17 @@
 from src.scenarios.scenario import ScenarioOpenWorld
 from src.utils.paths import WORLD_ASSETS
+from src.entities.enemy.enemies import Enemy
 
 background_path = WORLD_ASSETS / "village/background.png"
 top_layer_path = WORLD_ASSETS / "village/toplayer.png"
 spawn_position = (300, 180)
+
+entities = [
+    {"enemy": Enemy.enemyList[7],
+    "position": (140,180)},
+    {"enemy": Enemy.enemyList[2],
+    "position": (380,160)}
+]
 
 eventTiles = [
     [
@@ -1898,4 +1906,4 @@ nonPassableTiles = [
   (78, 47),
   (79, 47)
 ]
-Village = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles)
+Village = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)

@@ -10,6 +10,9 @@ class World:
         self.current_map = Spawn
         self.player_pos = pygame.Vector2(props.getScreen().get_width() / 2, props.getScreen().get_height() / 2)
 
+    def getEntities(self):
+        return self.current_map.entities
+
     def setMap(self, map):
         self.current_map = map
         props.player_pos.x = map.spawn_position[0]

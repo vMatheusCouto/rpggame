@@ -1,9 +1,18 @@
 from src.scenarios.scenario import ScenarioOpenWorld
 from src.utils.paths import WORLD_ASSETS
 
+from src.entities.enemy.enemies import Enemy
+
 background_path = WORLD_ASSETS / "spawn/background.png"
 top_layer_path = WORLD_ASSETS / "spawn/toplayer.png"
 spawn_position = (150, 250)
+
+entities = [
+    {"enemy": Enemy.enemyList[3],
+    "position": (140,180)},
+    {"enemy": Enemy.enemyList[1],
+    "position": (370,180)}
+]
 
 eventTiles = [
     [
@@ -1967,4 +1976,4 @@ nonPassableTiles = [
   (79, 47)
 ]
 
-Spawn = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles)
+Spawn = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)

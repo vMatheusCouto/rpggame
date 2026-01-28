@@ -1,9 +1,17 @@
 from src.scenarios.scenario import ScenarioOpenWorld
 from src.utils.paths import WORLD_ASSETS
+from src.entities.enemy.enemies import Enemy
 
 background_path = WORLD_ASSETS / "cave/background.png"
 top_layer_path = WORLD_ASSETS / "cave/toplayer.png"
 spawn_position = (160, 150)
+
+entities = [
+    {"enemy": Enemy.enemyList[4],
+    "position": (365,200)},
+    {"enemy": Enemy.enemyList[5],
+    "position": (130,160)}
+]
 
 eventTiles = [
     [
@@ -1937,4 +1945,4 @@ nonPassableTiles = [
   (78, 47),
   (79, 47)
 ]
-Cave = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles)
+Cave = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)

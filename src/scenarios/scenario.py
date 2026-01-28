@@ -13,13 +13,14 @@ class Scenario(ABC):
         pass
 
 class ScenarioOpenWorld(Scenario):
-    def __init__(self, imagePath, blockedTiles, topLayerPath, spawn_position, eventTiles):
+    def __init__(self, imagePath, blockedTiles, topLayerPath, spawn_position, eventTiles, entities):
         super().__init__(imagePath)
         self.blockedTiles = blockedTiles
         self.events = []
         self.topLayerPath = topLayerPath
         self.spawn_position = spawn_position
         self.eventTiles = eventTiles
+        self.entities = entities
 
     def setSpawnPosition(self, position):
         self.spawn_position = position
@@ -59,7 +60,7 @@ class ScenarioBattle(Scenario):
         self.screen_w = props.getScreen().get_width()
         self.screen_h = props.getScreen().get_height()
         self.player_battler = player_battle
-        self.enemy_battler = Enemy("Goblin", 100, 15, 500)
+        self.enemy_battler = Enemy.enemyList[1]
 
         self.player_sprite = pygame.image.load(
             CHARACTER_ASSETS / "idle/up/characterbase1.png"
