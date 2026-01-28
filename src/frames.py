@@ -44,7 +44,7 @@ def currentFrame(keys):
     if ACTIVE_MODE == "world" and keys[pygame.K_b]:
         ACTIVE_MODE = "battle"
         position = props.getPlayerPos()
-        battle_scene = ScenarioBattle(player, Enemy.enemyList[5])
+        battle_scene = ScenarioBattle(player, Enemy.enemyList[5], world.current_map.name)
         currentFrameProps()
         return
 
@@ -66,17 +66,17 @@ def currentFrame(keys):
                 currentFrameProps()
             elif event[0] == "entityevent":
                 ACTIVE_MODE = "battle"
-                battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]])
+                battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]], world.current_map.name)
                 currentFrameProps()
         elif world.current_map.name == "cave":
             if random.randint(1, 50) == 2:
                 ACTIVE_MODE = "battle"
                 if random.randint(1, 4) == 3:
                     Enemy.enemyList[4].hp = Enemy.enemyList[4].max_hp
-                    battle_scene = ScenarioBattle(player, Enemy.enemyList[4])
+                    battle_scene = ScenarioBattle(player, Enemy.enemyList[4], world.current_map.name)
                 else:
                     Enemy.enemyList[0].hp = Enemy.enemyList[0].max_hp
-                    battle_scene = ScenarioBattle(player, Enemy.enemyList[0])
+                    battle_scene = ScenarioBattle(player, Enemy.enemyList[0], world.current_map.name)
                 currentFrameProps()
 
     screen = props.getScreen()

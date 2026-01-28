@@ -56,8 +56,8 @@ class ScenarioDialogue(Scenario):
     pass
 
 class ScenarioBattle(Scenario):
-    def __init__(self, player_battle, enemy_battle):
-        super().__init__(BATTLE_ASSETS / "forest/background2")
+    def __init__(self, player_battle, enemy_battle, backgroundName):
+        super().__init__(BATTLE_ASSETS / f"{backgroundName}/background.png")
         from src.props import props
         self.life_hud_img = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
         self.life_hud_img_inverted = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
