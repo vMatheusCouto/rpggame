@@ -13,13 +13,14 @@ class Scenario(ABC):
         pass
 
 class ScenarioOpenWorld(Scenario):
-    def __init__(self, imagePath, blockedTiles, topLayerPath, spawn_position, eventTiles):
+    def __init__(self, imagePath, blockedTiles, topLayerPath, spawn_position, eventTiles, entities):
         super().__init__(imagePath)
         self.blockedTiles = blockedTiles
         self.events = []
         self.topLayerPath = topLayerPath
         self.spawn_position = spawn_position
         self.eventTiles = eventTiles
+        self.entities = entities
 
     def setSpawnPosition(self, position):
         self.spawn_position = position
@@ -204,11 +205,11 @@ class ScenarioBattle(Scenario):
 
         enemy_x = self.screen_w - 190
         enemy_y = 70
-        screen.blit(self.enemy_sprite, (enemy_x, enemy_y))
+        screen.blit(self.enemy_battler.getSprite(), (enemy_x, enemy_y))
 
         player_x = 90
         player_y = self.screen_h - 210
-        screen.blit(self.player_sprite, (player_x, player_y))
+        screen.blit(self.player_battler.getSprite(), (player_x, player_y))
 
         self._draw_hp_box(
             screen,

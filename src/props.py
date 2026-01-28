@@ -15,6 +15,7 @@ class Props:
         self.status = "idle"
         self.direction = "down"
         self.moving = False
+        self.path = "player"
 
     def setDT(self, dt):
         self.dt = dt

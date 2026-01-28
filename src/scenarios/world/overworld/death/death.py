@@ -1,9 +1,17 @@
 from src.scenarios.scenario import ScenarioOpenWorld
 from src.utils.paths import WORLD_ASSETS
+from src.entities.enemy.enemies import Enemy
 
 background_path = WORLD_ASSETS / "death/background.png"
 top_layer_path = WORLD_ASSETS / "emptylayer.png"
 spawn_position = (300, 250)
+
+entities = [
+    {"enemy": Enemy.enemyList[3],
+    "position": (140,180)},
+    {"enemy": Enemy.enemyList[1],
+    "position": (370,180)}
+]
 
 eventTiles = [
     [
@@ -2362,4 +2370,4 @@ nonPassableTiles = [
   (78, 47),
   (79, 47)
 ]
-Death = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles)
+Death = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)

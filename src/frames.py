@@ -1,13 +1,14 @@
 from src.scenarios.world.world import world
 from src.scenarios.scenario import ScenarioBattle
 from src.props import props
-from src.entities.player.sprites import sprite
+from src.entities.player.sprites import entitySprites
 from src.entities.cordinates import getTilePos
-from src.entities.character import player
 import pygame
 
 ACTIVE_MODE = "world"
 battle_scene = None
+
+heroSprites = entitySprites(props)
 
 def currentFrameProps():
     global battle_scene
@@ -36,7 +37,7 @@ def currentFrame(keys):
 
     if ACTIVE_MODE == "world" and keys[pygame.K_b]:
         ACTIVE_MODE = "battle"
-        battle_scene = ScenarioBattle(player)
+        battle_scene = ScenarioBattle()
         currentFrameProps()
         return
 
@@ -80,7 +81,10 @@ def currentFrame(keys):
         True, (255, 255, 255)
     )
     screen.blit(text_surface, (10, 10))
-    screen.blit(sprite.getSprite(), (props.getPlayerPos().x - 16, props.getPlayerPos().y - 24))
+    enemies = world.getEntities()
+    for enemy in enemies:
+        screen.blit(enemy["enemy"].getSprite(), (enemy["position"]))
+    screen.blit(heroSprites.getSprite(), (props.getPlayerPos().x - 16, props.getPlayerPos().y - 24))
     top = props.getTopLayer()
     if top is not None:
         screen.blit(top, (0, 0))
