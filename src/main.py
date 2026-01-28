@@ -8,7 +8,7 @@ pygame.init()
 pygame.display.set_caption("RPG Game")
 pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 0)
 
-currentFrameProps()
+currentFrameProps(True)
 
 clock = pygame.time.Clock()
 pygame.font.init()
