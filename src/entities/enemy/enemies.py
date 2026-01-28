@@ -1,6 +1,8 @@
 from src.entities.character import Character
 from src.utils.paths import SRC_DIR
 from src.entities.player.sprites import entitySprites
+import random
+from src.entities.attacks import Attack
 import os
 import json
 class Enemy(Character):
@@ -14,6 +16,17 @@ class Enemy(Character):
         self.direction = "left"
         self.sprites = None
         self.position = position
+        self.moves = [
+            Attack("Arranhao", bonus=0, accuracy=0.95),
+            Attack("Mordida", bonus=4, accuracy=0.80),
+        ]
+    def use_random_move(self, target):
+        move = random.choice(self.moves)
+        if not move.roll_hit():
+            return move.name, 0, False
+        dano_total = max(1, self.damage + move.bonus + random.randint(-2, 2))
+        target.hp -= dano_total
+        return move.name, dano_total, True
 
     def setSprites(self, sprite):
         self.sprites = sprite
@@ -44,7 +57,7 @@ for enemy in sorted(entries):
                 hp=data["hp"],
                 damage=data["damage"],
                 drop_xp=data["drop_xp"],
-                path=f"enemies/{data["path"]}",
+                path=f'enemies/{data["path"]}',
                 position=(140,180)
             )
             enemySprite = entitySprites(currentEnemy)

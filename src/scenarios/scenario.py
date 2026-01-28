@@ -3,6 +3,8 @@ from src.scenarios.world.overworld.movement import *
 from src.entities.character import Character, Player, player
 from src.entities.enemy.enemies import Enemy
 from src.utils.paths import BATTLE_ASSETS, CHARACTER_ASSETS
+from src.props import props
+from src.entities.player.sprites import entitySprites
 import pygame
 class Scenario(ABC):
     def __init__(self, imagePath):
@@ -53,25 +55,15 @@ class ScenarioDialogue(Scenario):
     pass
 
 class ScenarioBattle(Scenario):
-    def __init__(self, player_battle):
+    def __init__(self, player_battle, enemy_battle):
         super().__init__(BATTLE_ASSETS / "forest/background2")
 
         from src.props import props
         self.screen_w = props.getScreen().get_width()
         self.screen_h = props.getScreen().get_height()
         self.player_battler = player_battle
-        self.enemy_battler = Enemy.enemyList[1]
-
-        self.player_sprite = pygame.image.load(
-            CHARACTER_ASSETS / "idle/up/characterbase1.png"
-        ).convert_alpha()
-
-        self.enemy_sprite = pygame.image.load(
-            BATTLE_ASSETS / "enemy/enemy.png"
-        ).convert_alpha()
-
-        self.player_sprite = pygame.transform.scale(self.player_sprite, (96, 96))
-        self.enemy_sprite = pygame.transform.scale(self.enemy_sprite, (96, 96))
+        self.enemy_battler = enemy_battle
+        self.heroSprites = entitySprites(props)
 
         # Menu principal
         self.menu_items = ["Lutar", "Bolsa", "Fugir"]
@@ -123,11 +115,15 @@ class ScenarioBattle(Scenario):
         #contra ataque agendado
         if not self.message_queue and self.pending_enemy_attack and not self.battle_over:
             self.pending_enemy_attack = False
+            move_name, dmg, hit = self.enemy_battler.use_random_move(self.player_battler)
+            self._push_msg(f"{self.enemy_battler.name} usou {move_name}!")
+            if hit:
+                self._push_msg(f"Causou {dmg} de dano!")
+                self.player_hit_timer = 10
+            else:
+                self._push_msg("Mas errou!")
 
-            enemy_damage = self.enemy_battler.attack(self.player_battler)
-            self._push_msg(f"{self.enemy_battler.name} atacou!")
-            self._push_msg(f"Causou {enemy_damage} de dano!")
-            self.player_hit_timer = 10
+                self.player_hit_timer = 10
 
             if self.player_battler.hp <= 0:
                 self._push_msg("DERROTA...")
@@ -287,13 +283,23 @@ class ScenarioBattle(Scenario):
         enemy_x = self.screen_w - 190
         enemy_y = 70
         dx, dy = self._shake_offset(self.enemy_hit_timer)
-        screen.blit(self.enemy_sprite, (enemy_x + dx, enemy_y + dy))
 
+        enemy_frame = self.enemy_battler.getSprite().convert_alpha()
+        enemy_sprite = pygame.transform.scale(enemy_frame, (96, 96))
+
+        screen.blit(enemy_sprite, (enemy_x + dx, enemy_y + dy))
 
         player_x = 90
         player_y = self.screen_h - 210
+        props.setStatus("idle")
+        props.setDirection("up")
+
+        player_frame = self.heroSprites.getSprite().convert_alpha()
+        player_frame = pygame.transform.scale(player_frame, (96, 96))
+
         dx, dy = self._shake_offset(self.player_hit_timer)
-        screen.blit(self.player_sprite, (player_x + dx, player_y + dy))
+        screen.blit(player_frame, (player_x + dx, player_y + dy))
+
         if self.enemy_hit_timer > 0:
             self.enemy_hit_timer -= 1
         if self.player_hit_timer > 0:
@@ -353,7 +359,7 @@ class ScenarioBattle(Scenario):
                     self._draw_text(screen, prefix + item, start_x + 50, y, big=True)
 
             elif self.ui_mode == "fight":
-                # Submenu de golpes (até 4 + Voltar)
+                # Submenu de golpes
                 items = self._fight_items()
                 for i, item in enumerate(items):
                     y = start_y + i * 22

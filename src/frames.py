@@ -1,8 +1,10 @@
+from src.entities.enemy.enemies import Enemy
 from src.scenarios.world.world import world
 from src.scenarios.scenario import ScenarioBattle
 from src.props import props
 from src.entities.player.sprites import entitySprites
 from src.entities.cordinates import getTilePos
+from src.entities.character import player
 import pygame
 
 ACTIVE_MODE = "world"
@@ -37,7 +39,7 @@ def currentFrame(keys):
 
     if ACTIVE_MODE == "world" and keys[pygame.K_b]:
         ACTIVE_MODE = "battle"
-        battle_scene = ScenarioBattle()
+        battle_scene = ScenarioBattle(player, Enemy.enemyList[2])
         currentFrameProps()
         return
 
