@@ -98,9 +98,9 @@ def currentFrame(keys):
             currentFrameProps()
         return
 
-    (tileX, tileY) = props.getPlayerPos()
+    (tileX, tileY) = getTilePos(props.getPlayerPos())
     text_surface = font.render(
-        f"x = {props.getPlayerPos().x} ({tileX}) z = {props.getPlayerPos().y} ({tileY})",
+        f"x = {int(props.getPlayerPos().x)} ({int(tileX)}) z = {int(props.getPlayerPos().y)} ({int(tileY)})",
         True, (255, 255, 255)
     )
     screen.blit(text_surface, (10, 10))
