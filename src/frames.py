@@ -1,3 +1,5 @@
+import pygame
+import random
 from src.entities.enemy.enemies import Enemy
 from src.scenarios.world.world import world
 from src.scenarios.scenario import ScenarioBattle
@@ -5,7 +7,7 @@ from src.props import props
 from src.entities.player.sprites import entitySprites
 from src.entities.cordinates import getTilePos
 from src.entities.character import player
-import pygame
+from src.utils.paths import ASSETS_DIR
 
 ACTIVE_MODE = "world"
 battle_scene = None
@@ -28,7 +30,7 @@ def currentFrameProps():
     props.player_pos.y = world.current_map.spawn_position[1]
 
 pygame.font.init()
-font = pygame.font.Font(None, 16)
+font = pygame.font.Font(ASSETS_DIR / "Pixeled.ttf", 5)
 
 def currentFrame(keys):
     global ACTIVE_MODE, battle_scene
@@ -37,8 +39,11 @@ def currentFrame(keys):
     props.setStatus("idle")
     event = None
 
+    position = None
+
     if ACTIVE_MODE == "world" and keys[pygame.K_b]:
         ACTIVE_MODE = "battle"
+        position = props.getPlayerPos()
         battle_scene = ScenarioBattle(player, Enemy.enemyList[5])
         currentFrameProps()
         return
@@ -54,15 +59,25 @@ def currentFrame(keys):
         battle_scene.keyActions(keys)
     else:
         event = world.current_map.keyActions(keys, world.current_map.blockedTiles, world.current_map.eventTiles)
-    if event:
-        if event[0] == "mapevent":
-            world.setMapByName(event[1])
-            world.current_map.setSpawnPosition(event[2])
-            currentFrameProps()
-        if event[0] == "entityevent":
-            ACTIVE_MODE = "battle"
-            battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]])
-            currentFrameProps()
+        if event:
+            if event[0] == "mapevent":
+                world.setMapByName(event[1])
+                world.current_map.setSpawnPosition(event[2])
+                currentFrameProps()
+            elif event[0] == "entityevent":
+                ACTIVE_MODE = "battle"
+                battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]])
+                currentFrameProps()
+        elif world.current_map.name == "cave":
+            if random.randint(1, 50) == 2:
+                ACTIVE_MODE = "battle"
+                if random.randint(1, 4) == 3:
+                    Enemy.enemyList[4].hp = Enemy.enemyList[4].max_hp
+                    battle_scene = ScenarioBattle(player, Enemy.enemyList[4])
+                else:
+                    Enemy.enemyList[0].hp = Enemy.enemyList[0].max_hp
+                    battle_scene = ScenarioBattle(player, Enemy.enemyList[0])
+                currentFrameProps()
 
     screen = props.getScreen()
 

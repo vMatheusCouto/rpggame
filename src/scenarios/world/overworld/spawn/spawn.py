@@ -2113,4 +2113,4 @@ nonPassableTiles = [
   (79, 47)
 ]
 
-Spawn = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)
+Spawn = ScenarioOpenWorld("spawn", background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)

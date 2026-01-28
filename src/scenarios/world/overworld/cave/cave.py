@@ -1945,4 +1945,4 @@ nonPassableTiles = [
   (78, 47),
   (79, 47)
 ]
-Cave = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)
+Cave = ScenarioOpenWorld("cave", background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)

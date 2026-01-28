@@ -15,8 +15,9 @@ class Scenario(ABC):
         pass
 
 class ScenarioOpenWorld(Scenario):
-    def __init__(self, imagePath, blockedTiles, topLayerPath, spawn_position, eventTiles, entities):
+    def __init__(self, name, imagePath, blockedTiles, topLayerPath, spawn_position, eventTiles, entities):
         super().__init__(imagePath)
+        self.name = name
         self.blockedTiles = blockedTiles
         self.events = []
         self.topLayerPath = topLayerPath

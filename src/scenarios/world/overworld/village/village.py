@@ -1906,4 +1906,4 @@ nonPassableTiles = [
   (78, 47),
   (79, 47)
 ]
-Village = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)
+Village = ScenarioOpenWorld("village", background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)
