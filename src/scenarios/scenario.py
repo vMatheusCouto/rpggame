@@ -226,7 +226,6 @@ class ScenarioBattle(Scenario):
                 else:
                     self._push_msg("Mas errou!")
 
-
                 if self.enemy_battler.hp <= 0:
                     self._push_msg("Inimigo derrotado!")
 
@@ -283,7 +282,6 @@ class ScenarioBattle(Scenario):
         enemy_y = 70
         dx, dy = self._shake_offset(self.enemy_hit_timer)
         screen.blit(self.enemy_sprite, (enemy_x + dx, enemy_y + dy))
-
 
         player_x = 90
         player_y = self.screen_h - 210
