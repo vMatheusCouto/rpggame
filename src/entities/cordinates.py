@@ -1,4 +1,4 @@
 def getTilePos(player_pos):
-    tileX = round(player_pos.x / (640/40))
-    tileY = round(player_pos.y / (384/24))
+    tileX = int(player_pos.x / (640/80))
+    tileY = int(player_pos.y / (384/48))
     return (tileX, tileY)

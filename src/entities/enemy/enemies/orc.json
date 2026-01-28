@@ -1,0 +1,7 @@
+{
+  "name": "orc",
+  "hp": 95,
+  "damage": 12,
+  "drop_xp": 20,
+  "path": "orc"
+}

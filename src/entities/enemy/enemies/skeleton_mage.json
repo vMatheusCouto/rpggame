@@ -1,0 +1,7 @@
+{
+  "name": "skeleton_mage",
+  "hp": 310,
+  "damage": 42,
+  "drop_xp": 140,
+  "path": "skeleton_mage"
+}

@@ -1,6 +1,7 @@
 from src.scenarios.world.overworld.spawn.spawn import Spawn
 from src.scenarios.world.overworld.cave.cave import Cave
 from src.scenarios.world.overworld.village.village import Village
+from src.scenarios.world.overworld.death.death import Death
 from src.props import props
 import pygame
 
@@ -8,6 +9,9 @@ class World:
     def __init__(self):
         self.current_map = Spawn
         self.player_pos = pygame.Vector2(props.getScreen().get_width() / 2, props.getScreen().get_height() / 2)
+
+    def getEntities(self):
+        return self.current_map.entities
 
     def setMap(self, map):
         self.current_map = map
