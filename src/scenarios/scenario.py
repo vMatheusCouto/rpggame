@@ -225,7 +225,6 @@ class ScenarioBattle(Scenario):
                 else:
                     self._push_msg("Mas errou!")
 
-
                 if self.enemy_battler.hp <= 0:
                     self._push_msg("Inimigo derrotado!")
 
@@ -283,6 +282,7 @@ class ScenarioBattle(Scenario):
         enemy_x = self.screen_w - 230
         enemy_y = 120
         dx, dy = self._shake_offset(self.enemy_hit_timer)
+
 
         enemy_frame = self.enemy_battler.getSprite().convert_alpha()
         enemy_sprite = pygame.transform.scale(enemy_frame, (96, 96))
@@ -346,6 +346,7 @@ class ScenarioBattle(Scenario):
             self._draw_text(screen, "ENTER: continuar", self.screen_w - 110, self.screen_h - 28)
 
         elif self.battle_over:
+
             self._draw_text(screen, "ENTER: voltar", self.screen_w - 95, self.screen_h - 28)
 
         else:
