@@ -8,9 +8,9 @@ spawn_position = (160, 150)
 
 entities = [
     {"enemy": Enemy.enemyList[4],
-    "position": (365,200)},
+    "position": (381,224)},
     {"enemy": Enemy.enemyList[5],
-    "position": (130,160)}
+    "position": (146,184)}
 ]
 
 eventTiles = [
