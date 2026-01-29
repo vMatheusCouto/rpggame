@@ -238,6 +238,7 @@ class ScenarioBattle(Scenario):
                         self._push_msg(f"SUBIU PARA O NIVEL {self.player_battler.level}!")
 
                     self._push_msg("VITORIA!")
+                    self.enemy_battler.defeated = True
                     self.battle_over = True
                     self.ui_mode = "main"
                     return

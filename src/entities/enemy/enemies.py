@@ -20,6 +20,7 @@ class Enemy(Character):
             Attack("Arranhao", bonus=0, accuracy=0.95),
             Attack("Mordida", bonus=4, accuracy=0.80),
         ]
+        self.defeated = False
     def use_random_move(self, target):
         move = random.choice(self.moves)
         if not move.roll_hit():

@@ -2,6 +2,6 @@
   "name": "Orc",
   "hp": 95,
   "damage": 12,
-  "drop_xp": 20,
+  "drop_xp": 800,
   "path": "orc"
 }

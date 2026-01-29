@@ -66,9 +66,13 @@ def currentFrame(keys):
                 world.current_map.setSpawnPosition(event[2])
                 currentFrameProps(True)
             elif event[0] == "entityevent":
-                ACTIVE_MODE = "battle"
-                battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]], world.current_map.name)
-                currentFrameProps()
+                if not Enemy.enemyList[event[1]].defeated:
+                    ACTIVE_MODE = "battle"
+                    if event[2] != (0,0):
+                        props.player_pos.x = event[2][0]
+                        props.player_pos.y = event[2][1]
+                    battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]], world.current_map.name)
+                    currentFrameProps()
         elif world.current_map.name == "cave":
             if props.getStatus() == "walking" or props.getStatus() == "running":
                 if random.randint(1, 80) == 2:
