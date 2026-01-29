@@ -1,3 +1,5 @@
+import pygame
+import random
 from src.entities.enemy.enemies import Enemy
 from src.scenarios.world.world import world
 from src.scenarios.scenario import ScenarioBattle
@@ -5,14 +7,14 @@ from src.props import props
 from src.entities.player.sprites import entitySprites
 from src.entities.cordinates import getTilePos
 from src.entities.character import player
-import pygame
+from src.utils.paths import ASSETS_DIR
 
 ACTIVE_MODE = "world"
 battle_scene = None
 
 heroSprites = entitySprites(props)
 
-def currentFrameProps():
+def currentFrameProps(respawn=False):
     global battle_scene
 
     if ACTIVE_MODE == "battle" and battle_scene is not None:
@@ -24,11 +26,12 @@ def currentFrameProps():
     top_layer_image = pygame.image.load(world.current_map.topLayerPath).convert_alpha()
     props.setBackground(background_image)
     props.setTopLayer(top_layer_image)
-    props.player_pos.x = world.current_map.spawn_position[0]
-    props.player_pos.y = world.current_map.spawn_position[1]
+    if respawn:
+        props.player_pos.x = world.current_map.spawn_position[0]
+        props.player_pos.y = world.current_map.spawn_position[1]
 
 pygame.font.init()
-font = pygame.font.Font(None, 16)
+font = pygame.font.Font(ASSETS_DIR / "Pixeled.ttf", 5)
 
 def currentFrame(keys):
     global ACTIVE_MODE, battle_scene
@@ -37,9 +40,12 @@ def currentFrame(keys):
     props.setStatus("idle")
     event = None
 
+    position = None
+
     if ACTIVE_MODE == "world" and keys[pygame.K_b]:
         ACTIVE_MODE = "battle"
-        battle_scene = ScenarioBattle(player, Enemy.enemyList[2])
+        position = props.getPlayerPos()
+        battle_scene = ScenarioBattle(player, Enemy.enemyList[5], world.current_map.name)
         currentFrameProps()
         return
 
@@ -54,15 +60,30 @@ def currentFrame(keys):
         battle_scene.keyActions(keys)
     else:
         event = world.current_map.keyActions(keys, world.current_map.blockedTiles, world.current_map.eventTiles)
-    if event:
-        if event[0] == "mapevent":
-            world.setMapByName(event[1])
-            world.current_map.setSpawnPosition(event[2])
-            currentFrameProps()
-        if event[0] == "entityevent":
-            ACTIVE_MODE = "battle"
-            battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]])
-            currentFrameProps()
+        if event:
+            if event[0] == "mapevent":
+                world.setMapByName(event[1])
+                world.current_map.setSpawnPosition(event[2])
+                currentFrameProps(True)
+            elif event[0] == "entityevent":
+                if not Enemy.enemyList[event[1]].defeated:
+                    ACTIVE_MODE = "battle"
+                    if event[2] != (0,0):
+                        props.player_pos.x = event[2][0]
+                        props.player_pos.y = event[2][1]
+                    battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]], world.current_map.name)
+                    currentFrameProps()
+        elif world.current_map.name == "cave":
+            if props.getStatus() == "walking" or props.getStatus() == "running":
+                if random.randint(1, 80) == 2:
+                    ACTIVE_MODE = "battle"
+                    if random.randint(1, 4) == 3:
+                        Enemy.enemyList[4].hp = Enemy.enemyList[4].max_hp
+                        battle_scene = ScenarioBattle(player, Enemy.enemyList[4], world.current_map.name)
+                    else:
+                        Enemy.enemyList[0].hp = Enemy.enemyList[0].max_hp
+                        battle_scene = ScenarioBattle(player, Enemy.enemyList[0], world.current_map.name)
+                    currentFrameProps()
 
     screen = props.getScreen()
 
@@ -81,9 +102,9 @@ def currentFrame(keys):
             currentFrameProps()
         return
 
-    (tileX, tileY) = props.getPlayerPos()
+    (tileX, tileY) = getTilePos(props.getPlayerPos())
     text_surface = font.render(
-        f"x = {props.getPlayerPos().x} ({tileX}) z = {props.getPlayerPos().y} ({tileY})",
+        f"x = {int(props.getPlayerPos().x)} ({int(tileX)}) z = {int(props.getPlayerPos().y)} ({int(tileY)})",
         True, (255, 255, 255)
     )
     screen.blit(text_surface, (10, 10))
