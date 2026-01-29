@@ -7,7 +7,7 @@ import os
 import json
 class Enemy(Character):
     enemyList = []
-    def __init__(self, name, hp, damage, drop_xp, path,position):
+    def __init__(self, name, hp, damage, drop_xp, path, mapName, position):
         super().__init__(name, hp, damage)
         self.enemy_path = path
         self.drop_xp = drop_xp
@@ -15,6 +15,7 @@ class Enemy(Character):
         self.status = "idle"
         self.direction = "left"
         self.sprites = None
+        self.mapName = mapName
         self.position = position
         self.moves = [
             Attack("Arranhao", bonus=0, accuracy=0.95),
@@ -59,7 +60,8 @@ for enemy in sorted(entries):
                 damage=data["damage"],
                 drop_xp=data["drop_xp"],
                 path=f'enemies/{data["path"]}',
-                position=(140,180)
+                mapName=data["map"],
+                position=(data["position"][0], data["position"][1])
             )
             enemySprite = entitySprites(currentEnemy)
             currentEnemy.setSprites(enemySprite)

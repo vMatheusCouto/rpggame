@@ -37,16 +37,16 @@ class ScenarioOpenWorld(Scenario):
             props.setSpeed(60)
             running = True
         if keys[pygame.K_w] and canMove:
-            event = walkUp(blockedTiles, eventTiles)
+            event = walkUp(eventTiles)
             canMove = False
         if keys[pygame.K_s] and canMove:
-            event = walkDown(blockedTiles, eventTiles)
+            event = walkDown(eventTiles)
             canMove = False
         if keys[pygame.K_a] and canMove:
-            event = walkLeft(blockedTiles, eventTiles)
+            event = walkLeft(eventTiles)
             canMove = False
         if keys[pygame.K_d] and canMove:
-            event = walkRight(blockedTiles, eventTiles)
+            event = walkRight(eventTiles)
             canMove = False
         if not canMove and running:
             props.setStatus("running")
@@ -167,7 +167,6 @@ class ScenarioBattle(Scenario):
 
         ratio = self._hp_ratio(battler)
         fill_w = int(bar_w * ratio)
-        print(f"f{bar_w}")
 
         color = (210, 14, 16)
         pygame.draw.rect(screen, color, (x, y, fill_w, bar_h))

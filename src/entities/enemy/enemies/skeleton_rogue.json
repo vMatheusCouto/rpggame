@@ -3,5 +3,7 @@
   "hp": 170,
   "damage": 22,
   "drop_xp": 52,
-  "path": "skeleton_rogue"
+  "path": "skeleton_rogue",
+  "map": "village",
+  "position": [468, 169]
 }

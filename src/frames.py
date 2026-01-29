@@ -3,11 +3,13 @@ import random
 from src.entities.enemy.enemies import Enemy
 from src.scenarios.world.world import world
 from src.scenarios.scenario import ScenarioBattle
+from src.scenarios.world.overworld.movement import *
 from src.props import props
 from src.entities.player.sprites import entitySprites
 from src.entities.cordinates import getTilePos
 from src.entities.character import player
 from src.utils.paths import ASSETS_DIR
+from src.scenarios.world.colision import entityColision
 
 ACTIVE_MODE = "world"
 battle_scene = None
@@ -59,21 +61,33 @@ def currentFrame(keys):
     if ACTIVE_MODE == "battle":
         battle_scene.keyActions(keys)
     else:
-        event = world.current_map.keyActions(keys, world.current_map.blockedTiles, world.current_map.eventTiles)
-        if event:
-            if event[0] == "mapevent":
-                world.setMapByName(event[1])
-                world.current_map.setSpawnPosition(event[2])
-                currentFrameProps(True)
-            elif event[0] == "entityevent":
-                if not Enemy.enemyList[event[1]].defeated:
-                    ACTIVE_MODE = "battle"
-                    if event[2] != (0,0):
-                        props.player_pos.x = event[2][0]
-                        props.player_pos.y = event[2][1]
-                    battle_scene = ScenarioBattle(player, Enemy.enemyList[event[1]], world.current_map.name)
-                    currentFrameProps()
-        elif world.current_map.name == "cave":
+        foundEnemy = False
+        for enemy in Enemy.enemyList:
+            if enemy.mapName == world.current_map.name:
+                if entityColision(props.player_pos, enemy.position):
+                    if not enemy.defeated:
+                        foundEnemy = True
+                        events = world.current_map.eventTiles
+                        if props.getDirection() == "down":
+                            props.player_pos.y -= props.getSpeed() * props.getDT()
+                        if props.getDirection() == "up":
+                            props.player_pos.y += props.getSpeed() * props.getDT()
+                        if props.getDirection() == "right":
+                            props.player_pos.x -= props.getSpeed() * props.getDT()
+                        if props.getDirection() == "left":
+                            props.player_pos.x += props.getSpeed() * props.getDT()
+                        ACTIVE_MODE = "battle"
+                        battle_scene = ScenarioBattle(player, enemy, world.current_map.name)
+                        currentFrameProps()
+
+        if not foundEnemy:
+            event = world.current_map.keyActions(keys, world.current_map.blockedTiles, world.current_map.eventTiles)
+            if event:
+                if event[0] == "mapevent":
+                    world.setMapByName(event[1])
+                    world.current_map.setSpawnPosition(event[2])
+                    currentFrameProps(True)
+        if world.current_map.name == "cave":
             if props.getStatus() == "walking" or props.getStatus() == "running":
                 if random.randint(1, 80) == 2:
                     ACTIVE_MODE = "battle"
@@ -108,9 +122,10 @@ def currentFrame(keys):
         True, (255, 255, 255)
     )
     screen.blit(text_surface, (10, 10))
-    enemies = world.getEntities()
-    for enemy in enemies:
-        screen.blit(enemy["enemy"].getSprite(), (enemy["position"]))
+    for enemy in Enemy.enemyList:
+        if enemy.mapName == world.current_map.name:
+            if not enemy.defeated:
+                screen.blit(enemy.getSprite(), (enemy.position[0] - 16, enemy.position[1] - 24))
     screen.blit(heroSprites.getSprite(), (props.getPlayerPos().x - 16, props.getPlayerPos().y - 24))
     top = props.getTopLayer()
     if top is not None:

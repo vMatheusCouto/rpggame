@@ -3,5 +3,7 @@
   "hp": 95,
   "damage": 12,
   "drop_xp": 800,
-  "path": "orc"
+  "path": "orc",
+  "map": "spawn",
+  "position": [155, 205]
 }
