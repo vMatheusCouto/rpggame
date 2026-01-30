@@ -1,0 +1,9 @@
+{
+  "name": "Skeleton Warrior",
+  "hp": 245,
+  "damage": 30,
+  "drop_xp": 85,
+  "path": "skeleton_warrior",
+  "map": "spawn",
+  "position": [155, 205]
+}

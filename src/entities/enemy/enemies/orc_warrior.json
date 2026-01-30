@@ -1,0 +1,9 @@
+{
+  "name": "Orc Warrior",
+  "hp": 210,
+  "damage": 27,
+  "drop_xp": 70,
+  "path": "orc_warrior",
+  "map": "spawn",
+  "position": [155, 205]
+}
