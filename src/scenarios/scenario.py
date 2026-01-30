@@ -187,6 +187,7 @@ class ScenarioBattle(Scenario):
         down = self._edge("down", keys[pygame.K_s])
         z = self._edge("z", keys[pygame.K_RETURN])
         x = self._edge("x", keys[pygame.K_x])
+        f2 = self._edge("f2", keys[pygame.K_F2])
 
         if self.in_message:
             if z:
@@ -261,7 +262,8 @@ class ScenarioBattle(Scenario):
             self.menu_index = (self.menu_index - 1) % len(self.menu_items)
         if down:
             self.menu_index = (self.menu_index + 1) % len(self.menu_items)
-
+        if f2:
+            self.player_battler.take_xp(1000)
         if z:
             choice = self.menu_items[self.menu_index]
 
