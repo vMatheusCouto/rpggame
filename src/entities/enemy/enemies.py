@@ -7,21 +7,52 @@ import os
 import json
 class Enemy(Character):
     enemyList = []
-    def __init__(self, name, hp, damage, drop_xp, path, mapName, position):
+    def __init__(self, name, hp, damage, drop_xp, path, mapName, position, direction="left", moves=[]):
         super().__init__(name, hp, damage)
         self.enemy_path = path
         self.drop_xp = drop_xp
         self.path = path
         self.status = "idle"
-        self.direction = "left"
+        self.direction = direction
         self.sprites = None
         self.mapName = mapName
         self.position = position
-        self.moves = [
-            Attack("Arranhao", bonus=0, accuracy=0.95),
-            Attack("Mordida", bonus=4, accuracy=0.80),
-        ]
+        self.moves = moves
         self.defeated = False
+
+    @classmethod
+    def load_enemies(cls):
+        enemiesFolder = SRC_DIR / "entities/enemy/enemies/"
+        entries = os.listdir(enemiesFolder)
+        for enemy in sorted(entries):
+            try:
+                with open(enemiesFolder / enemy, 'r') as file:
+                    data = json.load(file)
+                    moves = []
+                    for move in data["moves"]:
+                        moves.append(Attack.list[move])
+                    currentEnemy = Enemy(
+                        name=data["name"],
+                        hp=data["hp"],
+                        damage=data["damage"],
+                        drop_xp=data["drop_xp"],
+                        path=f'enemies/{data["path"]}',
+                        mapName=data["map"],
+                        position=(data["position"][0], data["position"][1]),
+                        moves=moves
+                    )
+                    enemySprite = entitySprites(currentEnemy)
+                    currentEnemy.setSprites(enemySprite)
+                    cls.enemyList.append(currentEnemy)
+
+            except FileNotFoundError:
+                print("File", enemy, "not found.")
+            except json.JSONDecodeError as e:
+                print(f"Failed to decode JSON: {e}")
+
+            for index, item in enumerate(Enemy.enemyList):
+                print(f"{index} - {item.name}")
+
     def use_random_move(self, target):
         move = random.choice(self.moves)
         if not move.roll_hit():
@@ -47,30 +78,3 @@ class Enemy(Character):
 
     def setDirection(self, direction):
         self.direction = direction
-
-enemiesFolder = SRC_DIR / "entities/enemy/enemies/"
-entries = os.listdir(enemiesFolder)
-for enemy in sorted(entries):
-    try:
-        with open(enemiesFolder / enemy, 'r') as file:
-            data = json.load(file)
-            currentEnemy = Enemy(
-                name=data["name"],
-                hp=data["hp"],
-                damage=data["damage"],
-                drop_xp=data["drop_xp"],
-                path=f'enemies/{data["path"]}',
-                mapName=data["map"],
-                position=(data["position"][0], data["position"][1])
-            )
-            enemySprite = entitySprites(currentEnemy)
-            currentEnemy.setSprites(enemySprite)
-            Enemy.enemyList.append(currentEnemy)
-
-    except FileNotFoundError:
-        print("Error: The file", enemy, "was not found.")
-    except json.JSONDecodeError as e:
-        print(f"Error: Failed to decode JSON from the file: {e}")
-
-for index, item in enumerate(Enemy.enemyList):
-    print(f"{index} - {item.name}")

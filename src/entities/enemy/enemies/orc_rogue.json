@@ -5,5 +5,7 @@
   "drop_xp": 40,
   "path": "orc_rogue",
   "map": "spawn",
-  "position": [16, 232]
+  "position": [16, 232],
+  "direction": "right",
+  "moves": ["quick_jab", "poison_stab", "backstab", "aimed_strike"]
 }
