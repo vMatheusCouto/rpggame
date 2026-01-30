@@ -34,11 +34,12 @@ class Player(Character):
         self.moves: list[Attack] = []
         self.learnset = [
             (1,  Attack("Investida", bonus=0,  accuracy=1.00)),
-            (5,  Attack("Golpe Rapido", bonus=3,  accuracy=0.90)),
-            (8,  Attack("Corte", bonus=6,  accuracy=0.75)),
+            (5,  Attack("Fatiar", bonus=3,  accuracy=0.90)),
+            (8,  Attack("Corte rápido", bonus=6,  accuracy=0.75)),
             (10, Attack("Furia", bonus=10, accuracy=0.50)),
         ]
         self._learn_moves_for_current_level()
+        self.dead = False
 
     def _learn_moves_for_current_level(self):
         for lvl_req, move in self.learnset:

@@ -73,6 +73,9 @@ class ScenarioBattle(Scenario):
         self.heroSprites = entitySprites(props)
         self.backgroundName = backgroundName
 
+        props.setStatus("idle")
+        props.setDirection("right")
+
         # Menu principal
         self.menu_items = ["Lutar", "Bolsa", "Fugir"]
         self.menu_index = 0
@@ -118,6 +121,8 @@ class ScenarioBattle(Scenario):
     def _next_msg(self):
         if self.message_queue:
             self.message_queue.pop(0)
+            if props.getStatus() != "death":
+                props.setStatus("idle")
         if not self.message_queue:
             self.in_message = False
         #contra ataque agendado
@@ -126,6 +131,7 @@ class ScenarioBattle(Scenario):
             move_name, dmg, hit = self.enemy_battler.use_random_move(self.player_battler)
             self._push_msg(f"{self.enemy_battler.name} usou {move_name}!")
             if hit:
+                props.setStatus("hit")
                 self._push_msg(f"Causou {dmg} de dano!")
                 self.player_hit_timer = 10
             else:
@@ -134,7 +140,10 @@ class ScenarioBattle(Scenario):
                 self.player_hit_timer = 10
 
             if self.player_battler.hp <= 0:
+                props.setStatus("death")
+                self.heroSprites.resetSprite(8)
                 self._push_msg("DERROTA...")
+                self.player_battler.dead = True
                 self.battle_over = True
 
     def _hp_ratio(self, battler):
@@ -225,11 +234,14 @@ class ScenarioBattle(Scenario):
                 self._push_msg(f"{self.player_battler.name} usou {move_name}!")
 
                 if hit:
+                    if move_name == "Corte rápido":
+                        props.setStatus("pierce")
+                    if move_name == "Fatiar":
+                        props.setStatus("slice")
                     self._push_msg(f"Causou {damage} de dano!")
                     self.enemy_hit_timer = 10
                 else:
                     self._push_msg("Mas errou!")
-
                 if self.enemy_battler.hp <= 0:
                     self._push_msg("Inimigo derrotado!")
 
@@ -241,6 +253,7 @@ class ScenarioBattle(Scenario):
                     if self.player_battler.level > lvl_before:
                         self._push_msg(f"SUBIU PARA O NIVEL {self.player_battler.level}!")
 
+                    self.enemy_battler.status = "death"
                     self._push_msg("VITORIA!")
                     self.enemy_battler.defeated = True
                     self.battle_over = True
@@ -250,10 +263,12 @@ class ScenarioBattle(Scenario):
                 self.pending_enemy_attack = True
 
                 if self.player_battler.hp <= 0:
+                    props.setStatus("death")
+                    self.heroSprites.resetSprite(8)
+                    self.heroSprites
                     self._push_msg("DERROTA...")
-                    self.player_battle.hp = self.player_battle.max_hp
+                    self.player_battler.hp = self.player_battler.max_hp
                     self.battle_over = True
-
                 self.ui_mode = "main"
             return
 
@@ -289,29 +304,34 @@ class ScenarioBattle(Scenario):
         enemy_y = 120
         dx, dy = self._shake_offset(self.enemy_hit_timer)
 
-
         enemy_frame = self.enemy_battler.getSprite().convert_alpha()
-        enemy_sprite = pygame.transform.scale(enemy_frame, (96, 96))
 
         if self.backgroundName == "death":
             pass
         else:
-            screen.blit(enemy_sprite, (enemy_x + dx, enemy_y + dy))
+            if self.enemy_battler.getStatus() == "death":
+                enemy_sprite = pygame.transform.scale(enemy_frame, (192, 192))
+                screen.blit(enemy_sprite, (enemy_x - 42, enemy_y - 80))
+            else:
+                enemy_sprite = pygame.transform.scale(enemy_frame, (96,96))
+                print("enemy_x:",enemy_x)
+                print("enemy_y:",enemy_y)
+                screen.blit(enemy_sprite, (enemy_x + dx, enemy_y + dy))
 
         if self.backgroundName == "death":
             player_y = 150
         else:
             player_y = 120
         player_x = 130
-        props.setStatus("idle")
-        props.setDirection("right")
-
-        player_frame = self.heroSprites.getSprite().convert_alpha()
-        player_frame = pygame.transform.scale(player_frame, (96, 96))
 
         dx, dy = self._shake_offset(self.player_hit_timer)
-        screen.blit(player_frame, (player_x + dx, player_y + dy))
-
+        player_frame = self.heroSprites.getSprite().convert_alpha()
+        if props.getStatus() == "death" or props.getStatus() == "pierce" or props.getStatus() == "hit" or props.getStatus() == "slice":
+            player_frame = pygame.transform.scale(player_frame, (192, 192))
+            screen.blit(player_frame, (player_x - 42, player_y - 50))
+        else:
+            player_frame = pygame.transform.scale(player_frame, (96, 96))
+            screen.blit(player_frame, (player_x + dx, player_y + dy))
 
         if self.enemy_hit_timer > 0:
             self.enemy_hit_timer -= 1
