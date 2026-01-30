@@ -39,7 +39,6 @@ class Player(Character):
             (10, Attack("Furia", bonus=10, accuracy=0.50)),
         ]
         self._learn_moves_for_current_level()
-        self._learn_moves_for_current_level()
 
     def _learn_moves_for_current_level(self):
         for lvl_req, move in self.learnset:

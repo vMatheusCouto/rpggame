@@ -2370,4 +2370,4 @@ nonPassableTiles = [
   (78, 47),
   (79, 47)
 ]
-Death = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)
+Death = ScenarioOpenWorld("death", background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)

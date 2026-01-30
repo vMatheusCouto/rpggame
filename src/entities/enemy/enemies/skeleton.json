@@ -1,7 +1,9 @@
 {
-  "name": "skeleton",
+  "name": "Skeleton",
   "hp": 120,
   "damage": 14,
   "drop_xp": 28,
-  "path": "skeleton"
+  "path": "skeleton",
+  "map": "village",
+  "position": [200, 169]
 }

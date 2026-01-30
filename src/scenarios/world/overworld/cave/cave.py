@@ -8,9 +8,9 @@ spawn_position = (160, 150)
 
 entities = [
     {"enemy": Enemy.enemyList[4],
-    "position": (365,200)},
+    "position": (381,224)},
     {"enemy": Enemy.enemyList[5],
-    "position": (130,160)}
+    "position": (146,184)}
 ]
 
 eventTiles = [
@@ -1945,4 +1945,4 @@ nonPassableTiles = [
   (78, 47),
   (79, 47)
 ]
-Cave = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)
+Cave = ScenarioOpenWorld("cave", background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)

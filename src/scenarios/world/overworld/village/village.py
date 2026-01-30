@@ -8,9 +8,9 @@ spawn_position = (300, 180)
 
 entities = [
     {"enemy": Enemy.enemyList[7],
-    "position": (140,180)},
+    "position": (156,204)},
     {"enemy": Enemy.enemyList[2],
-    "position": (380,160)}
+    "position": (396,184)}
 ]
 
 eventTiles = [
@@ -1906,4 +1906,4 @@ nonPassableTiles = [
   (78, 47),
   (79, 47)
 ]
-Village = ScenarioOpenWorld(background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)
+Village = ScenarioOpenWorld("village", background_path, nonPassableTiles, top_layer_path, spawn_position, eventTiles, entities)
