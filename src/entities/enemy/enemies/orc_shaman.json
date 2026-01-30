@@ -4,6 +4,8 @@
   "damage": 36,
   "drop_xp": 110,
   "path": "orc_shaman",
-  "map": "spawn",
-  "position": [155, 205]
+  "map": "village",
+  "position": [338, 189],
+  "direction": "right",
+  "moves": ["dark_bolt", "cursed_touch", "shadow_blast", "aimed_strike"]
 }

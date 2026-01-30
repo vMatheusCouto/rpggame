@@ -1,0 +1,103 @@
+{
+  "club_swing": {
+    "name": "Club Swing",
+    "bonus": 0,
+    "accuracy": 0.85
+  },
+
+  "quick_jab": {
+    "name": "Quick Jab",
+    "bonus": -3,
+    "accuracy": 0.95
+  },
+
+  "aimed_strike": {
+    "name": "Aimed Strike",
+    "bonus": 4,
+    "accuracy": 0.8
+  },
+
+  "brutal_smash": {
+    "name": "Brutal Smash",
+    "bonus": 12,
+    "accuracy": 0.55
+  },
+
+  "bone_slash": {
+    "name": "Bone Slash",
+    "bonus": 1,
+    "accuracy": 0.88
+  },
+
+  "cursed_touch": {
+    "name": "Cursed Touch",
+    "bonus": 6,
+    "accuracy": 0.78
+  },
+
+  "bone_crush": {
+    "name": "Bone Crush",
+    "bonus": 10,
+    "accuracy": 0.6
+  },
+
+  "poison_stab": {
+    "name": "Poison Stab",
+    "bonus": 7,
+    "accuracy": 0.75
+  },
+
+  "backstab": {
+    "name": "Backstab",
+    "bonus": 14,
+    "accuracy": 0.5
+  },
+
+  "shield_bash": {
+    "name": "Shield Bash",
+    "bonus": 3,
+    "accuracy": 0.7
+  },
+
+  "reckless_chop": {
+    "name": "Reckless Chop",
+    "bonus": 16,
+    "accuracy": 0.45
+  },
+
+  "dark_bolt": {
+    "name": "Bark Bolt",
+    "bonus": 11,
+    "accuracy": 0.65
+  },
+
+  "shadow_blast": {
+    "name": "Shadow Blast",
+    "bonus": 20,
+    "accuracy": 0.4
+  },
+
+  "arcane_missiles": {
+    "name": "Arcane Missiles",
+    "bonus": 4,
+    "accuracy": 0.9
+  },
+
+  "frost_spike": {
+    "name": "Frost Spike",
+    "bonus": 10,
+    "accuracy": 0.7
+  },
+
+  "fireball": {
+    "name": "Fireball",
+    "bonus": 16,
+    "accuracy": 0.55
+  },
+
+  "lightning_strike": {
+    "name": "Lightning Strike",
+    "bonus": 24,
+    "accuracy": 0.35
+  }
+}

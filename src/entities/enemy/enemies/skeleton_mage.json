@@ -4,6 +4,8 @@
   "damage": 42,
   "drop_xp": 140,
   "path": "skeleton_mage",
-  "map": "spawn",
-  "position": [155, 205]
+  "map": "snow",
+  "position": [534, 89],
+  "direction": "left",
+  "moves": ["arcane_missiles", "frost_spike", "fireball", "lightning_strike"]
 }

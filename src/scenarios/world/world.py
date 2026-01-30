@@ -2,6 +2,7 @@ from src.scenarios.world.overworld.spawn.spawn import Spawn
 from src.scenarios.world.overworld.cave.cave import Cave
 from src.scenarios.world.overworld.village.village import Village
 from src.scenarios.world.overworld.death.death import Death
+from src.scenarios.world.overworld.snow.snow import Snow
 from src.props import props
 import pygame
 

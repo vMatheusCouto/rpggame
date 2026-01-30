@@ -4,6 +4,8 @@
   "damage": 30,
   "drop_xp": 85,
   "path": "skeleton_warrior",
-  "map": "spawn",
-  "position": [155, 205]
+  "map": "cave",
+  "position": [69, 77],
+  "direction": "right",
+  "moves": ["shield_bash", "bone_crush", "reckless_chop", "bone_slash"]
 }
