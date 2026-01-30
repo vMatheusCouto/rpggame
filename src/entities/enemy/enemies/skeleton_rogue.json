@@ -5,7 +5,7 @@
   "drop_xp": 52,
   "path": "skeleton_rogue",
   "map": "village",
-  "position": [468, 169],
+  "position": [468, 173],
   "direction": "left",
   "moves": ["quick_jab", "bone_slash", "backstab", "cursed_touch"]
 }
