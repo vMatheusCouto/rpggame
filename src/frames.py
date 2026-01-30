@@ -121,7 +121,6 @@ def currentFrame(keys):
         f"x = {int(props.getPlayerPos().x)} ({int(tileX)}) z = {int(props.getPlayerPos().y)} ({int(tileY)})",
         True, (255, 255, 255)
     )
-    screen.blit(text_surface, (10, 10))
     for enemy in Enemy.enemyList:
         if enemy.mapName == world.current_map.name:
             if not enemy.defeated:
@@ -130,4 +129,5 @@ def currentFrame(keys):
     top = props.getTopLayer()
     if top is not None:
         screen.blit(top, (0, 0))
+    screen.blit(text_surface, (10, 10))
 

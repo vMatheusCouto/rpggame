@@ -4,6 +4,8 @@
   "damage": 12,
   "drop_xp": 800,
   "path": "orc",
-  "map": "spawn",
-  "position": [155, 205]
+  "map": "null",
+  "position": [0, 0],
+  "direction": "left",
+  "moves": ["club_swing", "quick_jab", "aimed_strike", "brutal_smash"]
 }

@@ -15,7 +15,7 @@ def canWalk(mapName):
         return True
 
 def entityColision(playerPos, entityPos):
-    x = 20
+    x = 40
     y = 35
     if playerPos.x >= entityPos[0] - x:
         if playerPos.x <= entityPos[0] + x:

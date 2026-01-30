@@ -4,6 +4,8 @@
   "damage": 27,
   "drop_xp": 70,
   "path": "orc_warrior",
-  "map": "spawn",
-  "position": [155, 205]
+  "map": "cave",
+  "position": [84, 244],
+  "direction": "right",
+  "moves": ["shield_bash", "aimed_strike", "reckless_chop", "brutal_smash"]
 }

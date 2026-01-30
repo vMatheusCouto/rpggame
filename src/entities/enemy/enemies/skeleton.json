@@ -4,6 +4,8 @@
   "damage": 14,
   "drop_xp": 28,
   "path": "skeleton",
-  "map": "village",
-  "position": [200, 169]
+  "map": "null",
+  "position": [0, 0],
+  "direction": "left",
+  "moves": ["bone_slash", "quick_jab", "cursed_touch", "bone_crush"]
 }
