@@ -3,6 +3,8 @@ import pygame
 
 from src.utils.paths import ASSETS_DIR
 
+from src.entitites.attacks import Attack
+from src.entitites.enemy.enemies import Enemy
 pygame.init()
 GAME_RESOLUTION = (640, 384)
 pygame.display.set_caption("Pixel Art Game")
@@ -41,6 +43,8 @@ def loadSprites():
 loadSprites()
 
 pygame.font.init()
+Attack.load_attacks()
+Enemy.load_enemies()
 font = pygame.font.Font(ASSETS_DIR / "Righteous.ttf", 36)
 text_surface = font.render("Paused", True, (255, 255, 255))
 

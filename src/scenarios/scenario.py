@@ -61,13 +61,17 @@ class ScenarioBattle(Scenario):
         from src.props import props
         self.life_hud_img = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
         self.life_hud_img_inverted = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
-        self.hudBar = (92,90)
-        self.enemyHudBar = (370,90)
+        if backgroundName == "death":
+            self.hudBar = (92,105)
+        else:
+            self.hudBar = (92,75)
+        self.enemyHudBar = (370,75)
         self.screen_w = props.getScreen().get_width()
         self.screen_h = props.getScreen().get_height()
         self.player_battler = player_battle
         self.enemy_battler = enemy_battle
         self.heroSprites = entitySprites(props)
+        self.backgroundName = backgroundName
 
         # Menu principal
         self.menu_items = ["Lutar", "Bolsa", "Fugir"]
@@ -156,21 +160,22 @@ class ScenarioBattle(Scenario):
         box = pygame.Rect(x, y, box_w, box_h)
 
         self._draw_text(screen, f"{name}", x + 2, y - 25, big=True)
-        # self._draw_text(screen, f"Lv {level}", x + 98, y - 25)
+        if battler.name == "Heroi":
+            self._draw_text(screen, f"Lv {level}", x + 45, y - 25)
 
         bar_x = x + 10
         bar_y = y + 32
         bar_w = 132
-        bar_h = 6
+        bar_h = 9
 
         pygame.draw.rect(screen, (0, 0, 0), (x, y, bar_w, bar_h))
 
         ratio = self._hp_ratio(battler)
         fill_w = int(bar_w * ratio)
 
-        color = (210, 14, 16)
+        color = (170, 0, 7)
         pygame.draw.rect(screen, color, (x, y, fill_w, bar_h))
-        self._draw_text(screen, f"{battler.hp}/{battler.max_hp}", x + box_w - 140, y + 8)
+        self._draw_text(screen, f"{battler.hp}/{battler.max_hp}", x + box_w - 140, y + 14)
 
     def _fight_items(self):
         move_names = [m.name for m in getattr(self.player_battler, "moves", [])]
@@ -182,6 +187,7 @@ class ScenarioBattle(Scenario):
         down = self._edge("down", keys[pygame.K_s])
         z = self._edge("z", keys[pygame.K_RETURN])
         x = self._edge("x", keys[pygame.K_x])
+        f2 = self._edge("f2", keys[pygame.K_F2])
 
         if self.in_message:
             if z:
@@ -243,10 +249,10 @@ class ScenarioBattle(Scenario):
                 # agenda o contra-ataque
                 self.pending_enemy_attack = True
 
-                if self.player_battler.hp <= 0:
-                    self._push_msg("DERROTA...")
-                    self.player_battle.hp = self.player_battle.max_hp
-                    self.battle_over = True
+                #if self.player_battler.hp <= 0:
+                    #self._push_msg("DERROTA...")
+                    #self.battle_over = True
+                    #self.player_battler.hp = self.player_battler.max_hp
 
                 self.ui_mode = "main"
             return
@@ -256,7 +262,8 @@ class ScenarioBattle(Scenario):
             self.menu_index = (self.menu_index - 1) % len(self.menu_items)
         if down:
             self.menu_index = (self.menu_index + 1) % len(self.menu_items)
-
+        if f2:
+            self.player_battler.take_xp(1000)
         if z:
             choice = self.menu_items[self.menu_index]
 
@@ -286,10 +293,16 @@ class ScenarioBattle(Scenario):
         enemy_frame = self.enemy_battler.getSprite().convert_alpha()
         enemy_sprite = pygame.transform.scale(enemy_frame, (96, 96))
 
-        screen.blit(enemy_sprite, (enemy_x + dx, enemy_y + dy))
+        if self.backgroundName == "death":
+            pass
+        else:
+            screen.blit(enemy_sprite, (enemy_x + dx, enemy_y + dy))
 
+        if self.backgroundName == "death":
+            player_y = 150
+        else:
+            player_y = 120
         player_x = 130
-        player_y = 120
         props.setStatus("idle")
         props.setDirection("right")
 
@@ -306,21 +319,24 @@ class ScenarioBattle(Scenario):
             self.player_hit_timer -= 1
 
         # HUD inimigo
-        self._draw_hp_box(
-            screen,
-            x=self.enemyHudBar[0] + 21,
-            y=self.enemyHudBar[1] + 13,
-            name=self.enemy_battler.name,
-            level=3,
-            battler=self.enemy_battler,
-            box_w=240,
-            box_h=64
-        )
+        if self.backgroundName == "death":
+            pass
+        else:
+            self._draw_hp_box(
+                screen,
+                x=self.enemyHudBar[0] + 19,
+                y=self.enemyHudBar[1] + 12,
+                name=self.enemy_battler.name,
+                level=3,
+                battler=self.enemy_battler,
+                box_w=240,
+                box_h=64
+            )
         # HUD player
         self._draw_hp_box(
             screen,
-            x=self.hudBar[0] + 21,
-            y=self.hudBar[1] + 13,
+            x=self.hudBar[0] + 19,
+            y=self.hudBar[1] + 12,
             name=self.player_battler.name,
             level=self.player_battler.level,
             battler=self.player_battler,
@@ -329,14 +345,22 @@ class ScenarioBattle(Scenario):
         )
 
         screen.blit(self.life_hud_img, self.hudBar)
-        screen.blit(self.life_hud_img_inverted, self.enemyHudBar)
+
+        if self.backgroundName == "death":
+            pass
+        else:
+            screen.blit(self.life_hud_img_inverted, self.enemyHudBar)
 
         # Mostrar XP
+        if self.backgroundName == "death":
+            xpY = 57
+        else:
+            xpY = 26
         self._draw_text(
             screen,
             f"XP: {self.player_battler.xp}/100",
             x=self.enemyHudBar[0] - 260,
-            y=self.enemyHudBar[1] + 26,
+            y=self.enemyHudBar[1] + xpY,
         )
         # Mensagens ou menus
         if self.in_message and self.message_queue:

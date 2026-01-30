@@ -1,8 +1,12 @@
 import os
 import pygame
 
-from src.frames import *
+from src.entities.attacks import Attack
+from src.entities.enemy.enemies import Enemy
+Attack.load_attacks()
+Enemy.load_enemies()
 
+from src.frames import *
 pygame.init()
 
 pygame.display.set_caption("RPG Game")
