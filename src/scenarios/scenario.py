@@ -262,13 +262,11 @@ class ScenarioBattle(Scenario):
                 # agenda o contra-ataque
                 self.pending_enemy_attack = True
 
-                if self.player_battler.hp <= 0:
-                    props.setStatus("death")
-                    self.heroSprites.resetSprite(8)
-                    self.heroSprites
-                    self._push_msg("DERROTA...")
-                    self.player_battler.hp = self.player_battler.max_hp
-                    self.battle_over = True
+                #if self.player_battler.hp <= 0:
+                    #self._push_msg("DERROTA...")
+                    #self.battle_over = True
+                    #self.player_battler.hp = self.player_battler.max_hp
+
                 self.ui_mode = "main"
             return
 
