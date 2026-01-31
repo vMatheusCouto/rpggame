@@ -11,8 +11,8 @@ class entitySprites:
         self.amount = 0
         self.currentStatus = "init"
         self.currentDirection = "init"
-        self.nonLoop = ["death","pierce","hit","slice"]
-        self.once = ["pierce","hit","slice"]
+        self.nonLoop = ["death","pierce","hit","slice", "slice2", "rush"]
+        self.once = ["pierce","hit","slice", "slice2", "rush"]
 
     def load(self):
         characterStatus = f"{self.entity.getStatus()}/"
@@ -26,12 +26,23 @@ class entitySprites:
             elif self.entity.getStatus() == "running":
                 self.amount = 6
             elif self.entity.getStatus() == "death":
-                self.amount = 6
+                if self.entity.name == "Skeleton":
+                    print("skeleton")
+                    self.amount = 8
+                elif self.entity.name == "Orc Shaman":
+                    self.amount = 7
+                else:
+                    self.amount = 6
+
             elif self.entity.getStatus() == "pierce":
                 self.amount = 8
             elif self.entity.getStatus() == "hit":
                 self.amount = 4
             elif self.entity.getStatus() == "slice":
+                self.amount = 8
+            elif self.entity.getStatus() == "slice2":
+                self.amount = 8
+            elif self.entity.getStatus() == "rush":
                 self.amount = 8
         else:
             self.amount = self.currentMax

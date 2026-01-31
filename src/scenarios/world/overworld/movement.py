@@ -3,6 +3,8 @@ from src.scenarios.world.colision import canWalk
 from src.scenarios.world.event import *
 dt = props.getDT()
 
+# Transformar em classe, de resto tá ok
+
 def walk():
     from src.scenarios.world.world import world
     props.setMoving(True)

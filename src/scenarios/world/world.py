@@ -16,11 +16,15 @@ class World:
         return self.current_map.entities
 
     def setMap(self, map):
+        # Repensar na forma atual, o player deveria decidir o mundo que ele tá; World poderia ser apenas uma instanciação dos mapas com funções para fazer um get pelo nome e atributos dos mapas;
+
+        # E se o mapa fosse carregado na hora? Ou seja, na hora que o player troca de mapa, uma nova instância é criada pela leitura do json;
         self.current_map = map
         props.player_pos.x = map.spawn_position[0]
         props.player_pos.y = map.spawn_position[1]
 
     def setMapByName(self, map):
+        # Adicionar laço para encontrar mapa pelo nome
         if map == "cave":
             self.setMap(Cave)
         elif map == "spawn":
