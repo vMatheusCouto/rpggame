@@ -5,10 +5,14 @@ import random
 from src.entities.attacks import Attack
 import os
 import json
+
+# Tirar isso daqui: deve ser junto de character.py; transformar pasta "enemies" na pasta "enemy", substituindo-as.
+
 class Enemy(Character):
     enemyList = []
     def __init__(self, name, hp, damage, drop_xp, path, mapName, position, direction="left", moves=[]):
         super().__init__(name, hp, damage)
+        self.max_hp = hp
         self.enemy_path = path
         self.drop_xp = drop_xp
         self.path = path

@@ -3,7 +3,9 @@ class Item:
         self.__tipo = tipo
         self.__nome = nome
         self.__descricao = descricao
-        self.quantidade = quantidade  
+        self.quantidade = quantidade
+
+    # Converter tudo para o inglês. Português apenas visual (menus, botões, golpes, etc.)
 
     @property
     def tipo(self):
@@ -23,7 +25,7 @@ class Item:
 
     @quantidade.setter
     def quantidade(self, valor):
-        self.__quantidade = max(0, valor) 
+        self.__quantidade = max(0, valor)
 
     def usar(self):
         if self.__quantidade > 0:

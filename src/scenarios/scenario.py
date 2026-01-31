@@ -17,6 +17,7 @@ class Scenario(ABC):
         pass
 
 class ScenarioOpenWorld(Scenario):
+
     def __init__(self, name, imagePath, blockedTiles, topLayerPath, spawn_position, eventTiles, entities):
         super().__init__(imagePath)
         self.name = name
@@ -54,13 +55,19 @@ class ScenarioOpenWorld(Scenario):
             props.setStatus("running")
         return event
 
+    # Trazer todo o cenário de frames.py para aqui, seguindo a lógica do ScenarioBattle
+
 class ScenarioDialogue(Scenario):
+    # Remover essa classe e transformar em uma nova classe (que não herde de scenario) fora dessa para diálogos, que vão ser utilizados dentro de qualquer scenário
     pass
 
 class ScenarioBattle(Scenario):
     def __init__(self, player_battle, enemy_battle, backgroundName):
         super().__init__(BATTLE_ASSETS / f"{backgroundName}/background.png")
         from src.props import props
+        # Corrigir nomes, ordem e inicialização
+
+        # Ideia: pegar tudo que desenha na tela e colocar em Scenario ou em uma classe chamada Screen;
         self.life_hud_img = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
         self.life_hud_img_inverted = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
         if backgroundName == "death":
@@ -72,9 +79,11 @@ class ScenarioBattle(Scenario):
         self.screen_h = props.getScreen().get_height()
         self.player_battler = player_battle
         self.enemy_battler = enemy_battle
+
+        # Corrigir quando Player for refatorado
         self.heroSprites = entitySprites(props)
         self.backgroundName = backgroundName
-
+        self.defeated = False
         props.setStatus("idle")
         props.setDirection("right")
         #item add antes da batalha, se nao tiver nada(sempre add)
@@ -83,6 +92,7 @@ class ScenarioBattle(Scenario):
                 novoItem = criar_item_por_id(item, quantidade=1)
                 if novoItem:
                     self.player_battler.inventario.adicionar(novoItem)
+        self.enemy_battler.hp = self.enemy_battler.max_hp
         # Menu principal
         self.menu_items = ["Lutar", "Bolsa", "Fugir"]
         self.menu_index = 0
@@ -105,13 +115,15 @@ class ScenarioBattle(Scenario):
         self.request_exit = False
         self.battle_over = False
         # Tremor (shake) quando toma hit
+
+        # CORRIGIR: só vai ser executado quando o golpe for acertado
         self.player_hit_timer = 0
         self.enemy_hit_timer = 0
         self.shake_strength = 4   # pixels
         self.pending_enemy_attack = False
 
         # Fonts
-        pygame.font.init()
+        pygame.font.init() # avaliar: tem como puxar esse init direto do props?
         self.font = pygame.font.Font(ASSETS_DIR / "Pixeled.ttf", 5)
         self.font_big = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
 
@@ -154,6 +166,7 @@ class ScenarioBattle(Scenario):
                 self.heroSprites.resetSprite(8)
                 self._push_msg("DERROTA...")
                 self.player_battler.dead = True
+                self.defeated = True
                 self.battle_over = True
 
     def _hp_ratio(self, battler):
@@ -209,6 +222,7 @@ class ScenarioBattle(Scenario):
         f2 = self._edge("f2", keys[pygame.K_F2])
         f3 = self._edge("f3", keys[pygame.K_F3])
 
+        # AVALIAR: isso não deveria estar em um arquivo separado? keyActions deveria ser apenas os botões com chamadas de método
         if self.in_message:
             if z:
                 self._next_msg()
@@ -249,6 +263,10 @@ class ScenarioBattle(Scenario):
                         props.setStatus("pierce")
                     if move_name == "Fatiar":
                         props.setStatus("slice")
+                    if move_name == "Foice da morte":
+                        props.setStatus("slice2")
+                    if move_name == "Investida":
+                        props.setStatus("rush")
                     self._push_msg(f"Causou {damage} de dano!")
                     self.enemy_hit_timer = 10
                 else:
@@ -272,12 +290,6 @@ class ScenarioBattle(Scenario):
                     return
                 # agenda o contra-ataque
                 self.pending_enemy_attack = True
-
-                #if self.player_battler.hp <= 0:
-                    #self._push_msg("DERROTA...")
-                    #self.battle_over = True
-                    #self.player_battler.hp = self.player_battler.max_hp
-
                 self.ui_mode = "main"
             return
         if self.ui_mode == "bag":
@@ -332,6 +344,7 @@ class ScenarioBattle(Scenario):
             elif choice == "Fugir":
                 self._push_msg("Voce fugiu da batalha!")
                 self.battle_over = True
+                self.ui_mode = "main"
 
     def render(self, screen):
         # Sprites
@@ -361,7 +374,7 @@ class ScenarioBattle(Scenario):
 
         dx, dy = self._shake_offset(self.player_hit_timer)
         player_frame = self.heroSprites.getSprite().convert_alpha()
-        if props.getStatus() == "death" or props.getStatus() == "pierce" or props.getStatus() == "hit" or props.getStatus() == "slice":
+        if props.getStatus() == "death" or props.getStatus() == "pierce" or props.getStatus() == "hit" or props.getStatus() == "slice" or props.getStatus() == "slice2" or props.getStatus() == "rush":
             player_frame = pygame.transform.scale(player_frame, (192, 192))
             screen.blit(player_frame, (player_x - 42, player_y - 50))
         else:

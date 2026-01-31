@@ -11,13 +11,16 @@ from src.entities.character import player
 from src.utils.paths import ASSETS_DIR
 from src.scenarios.world.colision import entityColision
 
-ACTIVE_MODE = "world"
+ACTIVE_MODE = "menu"
 battle_scene = None
 
 heroSprites = entitySprites(props)
 
+# mudar nome da classe para algo como "updateScreen"
 def currentFrameProps(respawn=False):
     global battle_scene
+
+    # Active mode não deveria existir. Criar classmethods em Scenario para pegar o cenário atual e renderizar ele corretamente.
 
     if ACTIVE_MODE == "battle" and battle_scene is not None:
         background_image = pygame.image.load(battle_scene.imagePath).convert()
@@ -44,10 +47,25 @@ def currentFrame(keys):
 
     position = None
 
+    if ACTIVE_MODE == "menu":
+        screen = props.getScreen()
+        screen.fill((0, 0, 0))
+        gameOver = font.render("PRESS SPACE TO START", True, (255, 255, 255))
+        rect = gameOver.get_rect(
+            center=(screen.get_width() / 2, screen.get_height() / 2)
+        )
+
+        screen.blit(gameOver, rect)
+        pygame.display.update()
+        if keys[pygame.K_SPACE]:
+            ACTIVE_MODE = "world"
+        return
+
+
     if ACTIVE_MODE == "world" and keys[pygame.K_b]:
         ACTIVE_MODE = "battle"
         position = props.getPlayerPos()
-        battle_scene = ScenarioBattle(player, Enemy.enemyList[5], world.current_map.name)
+        battle_scene = ScenarioBattle(player, Enemy.enemyList[4], world.current_map.name)
         currentFrameProps()
         return
 
@@ -111,10 +129,11 @@ def currentFrame(keys):
 
         battle_scene.render(screen)
 
-        if battle_scene.request_exit:
+        if battle_scene.request_exit :
+            if battle_scene.defeated:
+                player.hp = player.max_hp
             ACTIVE_MODE = "world"
             battle_scene = None
-            player.hp = player.max_hp
             currentFrameProps()
         return
     (tileX, tileY) = getTilePos(props.getPlayerPos())

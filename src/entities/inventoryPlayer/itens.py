@@ -1,4 +1,5 @@
 from src.entities.inventoryPlayer.modeloItem import Item
+# Converter em JSON
 CATALOGO_ITENS = {
     "Small_Potion": {
         "type": "cura",
@@ -28,9 +29,9 @@ CATALOGO_ITENS = {
 }
 
 def criar_item_por_id(id_item, quantidade=1):
-    if id_item in CATALOGO_ITENS: 
+    if id_item in CATALOGO_ITENS:
         dados = CATALOGO_ITENS[id_item]
-         
+
         return Item(
             tipo=dados["type"],       
             nome=dados["name"],
