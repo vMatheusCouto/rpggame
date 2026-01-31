@@ -1,6 +1,7 @@
 import os
 import pygame
 
+# inicializar tudo aqui
 from src.entities.attacks import Attack
 from src.entities.enemy.enemies import Enemy
 Attack.load_attacks()

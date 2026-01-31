@@ -2,21 +2,30 @@ import pygame
 
 clock = pygame.time.Clock()
 
+# Mudar para State ou GlobalValues/Global
 class Props:
     def __init__(self, screen, player_pos):
         self.screen = screen
-        self.player_pos = player_pos
-        self.background = None
-        self.topLayer = None
         self.running = True
-        self.speed = 40
         self.clock = clock
         self.dt = 0
+
+        # temporário
+        self.name = "player"
+
+        # Mudar para classe do player
+        self.player_pos = player_pos
+        self.speed = 40
         self.status = "idle"
         self.direction = "down"
-        self.moving = False
         self.path = "player"
+        self.moving = False
 
+        # Mover para Scenario
+        self.background = None
+        self.topLayer = None
+
+    # Definir corretamente getters e setters
     def setDT(self, dt):
         self.dt = dt
 
@@ -80,6 +89,7 @@ class Props:
     def getMoving(self):
         return self.moving
 
+# Mover tudo isso para um método de inicialização
 GAME_RESOLUTION = (640, 384)
 screen = pygame.display.set_mode(
     GAME_RESOLUTION, pygame.FULLSCREEN | pygame.SCALED
