@@ -1,8 +1,6 @@
 import os
 import pygame
-
 from src.utils.paths import ASSETS_DIR
-
 from src.entitites.attacks import Attack
 from src.entitites.enemy.enemies import Enemy
 pygame.init()

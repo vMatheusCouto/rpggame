@@ -60,14 +60,18 @@ class Player(Character):
         target.hp -= dano_total
         return move.name, dano_total, True
 
+    def xp_to_next(self):
+        return int(100 * (1.35 * (self.level - 1)))
+
     def take_xp(self, xp):
         self.xp += xp
-        while self.xp >= 100:
-            self.xp -= 100
+        while self.xp >= self.xp_to_next():
+            self.xp -= self.xp_to_next()
             self.level += 1
-            self.damage += 5
-            self.max_hp += 20
-            self.hp += 20
+            self.damage += int(2 + self.level * 0.6)
+            hp_gain = 20 + int(20 * self.level * 0.45)
+            self.max_hp += hp_gain
+            self.hp += hp_gain
             self._learn_moves_for_current_level()
 
 
