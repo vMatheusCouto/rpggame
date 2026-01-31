@@ -63,11 +63,9 @@ class ScenarioBattle(Scenario):
     def __init__(self, player_battle, enemy_battle, backgroundName):
         super().__init__(BATTLE_ASSETS / f"{backgroundName}/background.png")
         from src.props import props
-        # Inimigo deve recuperar toda a vida sempre que entrar em batalha.
         # Corrigir nomes, ordem e inicialização
 
         # Ideia: pegar tudo que desenha na tela e colocar em Scenario ou em uma classe chamada Screen;
-        # O sistema de lista de mensagens também deve ficar fora daqui.
         self.life_hud_img = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
         self.life_hud_img_inverted = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
         if backgroundName == "death":
