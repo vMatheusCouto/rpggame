@@ -1,5 +1,4 @@
-from .modeloItem import Item 
-
+from src.entities.inventoryPlayer.modeloItem import Item
 CATALOGO_ITENS = {
     "Small_Potion": {
         "type": "cura",
@@ -18,15 +17,14 @@ CATALOGO_ITENS = {
     },
     "Iron_Axe":{
         "type": "arma",
-        "name": "Machado de ferro"
-        "description" "aumenta em +15 o ataque"
+        "name": "Machado de ferro",     
+        "description": "aumenta em +15 o ataque"
     },
     "Iron_Armor": { 
         "type": "Armor",
         "name": "Armadura de ferro",
         "description": "Adiciona +5 de def ao personagem"
-        }
-
+    }
 }
 
 def criar_item_por_id(id_item, quantidade=1):
@@ -34,9 +32,9 @@ def criar_item_por_id(id_item, quantidade=1):
         dados = CATALOGO_ITENS[id_item]
          
         return Item(
-            type=dados["type"],
-            name=dados["name"],
-            description=dados["description"],
+            tipo=dados["type"],       
+            nome=dados["name"],
+            descricao=dados["description"],
             quantidade=quantidade
         )
     else:
