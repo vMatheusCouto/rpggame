@@ -24,6 +24,7 @@ def currentFrameProps(respawn=False):
         props.setBackground(background_image)
         props.setTopLayer(None)
         return
+
     background_image = pygame.image.load(world.current_map.imagePath).convert()
     top_layer_image = pygame.image.load(world.current_map.topLayerPath).convert_alpha()
     props.setBackground(background_image)
@@ -39,7 +40,6 @@ def currentFrame(keys):
     global ACTIVE_MODE, battle_scene
 
     props.setMoving(False)
-    props.setStatus("idle")
     event = None
 
     position = None
@@ -61,6 +61,7 @@ def currentFrame(keys):
     if ACTIVE_MODE == "battle":
         battle_scene.keyActions(keys)
     else:
+        props.setStatus("idle")
         foundEnemy = False
         for enemy in Enemy.enemyList:
             if enemy.mapName == world.current_map.name:
@@ -113,9 +114,9 @@ def currentFrame(keys):
         if battle_scene.request_exit:
             ACTIVE_MODE = "world"
             battle_scene = None
+            player.hp = player.max_hp
             currentFrameProps()
         return
-
     (tileX, tileY) = getTilePos(props.getPlayerPos())
     text_surface = font.render(
         f"x = {int(props.getPlayerPos().x)} ({int(tileX)}) z = {int(props.getPlayerPos().y)} ({int(tileY)})",
@@ -130,4 +131,15 @@ def currentFrame(keys):
     if top is not None:
         screen.blit(top, (0, 0))
     screen.blit(text_surface, (10, 10))
+    if player.dead:
+        screen.fill((0, 0, 0))
+        gameOver = font.render("GAME OVER", True, (255, 255, 255))
+        rect = gameOver.get_rect(
+            center=(screen.get_width() / 2, screen.get_height() / 2)
+        )
 
+        screen.blit(gameOver, rect)
+        pygame.display.update()
+
+        pygame.time.wait(3000)
+        player.dead = False
