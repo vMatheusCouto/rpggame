@@ -1,21 +1,30 @@
-from .modeloItem import Item
-
+from src.entities.inventoryPlayer.modeloItem import Item
 # Converter em JSON
 CATALOGO_ITENS = {
     "Small_Potion": {
-        "tipo": "cura",
-        "nome": "Poção Pequena",
-        "descricao": "Recupera 20 HP"
+        "type": "cura",
+        "name": "Poção Pequena",
+        "description": "Recupera 20 HP"
     },
     "Big_Potion": {
-        "tipo": "cura",
-        "nome": "Poção Grande",
-        "descricao": "Recupera 60 HP"
+        "type": "cura",
+        "name": "Poção Grande",
+        "description": "Recupera 60 HP"
     },
-    "espada_Ferro": {
-        "tipo": "arma",
-        "nome": "Espada simples de ferro",
-        "descricao": "Ataque +10"
+    "sword_Iron": {
+        "type": "arma",
+        "name": "Espada simples de ferro",
+        "description": "aumenta em +10 o ataque"
+    },
+    "Iron_Axe":{
+        "type": "arma",
+        "name": "Machado de ferro",     
+        "description": "aumenta em +15 o ataque"
+    },
+    "Iron_Armor": { 
+        "type": "Armor",
+        "name": "Armadura de ferro",
+        "description": "Adiciona +5 de def ao personagem"
     }
 }
 
@@ -24,9 +33,9 @@ def criar_item_por_id(id_item, quantidade=1):
         dados = CATALOGO_ITENS[id_item]
 
         return Item(
-            tipo=dados["tipo"],
-            nome=dados["nome"],
-            descricao=dados["descricao"],
+            tipo=dados["type"],       
+            nome=dados["name"],
+            descricao=dados["description"],
             quantidade=quantidade
         )
     else:

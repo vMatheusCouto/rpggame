@@ -1,4 +1,5 @@
 import random
+from src.entities.inventoryPlayer.bag import Inventario
 from src.entities.attacks import Attack
 class Character():
     def __init__(self, name, hp, damage):
@@ -31,6 +32,7 @@ class Player(Character):
         self.level = 1
         self.xp = 0
         self.potions = 1
+        self.inventario = Inventario()
         self.moves: list[Attack] = []
         self.learnset = [
             (1,  Attack("Investida", bonus=0,  accuracy=1.00)),

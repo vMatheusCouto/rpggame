@@ -5,6 +5,8 @@ from src.entities.enemy.enemies import Enemy
 from src.utils.paths import BATTLE_ASSETS, CHARACTER_ASSETS, ASSETS_DIR
 from src.props import props
 from src.entities.player.sprites import entitySprites
+from src.entities.inventoryPlayer.menuInventory import desenhar_inventario
+from src.entities.inventoryPlayer.itens import criar_item_por_id, CATALOGO_ITENS
 import pygame
 class Scenario(ABC):
     def __init__(self, imagePath):
@@ -84,6 +86,12 @@ class ScenarioBattle(Scenario):
         self.defeated = False
         props.setStatus("idle")
         props.setDirection("right")
+        #item add antes da batalha, se nao tiver nada(sempre add)
+        if not self.player_battler.inventario.itens:
+            for item in CATALOGO_ITENS:
+                novoItem = criar_item_por_id(item, quantidade=1)
+                if novoItem:
+                    self.player_battler.inventario.adicionar(novoItem)
         self.enemy_battler.hp = self.enemy_battler.max_hp
         # Menu principal
         self.menu_items = ["Lutar", "Bolsa", "Fugir"]
@@ -93,6 +101,9 @@ class ScenarioBattle(Scenario):
         self.ui_mode = "main"
         self.fight_index = 0
 
+        #submenu de itens
+        self.ui_mode = "main"
+        self.bag_index = 0
         # Mensagens
         self.message_queue = []
         self.in_message = False
@@ -209,6 +220,7 @@ class ScenarioBattle(Scenario):
         z = self._edge("z", keys[pygame.K_RETURN])
         x = self._edge("x", keys[pygame.K_x])
         f2 = self._edge("f2", keys[pygame.K_F2])
+        f3 = self._edge("f3", keys[pygame.K_F3])
 
         # AVALIAR: isso não deveria estar em um arquivo separado? keyActions deveria ser apenas os botões com chamadas de método
         if self.in_message:
@@ -280,6 +292,30 @@ class ScenarioBattle(Scenario):
                 self.pending_enemy_attack = True
                 self.ui_mode = "main"
             return
+        if self.ui_mode == "bag":
+            itens = self.player_battler.inventario.itens
+            if x:
+                self.ui_mode = "main"  
+                return
+            #inventario vazio:
+            if not itens:
+                return
+            #escolher qual item sera selecionado
+            if up:
+                self.bag_index = (self.bag_index - 1) % len(itens)
+            if down:
+                self.bag_index = (self.bag_index + 1) % len(itens)
+            if z:
+                itemSelecionado = itens[self.bag_index]
+                self._push_msg(f"Você usou {itemSelecionado}")
+                itemSelecionado.quantidade -= 1
+                if itemSelecionado.quantidade <= 0:
+                    
+                    self.ui_mode = "main"
+            else:
+                self._push_msg("Mochila vazia.")
+            
+            return
 
         #Menu principal
         if up:
@@ -288,6 +324,12 @@ class ScenarioBattle(Scenario):
             self.menu_index = (self.menu_index + 1) % len(self.menu_items)
         if f2:
             self.player_battler.take_xp(1000)
+        if f3:
+            #pecorre todos os itens e adiciona ele em 1x cada item
+            for id in CATALOGO_ITENS:
+                novoItem = criar_item_por_id(id, quantidade=1)
+                self.player_battler.inventario.adicionar(novoItem)
+                
         if z:
             choice = self.menu_items[self.menu_index]
 
@@ -296,12 +338,8 @@ class ScenarioBattle(Scenario):
                 self.fight_index = 0
 
             elif choice == "Bolsa":
-                if hasattr(self.player_battler, "potions") and self.player_battler.potions > 0:
-                    self.player_battler.potions -= 1
-                    self.player_battler.hp += 30
-                    self._push_msg("Voce usou uma pocao! +30 HP")
-                else:
-                    self._push_msg("Sem pocoes!")
+                self.ui_mode = "bag"
+                self.bag_index = 0 
 
             elif choice == "Fugir":
                 self._push_msg("Voce fugiu da batalha!")
@@ -420,4 +458,18 @@ class ScenarioBattle(Scenario):
                     y = start_y + i * 22
                     prefix = "> " if i == self.fight_index else "  "
                     self._draw_text(screen, prefix + item, start_x + 10, y, big=True)
+            if self.ui_mode == "bag":
+                desenhar_inventario(
+                    screen,
+                    self.player_battler.inventario,
+                    self.font_big,
+                    self.bag_index
+                )
+                self._draw_text(
+                    screen,
+                    "ENTER: usar  X: voltar",
+                    self.screen_w - 180,
+                    self.screen_h - 28
+                )
+
 
