@@ -72,10 +72,10 @@ class ScenarioBattle(Scenario):
         self.enemy_battler = enemy_battle
         self.heroSprites = entitySprites(props)
         self.backgroundName = backgroundName
-
+        self.defeated = False
         props.setStatus("idle")
         props.setDirection("right")
-
+        self.enemy_battler.hp = self.enemy_battler.max_hp
         # Menu principal
         self.menu_items = ["Lutar", "Bolsa", "Fugir"]
         self.menu_index = 0
@@ -144,6 +144,7 @@ class ScenarioBattle(Scenario):
                 self.heroSprites.resetSprite(8)
                 self._push_msg("DERROTA...")
                 self.player_battler.dead = True
+                self.defeated = True
                 self.battle_over = True
 
     def _hp_ratio(self, battler):
@@ -261,12 +262,6 @@ class ScenarioBattle(Scenario):
                     return
                 # agenda o contra-ataque
                 self.pending_enemy_attack = True
-
-                #if self.player_battler.hp <= 0:
-                    #self._push_msg("DERROTA...")
-                    #self.battle_over = True
-                    #self.player_battler.hp = self.player_battler.max_hp
-
                 self.ui_mode = "main"
             return
 
@@ -295,6 +290,7 @@ class ScenarioBattle(Scenario):
             elif choice == "Fugir":
                 self._push_msg("Voce fugiu da batalha!")
                 self.battle_over = True
+                self.ui_mode = "main"
 
     def render(self, screen):
         # Sprites

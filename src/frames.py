@@ -111,10 +111,11 @@ def currentFrame(keys):
 
         battle_scene.render(screen)
 
-        if battle_scene.request_exit:
+        if battle_scene.request_exit :
+            if battle_scene.defeated:
+                player.hp = player.max_hp
             ACTIVE_MODE = "world"
             battle_scene = None
-            player.hp = player.max_hp
             currentFrameProps()
         return
     (tileX, tileY) = getTilePos(props.getPlayerPos())
