@@ -150,5 +150,4 @@ class Enemy(Character):
         target.hp -= dano_total
         return move.name, dano_total, True
 
-
 player = Player("Heroi", 100, 15)

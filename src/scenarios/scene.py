@@ -153,8 +153,9 @@ class SceneWorld(Scene):
         if self._edge("f2", keys[pygame.K_F2]):
             self.coordinates = not self.coordinates
 
-        if self._edge("esc", keys[pygame.K_ESCAPE]):
-            self.switch_scene(SceneMainMenu())
+        # Abandonado temporariamente (sobrescreve os saves)
+        # if self._edge("esc", keys[pygame.K_ESCAPE]):
+        #    self.switch_scene(SceneMainMenu())
 
         # Redefinir velocidade
         player.speed = 35
@@ -309,6 +310,7 @@ class SceneMainMenu(Scene):
     def __init__(self):
         super().__init__()
         self.selected = 0
+        Save.load_saves()
 
     def render_text(self, text, center, position):
         surface = self.font.render(text, True, (255, 255, 255))

@@ -1,9 +1,12 @@
-from src.entities.character import player, Enemy
+from src.entities.character import player, Enemy, Player
 from src.scenarios.world.map import Map
 from src.utils.paths import SAVES_DIR
 from datetime import datetime
 import json
 import os
+
+default_player = Player("Heroi", 100, 15)
+
 class Save():
     save_list = []
     __selected = None
@@ -15,6 +18,7 @@ class Save():
 
     @classmethod
     def load_saves(self):
+        self.save_list = []
 
         # Carrega todos os saves e identifica se existem ou não
         for index in range(3):
