@@ -67,6 +67,7 @@ class entity_sprites:
             self.current_direction = self.entity.direction
 
             self.reset_sprite()
+
         if self.current_status in self.once and self.current == self.amount:
             self.current_status = "idle"
             self.current_direction = "right"

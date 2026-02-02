@@ -28,7 +28,7 @@ class Scene(ABC):
         self.font_big = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
 
         # Debounce
-        self._pressed = {"up": False, "down": False, "enter": False, "x": False, "F2": False, "space": False}
+        self._pressed = {"up": False, "down": False, "enter": False, "x": False, "F2": False, "space": False, "escape": False}
 
     def switch_scene(self, scene):
         context.add_scene = scene
@@ -152,6 +152,9 @@ class SceneWorld(Scene):
 
         if self._edge("f2", keys[pygame.K_F2]):
             self.coordinates = not self.coordinates
+
+        if self._edge("esc", keys[pygame.K_ESCAPE]):
+            self.switch_scene(SceneMainMenu())
 
         # Redefinir velocidade
         player.speed = 35
