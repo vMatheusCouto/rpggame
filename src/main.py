@@ -10,6 +10,9 @@ from src.entities.character import Enemy
 Map.load_maps()
 Enemy.load_enemies()
 
+from src.save import Save
+Save.load_saves()
+
 from src.frames import *
 pygame.init()
 
