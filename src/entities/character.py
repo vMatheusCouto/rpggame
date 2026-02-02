@@ -114,7 +114,7 @@ class Player(Character):
             self.xp -= self.xp_to_next()
             self.level += 1
             self.damage += int(2 + self.level * 0.6)
-            hp_gain = 20 + int(20 * self.level * 0.45)
+            hp_gain = 20 + int(2 * self.level * 0.45)
             self.max_hp += hp_gain
             self.hp += hp_gain
             self._learn_moves_for_current_level()
