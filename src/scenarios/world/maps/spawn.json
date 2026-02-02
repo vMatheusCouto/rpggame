@@ -1,6 +1,5 @@
 {
   "name": "spawn",
-  "spawn_position": [150, 250],
   "tiles": {
     "0,0": {
       "type": "block"

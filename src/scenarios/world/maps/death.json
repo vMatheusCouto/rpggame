@@ -1,6 +1,5 @@
 {
   "name": "death",
-  "spawn_position": [150, 250],
   "events": {
     "E0": {
       "type": "mapevent",

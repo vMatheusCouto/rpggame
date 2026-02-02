@@ -5,11 +5,10 @@ import pygame
 class Map:
     map_list = {}
 
-    def __init__(self, name, spawn_position, tiles, events):
+    def __init__(self, name, tiles, events):
         self.__name = name
         self.__background = pygame.image.load(WORLD_ASSETS / f"{name}/background.png")
         self.__top_layer = pygame.image.load(WORLD_ASSETS / f"{name}/toplayer.png").convert_alpha()
-        self.__spawn_position = spawn_position
         self.__tiles = tiles
         self.__events = events
 
@@ -22,7 +21,6 @@ class Map:
                 data = json.load(file)
                 current_map = Map(
                     name=data["name"],
-                    spawn_position=data["spawn_position"],
                     tiles=data["tiles"],
                     events=data["events"]
                 )
@@ -43,14 +41,6 @@ class Map:
     @property
     def top_layer(self):
         return self.__top_layer
-
-    @property
-    def spawn_position(self):
-        return self.__spawn_position
-
-    @spawn_position.setter
-    def spawn_position(self, new_position):
-        self.__spawn_position = new_position
 
     @property
     def tiles(self):

@@ -86,8 +86,6 @@ class Save():
             player.position.y = player_data["position"][1]
             player.map = player_data["map"]
 
-            Map.map_list[player.map].spawn_position = player_data["position"]
-
             # Atualização dos inimigos
             for enemy in data["defeated_enemies"]:
                 Enemy.enemy_list[enemy].dead = True
