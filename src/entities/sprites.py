@@ -25,7 +25,7 @@ class entity_sprites:
 
         # Quantidade de sprites
         self.short = ["idle", "hit"]
-        self.medium = ["walking", "running", "slice"]
+        self.medium = ["walking", "running"]
         self.long = ["slice", "slice2", "rush", "pierce"]
 
     def load(self):
