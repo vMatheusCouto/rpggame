@@ -1,6 +1,5 @@
 {
   "name": "lake",
-  "spawn_position": [36, 76],
   "tiles": {
     "0,0": {
       "type": "block"

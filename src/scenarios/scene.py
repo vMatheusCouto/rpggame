@@ -70,8 +70,6 @@ class SceneWorld(Scene):
 
         # Reinicializar player
         player.reset_status()
-        player.position.x = self.map.spawn_position[0]
-        player.position.y = self.map.spawn_position[1]
 
     def render(self):
         # Renderiza o background
@@ -100,14 +98,10 @@ class SceneWorld(Scene):
 
     def switch_map(self, new_map, position):
         player.map = new_map.name
-        new_map.spawn_position = position
+        player.position = pygame.Vector2(position[0], position[1])
 
         # Nova cena criada com base no novo mapa atual do usuário
         self.switch_scene(SceneWorld())
-
-    def switch_scene(self, scene):
-        self.map.spawn_position = (player.position.x, player.position.y)
-        super().switch_scene(scene)
 
     def move_back(self):
         if player.direction == "down":
@@ -285,17 +279,17 @@ class SceneGameOver(Scene):
         pygame.display.update()
 
         # Resetar player
-        player.dead = False
         player.hp = player.max_hp
         player.reset_status()
         player.reset_sprite()
 
         # Respawn
         player.map = "spawn"
-        self.switch_scene(SceneWorld())
         player.position = pygame.Vector2(140,260)
+        player.dead = False
 
         pygame.time.wait(3000)
+        self.switch_scene(SceneWorld())
 
     def handle_input(self, keys):
         pass
@@ -334,9 +328,11 @@ class SceneMainMenu(Scene):
         self.render_text("Escolha seu save", True, (0,-25))
         self.render_text("Aperte SPACE para começar", True, (0,45))
 
+        self.render_text("Aperte z para excluir o save", True, (0,135))
+
         # Lista de saves
         for index in range(3):
-            prefix = "> " if index == self.selected else ""
+            prefix = "- " if index == self.selected else ""
             self.render_text(f"{prefix}Save slot 0{index+1} - {Save.save_list[index]}", True, (0, -5 + 10 * (index+1)))
         pygame.display.update()
 

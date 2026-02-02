@@ -1,6 +1,5 @@
 {
   "name": "cave",
-  "spawn_position": [160, 150],
   "tiles": {
     "0,0": {
       "type": "block"

@@ -79,14 +79,12 @@ class Save():
             # Atualização do player
             player.hp = player_data["hp"]
             player.max_hp = player_data["max_hp"]
-            player.lvl = player_data["lvl"]
+            player.level = player_data["lvl"]
             player.xp = player_data["xp"]
 
             player.position.x = player_data["position"][0]
             player.position.y = player_data["position"][1]
             player.map = player_data["map"]
-
-            Map.map_list[player.map].spawn_position = player_data["position"]
 
             # Atualização dos inimigos
             for enemy in data["defeated_enemies"]:
