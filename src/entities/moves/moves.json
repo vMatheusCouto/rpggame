@@ -121,7 +121,7 @@
 
   "foice_da_morte": {
     "name": "Foice da morte",
-    "bonus": 10,
-    "accuracy": 0.5
+    "bonus": 50,
+    "accuracy": 0.4
   }
 }

@@ -13,6 +13,8 @@ from src.scenarios.world.map import Map
 from src.scenarios.world.movement import Walk
 from src.entities.collision import entity_collision
 
+from src.save import Save
+
 class Scene(ABC):
 
     def __init__(self):
@@ -28,6 +30,7 @@ class Scene(ABC):
 
     def switch_scene(self, scene):
         context.add_scene = scene
+        Save.update_current_save()
 
     @abstractmethod
     def render():
@@ -98,8 +101,7 @@ class SceneWorld(Scene):
         new_map.spawn_position = position
 
         # Nova cena criada com base no novo mapa atual do usuário
-        new_scene = SceneWorld()
-        context.add_scene = new_scene
+        self.switch_scene(SceneWorld())
 
     def switch_scene(self, scene):
         self.map.spawn_position = (player.position.x, player.position.y)
@@ -604,10 +606,10 @@ class SceneMainMenu(Scene):
         self.render_text("Escolha seu save", True, (0,-25))
         self.render_text("Aperte SPACE para começar", True, (0,45))
 
-
+        # Lista de saves
         for index in range(3):
             prefix = "> " if index == self.selected else ""
-            self.render_text(f"{prefix}Save slot 0{index+1}", True, (0, -5 + 10 * (index+1)))
+            self.render_text(f"{prefix}Save slot 0{index+1} - {Save.save_list[index]}", True, (0, -5 + 10 * (index+1)))
         pygame.display.update()
 
     def handle_input(self, keys):
@@ -619,16 +621,22 @@ class SceneMainMenu(Scene):
             self.selected = (self.selected - 1) % 3
 
         if self._edge("space", keys[pygame.K_SPACE]):
-            self.switch_scene(SceneWorld())
+            self.load_save()
+
+        if self._edge("z", keys[pygame.K_z]):
+            self.delete_save()
 
     def handle_event(self):
         pass
 
-    def load_save(self, index):
-        path = SAVES_DIR / ""
+    def load_save(self):
+        Save.select_save(self.selected)
+        Save.load()
+        self.switch_scene(SceneWorld())
 
-        with open(path, "r") as file:
-            data = json.load(file)
+    def delete_save(self):
+        Save.delete_save(self.selected)
+        Save.load_saves()
 
     def __str__(self):
         return self.id
