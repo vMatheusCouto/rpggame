@@ -1,5 +1,6 @@
 import pygame
 import random
+<<<<<<< HEAD
 import json
 import os
 
@@ -8,6 +9,10 @@ from src.entities.sprites import entity_sprites
 from src.entities.moves.moves import Move
 from src.utils.paths import SRC_DIR
 
+=======
+from src.entities.inventoryPlayer.bag import Inventario
+from src.entities.attacks import Attack
+>>>>>>> 13b5610ce72b6dc18402e4c6501917068a0c9898
 class Character():
     def __init__(self, name, hp, damage, path, moves, map="null", position=(0,0)):
 
@@ -71,8 +76,13 @@ class Player(Character):
 
         # Poções (temporário)
         self.potions = 1
+<<<<<<< HEAD
 
         self.moves: list[Move] = []
+=======
+        self.inventario = Inventario()
+        self.moves: list[Attack] = []
+>>>>>>> 13b5610ce72b6dc18402e4c6501917068a0c9898
         self.learnset = [
             (1,  Move.moves_list["investida"]),
             (5,  Move.moves_list["fatiar"]),

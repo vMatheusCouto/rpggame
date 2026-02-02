@@ -12,7 +12,7 @@ class Inventario:
 
         self.itens.append(novo_item)
         print(f"Item {novo_item.nome} adicionado ao inventário.")
-
+    
     def listar(self):
         print("--- INVENTÁRIO ---")
         if not self.itens:
