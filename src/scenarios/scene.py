@@ -188,23 +188,22 @@ class SceneWorld(Scene):
             player.status = "running"
 
     def start_battle(self, enemy):
-        self.switch_scene(SceneBattle(player, enemy))
+        self.switch_scene(SceneBattle(enemy))
 
-# --- CLASSE SCENEBATTLE REFATORADA ---
 class SceneBattle(Scene):
-    def __init__(self, player_battler, enemy_battler):
+    def __init__(self,enemy_battler):
         super().__init__()
-        player_battler.direction = "right"
-        player_battler.status = "idle" # Reseta animação para evitar bugs visuais
+        player.direction = "right"
+        player.status = "idle" # Reseta animação para evitar bugs visuais
         # Define que o Inimigo olha para a Esquerda
         enemy_battler.direction = "left"
         enemy_battler.status = "idle"
         # Inicializa Lógica e UI separadamente
-        self.logic = BattleLogic(player_battler, enemy_battler)
+        self.logic = BattleLogic(player, enemy_battler)
         self.ui = BattleUI(self.logic)
 
     def render(self):
-        # A cena apenas delega o desenho para a UI
+        # desenho feito na UI
         self.ui.draw()
 
     def handle_input(self, keys):
@@ -216,7 +215,6 @@ class SceneBattle(Scene):
         f2 = self._edge("f2", keys[pygame.K_F2])
 
         # 1. Se houver mensagens na tela, ENTER avança mensagem
-        # Note: usa self.logic.has_messages(), não self.in_message
         if self.logic.has_messages():
             if enter:
                 self.logic.next_message()
@@ -246,33 +244,25 @@ class SceneBattle(Scene):
             selection = self.ui.get_selection()
             self._process_selection(selection)
         if f2:
-            self.logic.player.take_xp(2000)
-
+            player.take_xp(2000)
 
     def _process_selection(self, selection):
         # Processa o que foi escolhido no menu
-
         # Menu Principal
         if selection == "Lutar":
             self.ui.enter_fight_menu()
-
         elif selection == "Bolsa":
             self.logic.use_potion()
-
         elif selection == "Fugir":
             self.logic.run_away()
-
         elif selection == "Voltar":
             self.ui.enter_main_menu()
-
         # Seleção de Golpe (retornou um int)
         elif isinstance(selection, int):
             hit_type, is_over = self.logic.player_attack(selection)
-
             # Feedback Visual na UI baseado no resultado da Lógica
             if hit_type == "hit":
                 self.ui.trigger_shake("enemy")
-
             self.ui.enter_main_menu() # Reseta para menu principal após atacar
 
     def handle_event(self):
@@ -371,6 +361,7 @@ class SceneMainMenu(Scene):
         Save.select_save(self.selected)
         Save.load()
         self.switch_scene(SceneWorld())
+        player._learn_moves_for_current_level()
 
     def delete_save(self):
         Save.delete_save(self.selected)

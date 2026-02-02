@@ -16,9 +16,11 @@ class BattleLogic:
     def add_message(self, text):
         self.message_queue.append(text)
 
-    def next_message(self):    
+    def next_message(self):
         if self.message_queue:
             self.message_queue.pop(0)
+            if player.status != "death":
+                player.status = "idle"
             # Se acabou as mensagens e tinha um ataque inimigo pendente
             if not self.message_queue and self.pending_enemy_attack:
                 self.pending_enemy_attack = False
@@ -32,11 +34,10 @@ class BattleLogic:
 
         self.add_message(f"{self.player.name} usou {move_name}!")
         if hit:
-            # Retorna o status que o player deve assumir para a UI saber (ex: "slice")
+            # Retorna o status que o player deve assumir para a UI saber
             status_effect = self._get_move_animation(move_name)
             self.player.status = status_effect
             self.add_message(f"Causou {damage} de dano!")
-
             if self.enemy.hp <= 0:
                 self._handle_victory()
                 return "hit", True # hit type, is_over
@@ -92,7 +93,7 @@ class BattleLogic:
         self.turn = "victory"
 
     def _get_move_animation(self, move_name):
-        # Mapeia nome do golpe para animação (refatorado do original)
+        # Mapeia nome do golpe para animação
         if move_name == "Corte rápido": return "pierce"
         if move_name == "Fatiar": return "slice"
         if move_name == "Foice da morte": return "slice2"

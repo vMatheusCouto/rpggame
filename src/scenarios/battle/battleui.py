@@ -95,19 +95,18 @@ class BattleUI:
     def _draw_entity(self, screen, entity, is_player):
         sprite = entity.get_sprite().convert_alpha()
 
-        # Lógica de escala e posição (simplificada do original)
+        # Lógica de escala e posição
         scale = 192 if entity.status in ["death", "pierce", "hit", "slice", "slice2", "rush"] else 96
         sprite = pygame.transform.scale(sprite, (scale, scale))
 
-        # Shake Offset
+        # Shake 
         timer = self.shake_timer_player if is_player else self.shake_timer_enemy
         dx = self.shake_strength if (timer % 2 == 0 and timer > 0) else -self.shake_strength if timer > 0 else 0
 
-        # Posições fixas baseadas no original
+        # Posições fixas
         x = 130 if is_player else self.screen_w - 230
         y = (150 if self.logic.player.map == "death" else 120) if is_player else 120
 
-        # Ajuste fino para sprites grandes
         if scale == 192:
             x -= 42
             y -= (50 if is_player else 80)
