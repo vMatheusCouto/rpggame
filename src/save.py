@@ -79,7 +79,7 @@ class Save():
             # Atualização do player
             player.hp = player_data["hp"]
             player.max_hp = player_data["max_hp"]
-            player.lvl = player_data["lvl"]
+            player.level = player_data["lvl"]
             player.xp = player_data["xp"]
 
             player.position.x = player_data["position"][0]
