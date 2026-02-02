@@ -1,34 +1,40 @@
 import os
 import pygame
 
-# inicializar tudo aqui
-from src.entities.attacks import Attack
-from src.entities.enemy.enemies import Enemy
-Attack.load_attacks()
+from src.frames import *
+
+# Inicializar mapa, ataques e inimigos
+from src.scenarios.world.map import Map
+from src.entities.moves.moves import Move
+from src.entities.character import Enemy
+Map.load_maps()
+Move.load_attacks()
 Enemy.load_enemies()
 
-from src.frames import *
 pygame.init()
 
 pygame.display.set_caption("RPG Game")
 pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 0)
 
-currentFrameProps(True)
-
 clock = pygame.time.Clock()
 pygame.font.init()
 
-while props.getRunning():
+frames = Frames()
+
+# Loop que compõe o jogo inteiro
+while context.running:
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    keys = pygame.key.get_pressed()
 
-    currentFrame(keys)
+    # Frame atual, gerencia ações e renderização e atualização da tela
+    frames.current_frame(pygame.key.get_pressed())
+
     pygame.display.update()
     pygame.display.flip()
 
     dt = clock.tick(12) / 1000
-    props.setDT(dt)
+    context.delta = dt
 
 pygame.quit()
