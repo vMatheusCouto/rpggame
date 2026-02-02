@@ -20,7 +20,7 @@
   "brutal_smash": {
     "name": "Brutal Smash",
     "bonus": 12,
-    "accuracy": 0.55
+    "accuracy": 0.65
   },
 
   "bone_slash": {
@@ -38,7 +38,7 @@
   "bone_crush": {
     "name": "Bone Crush",
     "bonus": 10,
-    "accuracy": 0.6
+    "accuracy": 0.65
   },
 
   "poison_stab": {
@@ -50,7 +50,7 @@
   "backstab": {
     "name": "Backstab",
     "bonus": 14,
-    "accuracy": 0.5
+    "accuracy": 0.8
   },
 
   "shield_bash": {
@@ -62,7 +62,7 @@
   "reckless_chop": {
     "name": "Reckless Chop",
     "bonus": 16,
-    "accuracy": 0.45
+    "accuracy": 0.65
   },
 
   "dark_bolt": {
@@ -74,7 +74,7 @@
   "shadow_blast": {
     "name": "Shadow Blast",
     "bonus": 20,
-    "accuracy": 0.4
+    "accuracy": 0.5
   },
 
   "arcane_missiles": {
@@ -92,12 +92,36 @@
   "fireball": {
     "name": "Fireball",
     "bonus": 16,
-    "accuracy": 0.55
+    "accuracy": 0.75
   },
 
   "lightning_strike": {
     "name": "Lightning Strike",
     "bonus": 24,
-    "accuracy": 0.35
+    "accuracy": 0.65
+  },
+
+  "investida": {
+    "name": "Investida",
+    "bonus": 0,
+    "accuracy": 1.0
+  },
+
+  "fatiar": {
+    "name": "Fatiar",
+    "bonus": 3,
+    "accuracy": 0.9
+  },
+
+  "corte_rapido": {
+    "name": "Corte rápido",
+    "bonus": 6,
+    "accuracy": 0.75
+  },
+
+  "foice_da_morte": {
+    "name": "Foice da morte",
+    "bonus": 10,
+    "accuracy": 0.5
   }
 }

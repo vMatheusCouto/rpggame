@@ -20,7 +20,6 @@ class Map:
         for map in sorted(entries):
             with open(maps_folder / map, 'r') as file:
                 data = json.load(file)
-                print(file)
                 current_map = Map(
                     name=data["name"],
                     spawn_position=data["spawn_position"],

@@ -1,8 +1,8 @@
 {
   "name": "Skeleton Warrior",
   "hp": 245,
-  "damage": 30,
-  "drop_xp": 85,
+  "damage": 40,
+  "drop_xp": 300,
   "path": "skeleton_warrior",
   "map": "cave",
   "position": [69, 77],

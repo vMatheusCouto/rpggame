@@ -1,8 +1,8 @@
 {
   "name": "Orc Shaman",
   "hp": 275,
-  "damage": 36,
-  "drop_xp": 110,
+  "damage": 42,
+  "drop_xp": 350,
   "path": "orc_shaman",
   "map": "village",
   "position": [338, 189],

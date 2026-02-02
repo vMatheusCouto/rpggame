@@ -9,7 +9,7 @@ from src.entities.moves.moves import Move
 from src.utils.paths import SRC_DIR
 
 class Character():
-    def __init__(self, name, hp, damage):
+    def __init__(self, name, hp, damage, path, moves, map="null", position=(0,0)):
 
         # Atributos de combate
         self.name = name
@@ -17,16 +17,17 @@ class Character():
         self.max_hp = hp
         self.damage = damage
 
+        self.moves = moves
         self.dead = False
 
         # Atributos de mapa/sprites
+        self.path = path
         self.status = "idle"
         self.direction = "right"
-        self.position = (0,0)
-        self.map = "null"
+        self.position = position
+        self.map = map
 
         self.sprites = entity_sprites(self)
-        self.path = ""
 
     @property
     def hp(self):
@@ -57,32 +58,33 @@ class Character():
     def get_sprite(self):
         return self.sprites.get_sprite()
 
-    def reset_sprite(self, number):
+    def reset_sprite(self, number=0):
         self.sprites.reset_sprite(number)
 
 class Player(Character):
     def __init__(self, name, hp, damage):
-        super().__init__(name, hp, damage)
+        super().__init__(name, hp, damage, "player", [], "spawn", pygame.Vector2(150,250))
+
+        # Progresso
         self.level = 1
         self.xp = 0
+
+        # Poções (temporário)
         self.potions = 1
+
         self.moves: list[Move] = []
         self.learnset = [
-            (1,  Move("Investida", bonus=0,  accuracy=1.00)),
-            (5,  Move("Fatiar", bonus=3,  accuracy=0.90)),
-            (8,  Move("Corte rápido", bonus=6,  accuracy=0.75)),
-            (10, Move("Foice da morte", bonus=10, accuracy=0.50)),
+            (1,  Move.moves_list["investida"]),
+            (5,  Move.moves_list["fatiar"]),
+            (8,  Move.moves_list["corte_rapido"]),
+            (10, Move.moves_list["foice_da_morte"]),
         ]
+
         self._learn_moves_for_current_level()
-        self.respawn = False
+
+        # Valores iniciais de movimentação
         self.moving = False
         self.speed = 35
-
-
-        self.path = "player"
-
-        self.map = "spawn"
-        self.position = pygame.Vector2(150, 250)
 
     def _learn_moves_for_current_level(self):
         for lvl_req, move in self.learnset:
@@ -119,17 +121,9 @@ class Player(Character):
 
 class Enemy(Character):
     enemy_list = {}
-    def __init__(self, name, hp, damage, drop_xp, path, map_name, position, direction="left", moves=[]):
-        super().__init__(name, hp, damage)
-        self.max_hp = hp
-        self.enemy_path = path
+    def __init__(self, name, hp, damage, drop_xp, path, map_name, position, moves=[]):
+        super().__init__(name, hp, damage, path, moves, map_name, position)
         self.drop_xp = drop_xp
-        self.path = path
-        self.status = "idle"
-        self.direction = direction
-        self.moves = moves
-        self.map = map_name
-        self.position = position
 
     @classmethod
     def load_enemies(cls):
@@ -151,12 +145,7 @@ class Enemy(Character):
                     position=(data["position"][0], data["position"][1]),
                     moves=current_moves
                 )
-                enemy_sprite = entity_sprites(current_enemy)
-                current_enemy.setSprites(enemy_sprite)
                 cls.enemy_list[data["name"]] = current_enemy
-
-            for key, item in Enemy.enemy_list.items():
-                print(f"{key} - {item.name}")
 
     def use_random_move(self, target):
         move = random.choice(self.moves)
@@ -166,22 +155,5 @@ class Enemy(Character):
         target.hp -= dano_total
         return move.name, dano_total, True
 
-    def setSprites(self, sprite):
-        self.sprites = sprite
-
-    def getSprite(self):
-        return self.sprites.get_sprite()
-
-    def getStatus(self):
-        return self.status
-
-    def getDirection(self):
-        return self.direction
-
-    def setStatus(self, status):
-        self.status = status
-
-    def setDirection(self, direction):
-        self.direction = direction
 
 player = Player("Heroi", 100, 15)

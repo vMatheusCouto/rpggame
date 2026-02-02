@@ -4,49 +4,56 @@ import pygame
 
 class entity_sprites:
     def __init__(self, entity):
+
+        self.entity = entity
+
+        # Controle de quantidade de sprites
         self.current = 0
         self.current_max = 0
+
+        # Gerenciamento do sprite atual
         self.character_sprites = []
-        self.entity = entity
         self.amount = 0
+
+        # Definição inicial
         self.current_status = "init"
         self.current_direction = "init"
+
+        # Controle de animações
         self.non_loop = ["death","pierce","hit","slice", "slice2", "rush"]
         self.once = ["pierce","hit","slice", "slice2", "rush"]
+
+        # Quantidade de sprites
+        self.short = ["idle", "hit"]
+        self.medium = ["walking", "running", "slice"]
+        self.long = ["slice", "slice2", "rush", "pierce"]
 
     def load(self):
         character_status = f"{self.entity.status}/"
         character_direction = f"{self.entity.direction}/"
         self.character_sprites = []
         if self.current_max == 0:
-            if self.entity.status == "idle":
+
+            if self.entity.status in self.short:
                 self.amount = 4
-            elif self.entity.status == "walking":
+            elif self.entity.status in self.medium:
                 self.amount = 6
-            elif self.entity.status == "running":
-                self.amount = 6
+            elif self.entity.status in self.long:
+                self.amount = 8
+
+            # Condições especiais de morte (100% mockado temporariamente)
             elif self.entity.status == "death":
                 if self.entity.name == "Skeleton":
                     self.amount = 8
                 elif self.entity.name == "Orc Shaman":
                     self.amount = 7
+                elif self.entity.name == "Heroi":
+                    self.amount = 8
                 else:
                     self.amount = 6
-
-            elif self.entity.status == "pierce":
-                self.amount = 8
-            elif self.entity.status == "hit":
-                self.amount = 4
-            elif self.entity.status == "slice":
-                self.amount = 8
-            elif self.entity.status == "slice2":
-                self.amount = 8
-            elif self.entity.status == "rush":
-                self.amount = 8
         else:
             self.amount = self.current_max
         for count in range(self.amount):
-            print(count)
             self.character_sprites.append(pygame.image.load(CHARACTER_ASSETS / f"{self.entity.path}/{self.entity.status}/{character_direction}characterbase{count+1}.png"))
 
     def advance_sprite(self):
@@ -80,7 +87,7 @@ class entity_sprites:
                 self.current = 0
 
     def reset_sprite(self, maximum=0):
-        self.current = 0
+        self.current = maximum
         if maximum != 0:
             self.current_max = maximum
 

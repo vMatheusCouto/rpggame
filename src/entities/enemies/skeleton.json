@@ -2,7 +2,7 @@
   "name": "Skeleton",
   "hp": 120,
   "damage": 14,
-  "drop_xp": 28,
+  "drop_xp": 100,
   "path": "skeleton",
   "map": "null",
   "position": [0, 0],

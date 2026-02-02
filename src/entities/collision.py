@@ -1,4 +1,3 @@
-
 def entity_collision(playerPos, entityPos):
     x = 40
     y = 35

@@ -1,5 +1,7 @@
-import pygame
 import random
+import pygame
+import json
+import os
 
 from abc import ABC, abstractmethod
 from src.scenarios.world.movement import *
@@ -14,18 +16,20 @@ from src.entities.collision import entity_collision
 class Scene(ABC):
 
     def __init__(self):
-        self.id = rand.randint(100000, 999999)
+        self.id = random.randint(100000, 999999)
 
-    def start():
-        pass
+        # Gerenciamento de fontes
+        pygame.font.init()
+        self.font = pygame.font.Font(ASSETS_DIR / "Pixeled.ttf", 5)
+        self.font_big = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
 
-    def __end():
-        pass
+        # Debounce
+        self._pressed = {"up": False, "down": False, "enter": False, "x": False, "F2": False, "space": False}
 
     def switch_scene(self, scene):
         context.add_scene = scene
 
-    @classmethod
+    @abstractmethod
     def render():
         pass
 
@@ -33,12 +37,22 @@ class Scene(ABC):
     def handle_input():
         pass
 
+    def _edge(self, key_name: str, is_down: bool) -> bool:
+        """True só no frame em que a tecla foi pressionada (debounce)."""
+        if is_down and not self._pressed[key_name]:
+            self._pressed[key_name] = True
+            return True
+        if not is_down:
+            self._pressed[key_name] = False
+        return False
+
     def __str__(self):
         return self.id
 
 class SceneWorld(Scene):
 
     def __init__(self):
+        super().__init__()
 
         # Estado da cena
         self.__active = False
@@ -49,54 +63,43 @@ class SceneWorld(Scene):
         # Elementos da tela
         self.coordinates = False
 
+        # Reinicializar player
+        player.reset_status()
         player.position.x = self.map.spawn_position[0]
         player.position.y = self.map.spawn_position[1]
 
-        self.start()
-
     def render(self):
-        if self.__active:
-            # Renderiza o background
-            print("mapbg:",self.map.background)
-            context.screen.blit(self.map.background, (0, 0))
+        # Renderiza o background
+        context.screen.blit(self.map.background, (0, 0))
 
-            # Renderiza todos os inimigos do mapa atual
-            for key, enemy in Enemy.enemy_list.items():
-                print("enemy")
-                print(enemy.map)
-                print(self.map.name)
-                if enemy.map == self.map.name:
-                    if not enemy.dead:
-                        print((enemy.position[0] - 16, enemy.position[1] - 24))
-                        context.screen.blit(enemy.get_sprite(), (enemy.position[0] - 16, enemy.position[1] - 24))
+        # Renderiza todos os inimigos do mapa atual
+        for key, enemy in Enemy.enemy_list.items():
+            if enemy.map == self.map.name:
+                if not enemy.dead:
+                    context.screen.blit(enemy.get_sprite(), (enemy.position[0] - 16, enemy.position[1] - 24))
 
-            # Renderiza o player
-            print(player.position.x)
-            print(player.position.y)
-            context.screen.blit(player.get_sprite(), (player.position.x - 16, player.position.y - 24))
+        # Renderiza o player
+        context.screen.blit(player.get_sprite(), (player.position.x - 16, player.position.y - 24))
 
-            # Renderiza o top layer
-            context.screen.blit(self.map.top_layer, (0, 0))
+        # Renderiza o top layer
+        context.screen.blit(self.map.top_layer, (0, 0))
 
-            # Renderiza as coordenadas
-            if self.coordinates:
-                (tileX, tileY) = player.tiles
-                text_surface = font.render(
-                    f"x = {int(player.position.x)} ({int(tileX)}) z = {int(player.position.y)} ({int(tileY)})",
-                    True, (255, 255, 255)
-                )
-
-    def start(self):
-        player.reset_status()
-        self.map = self.map
-        self.__active = True
+        # Renderiza as coordenadas
+        if self.coordinates:
+            (tileX, tileY) = player.get_tile_pos()
+            text_surface = self.font.render(
+                f"x = {int(player.position.x)} ({int(tileX)}) z = {int(player.position.y)} ({int(tileY)})",
+                True, (255, 255, 255)
+            )
+            context.screen.blit(text_surface, (10, 10))
 
     def switch_map(self, new_map, position):
         player.map = new_map.name
+        new_map.spawn_position = position
+
+        # Nova cena criada com base no novo mapa atual do usuário
         new_scene = SceneWorld()
         context.add_scene = new_scene
-        new_scene.start()
-        player.position = pygame.Vector2(position[0], position[1])
 
     def switch_scene(self, scene):
         self.map.spawn_position = (player.position.x, player.position.y)
@@ -124,10 +127,9 @@ class SceneWorld(Scene):
                 if entity_collision(player.position, enemy.position):
                     if not enemy.dead:
                         self.move_back()
-                        self.switch_scene(SceneBattle(player, enemy, self.map.name))
+                        self.start_battle(enemy)
 
         tile = self.map.get_tile_details(player.get_tile_pos())
-        print(tile)
         if tile:
             # Colisão com o mapa
             if tile["type"] == "block":
@@ -144,19 +146,19 @@ class SceneWorld(Scene):
             if player.status == "walking" or player.status == "running":
                 if random.randint(1, 80) == 2:
                     if random.randint(1, 4) == 3:
-                        self.switch_scene(SceneBattle(player, Enemy.enemy_list["Orc"], self.map.name))
+                        self.start_battle(Enemy.enemy_list["Orc"])
                     else:
-                        self.switch_scene(SceneBattle(player, Enemy.enemy_list["Skeleton"], self.map.name))
-
+                        self.start_battle(Enemy.enemy_list["Skeleton"])
 
     def handle_input(self, keys):
-        event = None
-        running = False
+
+        if self._edge("f2", keys[pygame.K_F2]):
+            self.coordinates = not self.coordinates
+
+        # Redefinir velocidade
         player.speed = 35
 
-        if keys[pygame.K_q]:
-            context.stop_running()
-
+        # Correr
         if keys[pygame.K_LSHIFT]:
             running = True
             player.speed = 60
@@ -177,37 +179,37 @@ class SceneWorld(Scene):
             player.status = "idle"
             return
 
-        if running:
+        # Animação definida após os botões para garantir que "running" sobreponha "walking"
+        if keys[pygame.K_LSHIFT]:
             player.status = "running"
 
     def start_battle(self, enemy):
-        self.end()
+        self.switch_scene(SceneBattle(player, enemy))
 
 class SceneBattle(Scene):
-    def __init__(self, player_battle, enemy_battle, backgroundName):
-        from src.context import context
-        # Corrigir nomes, ordem e inicialização
+    def __init__(self, player_battler, enemy_battler):
+        super().__init__()
 
-        # Ideia: pegar tudo que desenha na tela e colocar em Scene ou em uma classe chamada Screen;
-        self.life_hud_img = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
-        self.life_hud_img_inverted = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
-        self.background_image = pygame.image.load(BATTLE_ASSETS / f"{player.map}/background.png")
-        if backgroundName == "death":
-            self.hudBar = (92,105)
-        else:
-            self.hudBar = (92,75)
-        self.enemyHudBar = (370,75)
+        # Definições iniciais
         self.screen_w = context.screen.get_width()
         self.screen_h = context.screen.get_height()
-        self.player_battler = player_battle
-        self.enemy_battler = enemy_battle
+        self.player_battler = player_battler
+        self.enemy_battler = enemy_battler
 
-        # Corrigir quando Player for refatorado
-        self.backgroundName = backgroundName
-        self.dead = False
+        # Carregamento de imagens
+        self.background_image = pygame.image.load(BATTLE_ASSETS / f"{player.map}/background.png")
+        self.life_hud_img = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
+        self.life_hud_img_inverted = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
+
+        # Ajustes iniciais player e inimigo
         player.status = "idle"
         player.direction = "right"
+
+        self.enemy_battler.dead = False
+        self.enemy_battler.status = "idle"
+        self.enemy_battler.direction = "left"
         self.enemy_battler.hp = self.enemy_battler.max_hp
+
         # Menu principal
         self.menu_items = ["Lutar", "Bolsa", "Fugir"]
         self.menu_index = 0
@@ -220,36 +222,23 @@ class SceneBattle(Scene):
         self.message_queue = []
         self.in_message = False
 
-        # Debounce das teclas
-        self._pressed = {"up": False, "down": False, "z": False, "x": False}
-
         # Controle de saída
         self.request_exit = False
         self.battle_over = False
-        # Tremor (shake) quando toma hit
 
-        # CORRIGIR: só vai ser executado quando o golpe for acertado
+        # Tremor (shake) quando toma hit
         self.player_hit_timer = 0
         self.enemy_hit_timer = 0
         self.shake_strength = 4   # pixels
+
         self.pending_enemy_attack = False
 
-        # Critérios visuais
-        self.enemy_battler.dead = False
-        self.enemy_battler.status = "idle"
-        # Fonts
-        pygame.font.init() # avaliar: tem como puxar esse init direto do context?
-        self.font = pygame.font.Font(ASSETS_DIR / "Pixeled.ttf", 5)
-        self.font_big = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
-
-    def _edge(self, key_name: str, is_down: bool) -> bool:
-        """True só no frame em que a tecla foi pressionada (debounce)."""
-        if is_down and not self._pressed[key_name]:
-            self._pressed[key_name] = True
-            return True
-        if not is_down:
-            self._pressed[key_name] = False
-        return False
+        # Posição do hud de entidade (boss mockado)
+        if player.map == "death":
+            self.hudBar = (92,105)
+        else:
+            self.hudBar = (92,75)
+        self.enemyHudBar = (370,75)
 
     def _push_msg(self, text: str):
         self.message_queue.append(text)
@@ -278,7 +267,7 @@ class SceneBattle(Scene):
 
             if self.player_battler.hp <= 0:
                 player.status = "death"
-                player.reset_sprite(8)
+                player.reset_sprite()
                 self._push_msg("DERROTA...")
                 self.player_battler.dead = True
                 self.dead = True
@@ -331,19 +320,23 @@ class SceneBattle(Scene):
     def handle_input(self, keys):
         up = self._edge("up", keys[pygame.K_w])
         down = self._edge("down", keys[pygame.K_s])
-        z = self._edge("z", keys[pygame.K_RETURN])
+        enter = self._edge("enter", keys[pygame.K_RETURN])
         x = self._edge("x", keys[pygame.K_x])
         f2 = self._edge("f2", keys[pygame.K_F2])
 
         # AVALIAR: isso não deveria estar em um arquivo separado? keyActions deveria ser apenas os botões com chamadas de método
         if self.in_message:
-            if z:
+            if enter:
                 self._next_msg()
             return
 
         if self.battle_over:
-            if z:
+            if enter:
                 self.request_exit = True
+                if player.dead:
+                    self.switch_scene(SceneGameOver())
+                else:
+                    self.switch_scene(SceneWorld())
             return
 
         # Submenu de golpes
@@ -359,7 +352,7 @@ class SceneBattle(Scene):
                 self.ui_mode = "main"
                 return
 
-            if z:
+            if enter:
                 choice = items[self.fight_index]
 
                 if choice == "Voltar":
@@ -413,7 +406,7 @@ class SceneBattle(Scene):
             self.menu_index = (self.menu_index + 1) % len(self.menu_items)
         if f2:
             self.player_battler.take_xp(1000)
-        if z:
+        if enter:
             choice = self.menu_items[self.menu_index]
 
             if choice == "Lutar":
@@ -442,19 +435,17 @@ class SceneBattle(Scene):
 
         enemy_frame = self.enemy_battler.get_sprite().convert_alpha()
 
-        if self.backgroundName == "death":
+        if player.map == "death":
             pass
         else:
-            if self.enemy_battler.getStatus() == "death":
+            if self.enemy_battler.status == "death":
                 enemy_sprite = pygame.transform.scale(enemy_frame, (192, 192))
                 context.screen.blit(enemy_sprite, (enemy_x - 42, enemy_y - 80))
             else:
                 enemy_sprite = pygame.transform.scale(enemy_frame, (96,96))
-                print("enemy_x:",enemy_x)
-                print("enemy_y:",enemy_y)
                 context.screen.blit(enemy_sprite, (enemy_x + dx, enemy_y + dy))
 
-        if self.backgroundName == "death":
+        if player.map == "death":
             player_y = 150
         else:
             player_y = 120
@@ -476,7 +467,7 @@ class SceneBattle(Scene):
             self.player_hit_timer -= 1
 
         # HUD inimigo
-        if self.backgroundName != "death":
+        if player.map != "death":
             self._draw_hp_box(
                 context.screen,
                 x=self.enemyHudBar[0] + 19,
@@ -502,13 +493,13 @@ class SceneBattle(Scene):
 
         context.screen.blit(self.life_hud_img, self.hudBar)
 
-        if self.backgroundName == "death":
+        if player.map == "death":
             pass
         else:
             context.screen.blit(self.life_hud_img_inverted, self.enemyHudBar)
 
         # Renderizar XP
-        if self.backgroundName == "death":
+        if player.map == "death":
             xpY = 57
         else:
             xpY = 26
@@ -528,7 +519,6 @@ class SceneBattle(Scene):
         elif self.battle_over:
 
             self._draw_text(context.screen, "ENTER: voltar", self.screen_w - 95, self.screen_h - 28)
-            self.switch_scene(SceneWorld())
         else:
             start_x = self.screen_w - 240
             start_y = self.screen_h - 86
@@ -548,3 +538,97 @@ class SceneBattle(Scene):
                     prefix = "> " if i == self.fight_index else "  "
                     self._draw_text(context.screen, prefix + item, start_x + 10, y, big=True)
 
+class SceneGameOver(Scene):
+
+    def render(self):
+
+        # Fundo preto
+        context.screen.fill((0, 0, 0))
+
+        # Game over na tela
+        game_over = self.font.render("GAME OVER", True, (255, 255, 255))
+        rect = game_over.get_rect(
+            center=(context.screen.get_width() / 2, context.screen.get_height() / 2)
+        )
+        context.screen.blit(game_over, rect)
+
+        pygame.display.update()
+
+        # Resetar player
+        player.dead = False
+        player.hp = player.max_hp
+        player.reset_status()
+        player.reset_sprite()
+
+        # Respawn
+        player.map = "spawn"
+        self.switch_scene(SceneWorld())
+        player.position = pygame.Vector2(140,260)
+
+        pygame.time.wait(3000)
+
+    def handle_input(self, keys):
+        pass
+
+    def handle_event(self):
+        pass
+
+    def __str__(self):
+        return self.id
+
+
+class SceneMainMenu(Scene):
+
+    def __init__(self):
+        super().__init__()
+        self.selected = 0
+
+    def render_text(self, text, center, position):
+        surface = self.font.render(text, True, (255, 255, 255))
+        position_center = (0,0)
+        if center:
+            position_center = (context.screen.get_width() / 2, context.screen.get_height() / 2)
+
+            rect = surface.get_rect(
+                center=(position_center[0] + position[0], position_center[1] + position[1])
+            )
+            context.screen.blit(surface, rect)
+        else:
+            context.screen.blit(surface, position)
+
+    def render(self):
+
+        # Fundo preto
+        context.screen.fill((0, 0, 0))
+        self.render_text("Trono de ossos", True, (0,-35))
+        self.render_text("Escolha seu save", True, (0,-25))
+        self.render_text("Aperte SPACE para começar", True, (0,45))
+
+
+        for index in range(3):
+            prefix = "> " if index == self.selected else ""
+            self.render_text(f"{prefix}Save slot 0{index+1}", True, (0, -5 + 10 * (index+1)))
+        pygame.display.update()
+
+    def handle_input(self, keys):
+
+        if self._edge("down", keys[pygame.K_s]):
+            self.selected = (self.selected + 1) % 3
+
+        if self._edge("up", keys[pygame.K_w]):
+            self.selected = (self.selected - 1) % 3
+
+        if self._edge("space", keys[pygame.K_SPACE]):
+            self.switch_scene(SceneWorld())
+
+    def handle_event(self):
+        pass
+
+    def load_save(self, index):
+        path = SAVES_DIR / ""
+
+        with open(path, "r") as file:
+            data = json.load(file)
+
+    def __str__(self):
+        return self.id

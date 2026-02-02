@@ -1,8 +1,8 @@
 {
   "name": "Orc Warrior",
   "hp": 210,
-  "damage": 27,
-  "drop_xp": 70,
+  "damage": 31,
+  "drop_xp": 220,
   "path": "orc_warrior",
   "map": "cave",
   "position": [84, 244],

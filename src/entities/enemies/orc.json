@@ -2,7 +2,7 @@
   "name": "Orc",
   "hp": 95,
   "damage": 12,
-  "drop_xp": 800,
+  "drop_xp": 80,
   "path": "orc",
   "map": "null",
   "position": [0, 0],

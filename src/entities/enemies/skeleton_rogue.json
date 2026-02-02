@@ -1,8 +1,8 @@
 {
   "name": "Skeleton Rogue",
   "hp": 170,
-  "damage": 22,
-  "drop_xp": 52,
+  "damage": 30,
+  "drop_xp": 220,
   "path": "skeleton_rogue",
   "map": "village",
   "position": [468, 173],

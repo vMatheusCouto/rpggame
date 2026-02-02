@@ -1,8 +1,8 @@
 {
   "name": "Orc Rogue",
   "hp": 145,
-  "damage": 19,
-  "drop_xp": 40,
+  "damage": 25,
+  "drop_xp": 150,
   "path": "orc_rogue",
   "map": "spawn",
   "position": [16, 232],

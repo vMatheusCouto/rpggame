@@ -1,16 +1,16 @@
 import os
 import pygame
 
-from src.frames import *
-
-# Inicializar mapa, ataques e inimigos
-from src.scenarios.world.map import Map
+# Carregamento inicial (manter nessa ordem)
 from src.entities.moves.moves import Move
+Move.load_attacks()
+
+from src.scenarios.world.map import Map
 from src.entities.character import Enemy
 Map.load_maps()
-Move.load_attacks()
 Enemy.load_enemies()
 
+from src.frames import *
 pygame.init()
 
 pygame.display.set_caption("RPG Game")
@@ -26,7 +26,11 @@ while context.running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            context.stop_running()
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_q:
+                context.stop_running()
 
     # Frame atual, gerencia ações e renderização e atualização da tela
     frames.current_frame(pygame.key.get_pressed())
