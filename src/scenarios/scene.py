@@ -12,6 +12,8 @@ from src.entities.sprites import entity_sprites
 from src.scenarios.world.map import Map
 from src.scenarios.world.movement import Walk
 from src.entities.collision import entity_collision
+from src.scenarios.battle.battle import BattleLogic
+from src.scenarios.battle.battleui import BattleUI
 
 from src.save import Save
 
@@ -182,357 +184,93 @@ class SceneWorld(Scene):
     def start_battle(self, enemy):
         self.switch_scene(SceneBattle(player, enemy))
 
+# --- CLASSE SCENEBATTLE REFATORADA ---
 class SceneBattle(Scene):
     def __init__(self, player_battler, enemy_battler):
         super().__init__()
+        player_battler.direction = "right"
+        player_battler.status = "idle" # Reseta animação para evitar bugs visuais
+        # Define que o Inimigo olha para a Esquerda
+        enemy_battler.direction = "left"
+        enemy_battler.status = "idle"
+        # Inicializa Lógica e UI separadamente
+        self.logic = BattleLogic(player_battler, enemy_battler)
+        self.ui = BattleUI(self.logic)
 
-        # Definições iniciais
-        self.screen_w = context.screen.get_width()
-        self.screen_h = context.screen.get_height()
-        self.player_battler = player_battler
-        self.enemy_battler = enemy_battler
-
-        # Carregamento de imagens
-        self.background_image = pygame.image.load(BATTLE_ASSETS / f"{player.map}/background.png")
-        self.life_hud_img = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
-        self.life_hud_img_inverted = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
-
-        # Ajustes iniciais player e inimigo
-        player.status = "idle"
-        player.direction = "right"
-
-        self.enemy_battler.dead = False
-        self.enemy_battler.status = "idle"
-        self.enemy_battler.direction = "left"
-        self.enemy_battler.hp = self.enemy_battler.max_hp
-
-        # Menu principal
-        self.menu_items = ["Lutar", "Bolsa", "Fugir"]
-        self.menu_index = 0
-
-        # Submenu de golpes
-        self.ui_mode = "main"
-        self.fight_index = 0
-
-        # Mensagens
-        self.message_queue = []
-        self.in_message = False
-
-        # Controle de saída
-        self.request_exit = False
-        self.battle_over = False
-
-        # Tremor (shake) quando toma hit
-        self.player_hit_timer = 0
-        self.enemy_hit_timer = 0
-        self.shake_strength = 4   # pixels
-
-        self.pending_enemy_attack = False
-
-        # Posição do hud de entidade (boss mockado)
-        if player.map == "death":
-            self.hudBar = (92,105)
-        else:
-            self.hudBar = (92,75)
-        self.enemyHudBar = (370,75)
-
-    def _push_msg(self, text: str):
-        self.message_queue.append(text)
-        self.in_message = True
-
-    def _next_msg(self):
-        if self.message_queue:
-            self.message_queue.pop(0)
-            if player.status != "death":
-                player.status = "idle"
-        if not self.message_queue:
-            self.in_message = False
-        #contra ataque agendado
-        if not self.message_queue and self.pending_enemy_attack and not self.battle_over:
-            self.pending_enemy_attack = False
-            move_name, dmg, hit = self.enemy_battler.use_random_move(self.player_battler)
-            self._push_msg(f"{self.enemy_battler.name} usou {move_name}!")
-            if hit:
-                player.status = "hit"
-                self._push_msg(f"Causou {dmg} de dano!")
-                self.player_hit_timer = 10
-            else:
-                self._push_msg("Mas errou!")
-
-                self.player_hit_timer = 10
-
-            if self.player_battler.hp <= 0:
-                player.status = "death"
-                player.reset_sprite()
-                self._push_msg("DERROTA...")
-                self.player_battler.dead = True
-                self.dead = True
-                self.battle_over = True
-
-    def _hp_ratio(self, battler):
-        if battler.max_hp <= 0:
-            return 0
-        return max(0, min(1, battler.hp / battler.max_hp))
-
-    def _shake_offset(self, timer: int):
-        if timer <= 0:
-            return 0, 0
-        dx = self.shake_strength if (timer % 2 == 0) else -self.shake_strength
-        return dx, 0
-
-    def _draw_text(self, screen, text, x, y, big=False):
-        surf = (self.font_big if big else self.font).render(text, True, (255, 255, 255))
-        context.screen.blit(surf, (x, y))
-
-    def _draw_hp_box(self, screen, x, y, name, level, battler, box_w=240, box_h=64):
-        box = pygame.Rect(x, y, box_w, box_h)
-
-        self._draw_text(screen, f"{name}", x + 2, y - 25, big=True)
-        if battler.name == "Heroi":
-            self._draw_text(screen, f"Lv {level}", x + 45, y - 25)
-
-        bar_x = x + 10
-        bar_y = y + 32
-        bar_w = 132
-        bar_h = 9
-
-        pygame.draw.rect(screen, (0, 0, 0), (x, y, bar_w, bar_h))
-
-        ratio = self._hp_ratio(battler)
-        fill_w = int(bar_w * ratio)
-
-        color = (170, 0, 7)
-        pygame.draw.rect(screen, color, (x, y, fill_w, bar_h))
-        self._draw_text(screen, f"{battler.hp}/{battler.max_hp}", x + box_w - 140, y + 14)
-
-    def _fight_items(self):
-        move_names = [m.name for m in getattr(self.player_battler, "moves", [])]
-        move_names = move_names[:4]
-        return move_names + ["Voltar"]
-
-    def handle_event(self):
-        pass
+    def render(self):
+        # A cena apenas delega o desenho para a UI
+        self.ui.draw()
 
     def handle_input(self, keys):
+        # Leitura dos Inputs básicos com debounce
         up = self._edge("up", keys[pygame.K_w])
         down = self._edge("down", keys[pygame.K_s])
         enter = self._edge("enter", keys[pygame.K_RETURN])
-        x = self._edge("x", keys[pygame.K_x])
+        x_key = self._edge("x", keys[pygame.K_x])
         f2 = self._edge("f2", keys[pygame.K_F2])
 
-        # AVALIAR: isso não deveria estar em um arquivo separado? keyActions deveria ser apenas os botões com chamadas de método
-        if self.in_message:
+        # 1. Se houver mensagens na tela, ENTER avança mensagem
+        # Note: usa self.logic.has_messages(), não self.in_message
+        if self.logic.has_messages():
             if enter:
-                self._next_msg()
+                self.logic.next_message()
             return
 
-        if self.battle_over:
+        # 2. Se a batalha acabou, ENTER sai da cena
+        if self.logic.turn in ["victory", "defeat", "runaway"]:
             if enter:
-                self.request_exit = True
-                if player.dead:
+                if self.logic.turn == "defeat":
                     self.switch_scene(SceneGameOver())
                 else:
                     self.switch_scene(SceneWorld())
             return
 
-        # Submenu de golpes
-        if self.ui_mode == "fight":
-            items = self._fight_items()
+        # 3. Navegação do Menu
+        if up:
+            self.ui.navigate(-1)
+        if down:
+            self.ui.navigate(1)
 
-            if up:
-                self.fight_index = (self.fight_index - 1) % len(items)
-            if down:
-                self.fight_index = (self.fight_index + 1) % len(items)
-
-            if x:
-                self.ui_mode = "main"
-                return
-
-            if enter:
-                choice = items[self.fight_index]
-
-                if choice == "Voltar":
-                    self.ui_mode = "main"
-                    return
-
-                move_index = self.fight_index
-                move_name, damage, hit = self.player_battler.use_move(move_index, self.enemy_battler)
-
-                self._push_msg(f"{self.player_battler.name} usou {move_name}!")
-
-                if hit:
-                    if move_name == "Corte rápido":
-                        player.status = "pierce"
-                    if move_name == "Fatiar":
-                        player.status = "slice"
-                    if move_name == "Foice da morte":
-                        player.status = "slice2"
-                    if move_name == "Investida":
-                        player.status = "rush"
-                    self._push_msg(f"Causou {damage} de dano!")
-                    self.enemy_hit_timer = 10
-                else:
-                    self._push_msg("Mas errou!")
-                if self.enemy_battler.hp <= 0:
-                    self._push_msg("Inimigo derrotado!")
-
-                    xp = self.enemy_battler.drop_xp
-                    lvl_before = self.player_battler.level
-                    self.player_battler.take_xp(xp)
-                    self._push_msg(f"Voce ganhou {xp} XP!")
-
-                    if self.player_battler.level > lvl_before:
-                        self._push_msg(f"SUBIU PARA O NIVEL {self.player_battler.level}!")
-
-                    self.enemy_battler.status = "death"
-                    self._push_msg("VITORIA!")
-                    self.enemy_battler.dead = True
-                    self.battle_over = True
-                    self.ui_mode = "main"
-                    return
-                # agenda o contra-ataque
-                self.pending_enemy_attack = True
-                self.ui_mode = "main"
+        # 4. Seleção e Voltar
+        if x_key and self.ui.menu_mode == "fight":
+            self.ui.enter_main_menu()
             return
 
-        #Menu principal
-        if up:
-            self.menu_index = (self.menu_index - 1) % len(self.menu_items)
-        if down:
-            self.menu_index = (self.menu_index + 1) % len(self.menu_items)
-        if f2:
-            self.player_battler.take_xp(1000)
         if enter:
-            choice = self.menu_items[self.menu_index]
+            selection = self.ui.get_selection()
+            self._process_selection(selection)
+        if f2:
+            self.logic.player.take_xp(2000)
 
-            if choice == "Lutar":
-                self.ui_mode = "fight"
-                self.fight_index = 0
 
-            elif choice == "Bolsa":
-                if hasattr(self.player_battler, "potions") and self.player_battler.potions > 0:
-                    self.player_battler.potions -= 1
-                    self.player_battler.hp += 30
-                    self._push_msg("Voce usou uma pocao! +30 HP")
-                else:
-                    self._push_msg("Sem pocoes!")
+    def _process_selection(self, selection):
+        # Processa o que foi escolhido no menu
 
-            elif choice == "Fugir":
-                self._push_msg("Voce fugiu da batalha!")
-                self.battle_over = True
-                self.ui_mode = "main"
+        # Menu Principal
+        if selection == "Lutar":
+            self.ui.enter_fight_menu()
 
-    def render(self):
-        context.screen.blit(self.background_image, (0, 0))
-        # Sprites
-        enemy_x = self.screen_w - 230
-        enemy_y = 120
-        dx, dy = self._shake_offset(self.enemy_hit_timer)
+        elif selection == "Bolsa":
+            self.logic.use_potion()
 
-        enemy_frame = self.enemy_battler.get_sprite().convert_alpha()
+        elif selection == "Fugir":
+            self.logic.run_away()
 
-        if player.map == "death":
-            pass
-        else:
-            if self.enemy_battler.status == "death":
-                enemy_sprite = pygame.transform.scale(enemy_frame, (192, 192))
-                context.screen.blit(enemy_sprite, (enemy_x - 42, enemy_y - 80))
-            else:
-                enemy_sprite = pygame.transform.scale(enemy_frame, (96,96))
-                context.screen.blit(enemy_sprite, (enemy_x + dx, enemy_y + dy))
+        elif selection == "Voltar":
+            self.ui.enter_main_menu()
 
-        if player.map == "death":
-            player_y = 150
-        else:
-            player_y = 120
-        player_x = 130
+        # Seleção de Golpe (retornou um int)
+        elif isinstance(selection, int):
+            hit_type, is_over = self.logic.player_attack(selection)
 
-        dx, dy = self._shake_offset(self.player_hit_timer)
-        player_frame = player.get_sprite().convert_alpha()
+            # Feedback Visual na UI baseado no resultado da Lógica
+            if hit_type == "hit":
+                self.ui.trigger_shake("enemy")
 
-        if player.status == "death" or player.status == "pierce" or player.status == "hit" or player.status == "slice" or player.status == "slice2" or player.status == "rush":
-            player_frame = pygame.transform.scale(player_frame, (192, 192))
-            context.screen.blit(player_frame, (player_x - 42, player_y - 50))
-        else:
-            player_frame = pygame.transform.scale(player_frame, (96, 96))
-            context.screen.blit(player_frame, (player_x + dx, player_y + dy))
+            self.ui.enter_main_menu() # Reseta para menu principal após atacar
 
-        if self.enemy_hit_timer > 0:
-            self.enemy_hit_timer -= 1
-        if self.player_hit_timer > 0:
-            self.player_hit_timer -= 1
-
-        # HUD inimigo
-        if player.map != "death":
-            self._draw_hp_box(
-                context.screen,
-                x=self.enemyHudBar[0] + 19,
-                y=self.enemyHudBar[1] + 12,
-                name=self.enemy_battler.name,
-                level=3,
-                battler=self.enemy_battler,
-                box_w=240,
-                box_h=64
-            )
-
-        # HUD player
-        self._draw_hp_box(
-            context.screen,
-            x=self.hudBar[0] + 19,
-            y=self.hudBar[1] + 12,
-            name=self.player_battler.name,
-            level=self.player_battler.level,
-            battler=self.player_battler,
-            box_w=240,
-            box_h=64
-        )
-
-        context.screen.blit(self.life_hud_img, self.hudBar)
-
-        if player.map == "death":
-            pass
-        else:
-            context.screen.blit(self.life_hud_img_inverted, self.enemyHudBar)
-
-        # Renderizar XP
-        if player.map == "death":
-            xpY = 57
-        else:
-            xpY = 26
-        self._draw_text(
-            context.screen,
-            f"XP: {self.player_battler.xp}/100",
-            x=self.enemyHudBar[0] - 260,
-            y=self.enemyHudBar[1] + xpY,
-        )
-
-        # Renderizar mensagens e menus
-        if self.in_message and self.message_queue:
-            msg = self.message_queue[0]
-            self._draw_text(context.screen, msg, 18, self.screen_h - 80, big=True)
-            self._draw_text(context.screen, "ENTER: continuar", self.screen_w - 110, self.screen_h - 28)
-
-        elif self.battle_over:
-
-            self._draw_text(context.screen, "ENTER: voltar", self.screen_w - 95, self.screen_h - 28)
-        else:
-            start_x = self.screen_w - 240
-            start_y = self.screen_h - 86
-
-            if self.ui_mode == "main":
-                # Menu principal
-                for i, item in enumerate(self.menu_items):
-                    y = start_y + i * 22
-                    prefix = "> " if i == self.menu_index else "  "
-                    self._draw_text(context.screen, prefix + item, start_x + 50, y, big=True)
-
-            elif self.ui_mode == "fight":
-                # Submenu de golpes
-                items = self._fight_items()
-                for i, item in enumerate(items):
-                    y = start_y + i * 22
-                    prefix = "> " if i == self.fight_index else "  "
-                    self._draw_text(context.screen, prefix + item, start_x + 10, y, big=True)
+    def handle_event(self):
+        pass
 
 class SceneGameOver(Scene):
 
