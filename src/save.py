@@ -32,9 +32,10 @@ class Save():
 
     @classmethod
     def select_save(cls, index):
+        player.reset()
+        Enemy.load_enemies()
         cls.__selected = cls.save_list[index]
         if not cls.__selected.exist:
-            player.reset()
             cls.update_current_save()
 
     @classmethod
