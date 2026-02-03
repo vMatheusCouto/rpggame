@@ -5,8 +5,6 @@ from datetime import datetime
 import json
 import os
 
-default_player = Player("Heroi", 100, 15)
-
 class Save():
     save_list = []
     __selected = None
@@ -84,8 +82,8 @@ class Save():
             player_data = data["player"]
 
             # Atualização do player
-            player.hp = player_data["hp"]
             player.max_hp = player_data["max_hp"]
+            player.hp = player_data["hp"]
             player.damage = player_data["damage"]
             player.level = player_data["lvl"]
             player.xp = player_data["xp"]
