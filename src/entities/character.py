@@ -114,6 +114,9 @@ class Player(Character):
             self.hp += hp_gain
             self._learn_moves_for_current_level()
 
+    def reset(self):
+        self.__init__("Heroi", 100, 15)
+
 class Enemy(Character):
     enemy_list = {}
     def __init__(self, name, hp, damage, drop_xp, path, map_name, position, moves=[]):

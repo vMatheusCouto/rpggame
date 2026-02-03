@@ -153,9 +153,9 @@ class SceneWorld(Scene):
         if self._edge("f2", keys[pygame.K_F2]):
             self.coordinates = not self.coordinates
 
-        # Abandonado temporariamente (sobrescreve os saves)
-        # if self._edge("esc", keys[pygame.K_ESCAPE]):
-        #    self.switch_scene(SceneMainMenu())
+        # Menu
+        if self._edge("esc", keys[pygame.K_ESCAPE]):
+            self.switch_scene(SceneMainMenu())
 
         # Redefinir velocidade
         player.speed = 35
