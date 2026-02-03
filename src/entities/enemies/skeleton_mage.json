@@ -5,7 +5,7 @@
   "drop_xp": 600,
   "path": "skeleton_mage",
   "map": "snow",
-  "position": [534, 89],
+  "position": [27, 135],
   "direction": "left",
   "moves": ["arcane_missiles", "frost_spike", "fireball", "lightning_strike"]
 }

@@ -1,102 +1,102 @@
 {
   "club_swing": {
-    "name": "Club Swing",
+    "name": "Golpe de Clava",
     "bonus": 0,
     "accuracy": 0.85
   },
 
   "quick_jab": {
-    "name": "Quick Jab",
+    "name": "Golpe Rápido",
     "bonus": -3,
     "accuracy": 0.95
   },
 
   "aimed_strike": {
-    "name": "Aimed Strike",
+    "name": "Ataque Preciso",
     "bonus": 4,
     "accuracy": 0.8
   },
 
   "brutal_smash": {
-    "name": "Brutal Smash",
+    "name": "Esmagamento Brutal",
     "bonus": 12,
     "accuracy": 0.65
   },
 
   "bone_slash": {
-    "name": "Bone Slash",
+    "name": "Talho de Osso",
     "bonus": 1,
     "accuracy": 0.88
   },
 
   "cursed_touch": {
-    "name": "Cursed Touch",
+    "name": "Toque Amaldiçoado",
     "bonus": 6,
     "accuracy": 0.78
   },
 
   "bone_crush": {
-    "name": "Bone Crush",
+    "name": "Esmagamento de Osso",
     "bonus": 10,
     "accuracy": 0.65
   },
 
   "poison_stab": {
-    "name": "Poison Stab",
+    "name": "Punhalada Venenosa",
     "bonus": 7,
     "accuracy": 0.75
   },
 
   "backstab": {
-    "name": "Backstab",
+    "name": "Punhalada pelas Costas",
     "bonus": 14,
     "accuracy": 0.8
   },
 
   "shield_bash": {
-    "name": "Shield Bash",
+    "name": "Pancada de Escudo",
     "bonus": 3,
     "accuracy": 0.7
   },
 
   "reckless_chop": {
-    "name": "Reckless Chop",
+    "name": "Corte Imprudente",
     "bonus": 16,
     "accuracy": 0.65
   },
 
   "dark_bolt": {
-    "name": "Bark Bolt",
+    "name": "Raio Sombrio",
     "bonus": 11,
     "accuracy": 0.65
   },
 
   "shadow_blast": {
-    "name": "Shadow Blast",
+    "name": "Explosão Sombria",
     "bonus": 20,
     "accuracy": 0.5
   },
 
   "arcane_missiles": {
-    "name": "Arcane Missiles",
+    "name": "Mísseis Arcanos",
     "bonus": 4,
     "accuracy": 0.9
   },
 
   "frost_spike": {
-    "name": "Frost Spike",
+    "name": "Espinho de Gelo",
     "bonus": 10,
     "accuracy": 0.7
   },
 
   "fireball": {
-    "name": "Fireball",
+    "name": "Bola de Fogo",
     "bonus": 16,
     "accuracy": 0.75
   },
 
   "lightning_strike": {
-    "name": "Lightning Strike",
+    "name": "Golpe de Relâmpago",
     "bonus": 24,
     "accuracy": 0.65
   },
@@ -114,14 +114,50 @@
   },
 
   "corte_rapido": {
-    "name": "Corte rápido",
+    "name": "Corte Rápido",
     "bonus": 6,
     "accuracy": 0.75
   },
 
   "foice_da_morte": {
-    "name": "Foice da morte",
+    "name": "Foice da Morte",
     "bonus": 50,
     "accuracy": 0.4
+  },
+
+  "sombra_rapida": {
+    "name": "Sombra Rápida",
+    "bonus": 8,
+    "accuracy": 0.9
+  },
+
+  "execucao_silenciosa": {
+    "name": "Execução Silenciosa",
+    "bonus": 26,
+    "accuracy": 0.55
+  },
+
+  "golpe_pesado": {
+    "name": "Golpe Pesado",
+    "bonus": 10,
+    "accuracy": 0.8
+  },
+
+  "quebra_defesa": {
+    "name": "Quebra Defesa",
+    "bonus": 28,
+    "accuracy": 0.6
+  },
+
+  "rajada_arcana": {
+    "name": "Rajada Arcana",
+    "bonus": 12,
+    "accuracy": 0.85
+  },
+
+  "aniquilacao_magica": {
+    "name": "Aniquilação Mágica",
+    "bonus": 36,
+    "accuracy": 0.5
   }
 }

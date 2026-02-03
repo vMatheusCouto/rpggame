@@ -52,6 +52,7 @@ class Save():
             "player": {
                 "hp": player.hp,
                 "max_hp": player.max_hp,
+                "damage": player.damage,
                 "lvl": player.level,
                 "xp": player.xp,
                 "position": [player.position.x, player.position.y],
@@ -85,6 +86,7 @@ class Save():
             # Atualização do player
             player.hp = player_data["hp"]
             player.max_hp = player_data["max_hp"]
+            player.damage = player_data["damage"]
             player.level = player_data["lvl"]
             player.xp = player_data["xp"]
 

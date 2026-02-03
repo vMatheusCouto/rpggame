@@ -1,0 +1,15 @@
+{
+  "name": "wizard",
+  "hp": 520,
+  "damage": 65,
+  "drop_xp": 280,
+  "path": "wizard",
+  "map": "dungeon",
+  "position": [421, 210],
+  "moves": [
+    "arcane_missiles",
+    "fireball",
+    "rajada_arcana",
+    "aniquilacao_magica"
+  ]
+}

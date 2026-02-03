@@ -1,0 +1,10 @@
+{
+  "name": "knight",
+  "hp": 430,
+  "damage": 56,
+  "drop_xp": 220,
+  "path": "knight",
+  "map": "lake",
+  "position": [384, 345],
+  "moves": ["shield_bash", "investida", "golpe_pesado", "quebra_defesa"]
+}

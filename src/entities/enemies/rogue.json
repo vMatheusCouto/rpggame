@@ -1,0 +1,10 @@
+{
+  "name": "rogue",
+  "hp": 360,
+  "damage": 48,
+  "drop_xp": 175,
+  "path": "rogue",
+  "map": "lake",
+  "position": [235, 41],
+  "moves": ["quick_jab", "backstab", "sombra_rapida", "execucao_silenciosa"]
+}

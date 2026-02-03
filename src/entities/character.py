@@ -63,7 +63,7 @@ class Character():
 
 class Player(Character):
     def __init__(self, name, hp, damage):
-        super().__init__(name, hp, damage, "player", [], "spawn", pygame.Vector2(150,250))
+        super().__init__(name, hp, damage, "player", [], "death", pygame.Vector2(150,250))
         # Progresso
         self.level = 1
         self.xp = 0
@@ -77,6 +77,7 @@ class Player(Character):
             (10, Move.moves_list["foice_da_morte"]),
         ]
         self._learn_moves_for_current_level()
+
         # Valores iniciais de movimentação
         self.moving = False
         self.speed = 35

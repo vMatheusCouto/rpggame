@@ -94,8 +94,8 @@ class BattleLogic:
 
     def _get_move_animation(self, move_name):
         # Mapeia nome do golpe para animação
-        if move_name == "Corte rápido": return "pierce"
+        if move_name == "Corte Rápido": return "pierce"
         if move_name == "Fatiar": return "slice"
-        if move_name == "Foice da morte": return "slice2"
+        if move_name == "Foice da Morte": return "slice2"
         if move_name == "Investida": return "rush"
         return "idle"
