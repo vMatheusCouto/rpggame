@@ -57,11 +57,11 @@ class BattleLogic:
             if item.tipo == "cura":
                 heal_amount = 0
                 if "Pequena" in item.nome:
-                    heal_amount = 20
-                elif "Grande" in item.nome:
-                    heal_amount = 60
-                elif "Pocao" in item.nome:
+                    heal_amount = 50
+                elif "Media" in item.nome:
                     heal_amount = 150
+                elif "Grande" in item.nome:
+                    heal_amount = 350
 
                 player.hp += heal_amount
                 self.add_message(f"Usou {item.nome}! Recuperou {heal_amount} HP.")

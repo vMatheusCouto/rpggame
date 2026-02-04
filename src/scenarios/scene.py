@@ -30,7 +30,7 @@ class Scene(ABC):
         self.font_big = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
 
         # Debounce
-        self._pressed = {"up": False, "down": False, "enter": False, "x": False, "F2": False, "space": False, "escape": False}
+        self._pressed = {"up": False, "down": False, "enter": False, "x": False, "F2": False, "space": False, "escape": False, "F3": False, "i": False}
 
     def switch_scene(self, scene):
         context.add_scene = scene
@@ -276,11 +276,11 @@ class SceneBattle(Scene):
             if item.tipo == "cura":
                 heal_amount = 0
                 if "Pequena" in item.nome:
-                    heal_amount = 20
-                elif "Grande" in item.nome:
-                    heal_amount = 60
-                elif "Pocao" in item.nome:
+                    heal_amount = 50
+                elif "Media" in item.nome:
                     heal_amount = 150
+                elif "Grande" in item.nome:
+                    heal_amount = 350
 
                 player.hp += heal_amount
                 self.logic.add_message(f"Usou {item.nome} e Recuperou {heal_amount} HP.")
