@@ -1,20 +1,20 @@
 from src.entities.inventory.modeloItem import Item
-# Converter em JSON
+
 CATALOGO_ITENS = {
     "Small_Potion": {
         "type": "cura",
         "name": "Poção Pequena",
-        "description": "Recupera 20 HP"
+        "description": "Recupera 50 HP"
     },
     "Medium_Potion": {
         "type": "cura",
-        "name": "Poção Grande",
-        "description": "Recupera 60 HP"
+        "name": "Poção Media",
+        "description": "Recupera 150 HP"
     },
     "Big_Potion": {
         "type": "cura",
-        "name": "Pocao Grande",
-        "description": "recupera 150 hp"
+        "name": "Poção Grande",
+        "description": "recupera 350 hp"
     }
 }
 
