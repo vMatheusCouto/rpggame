@@ -203,9 +203,9 @@ class SceneBattle(Scene):
         # Inicializa Lógica e UI separadamente
         self.logic = BattleLogic(player, enemy_battler)
         self.ui = BattleUI(self.logic)
-        
+
         self.show_inventory = False
-        self.inventory_index = 0 
+        self.inventory_index = 0
     def render(self):
         # desenho feito na UI
         self.ui.draw()
@@ -228,13 +228,13 @@ class SceneBattle(Scene):
                 self.inventory_index = max(0, self.inventory_index - 1)
             if down:
                 self.inventory_index = min(len(player.inventory.itens) - 1, self.inventory_index + 1)
-            
+
             if enter and player.inventory.itens:
                 # Seleciona o item atual
                 item_selecionado = player.inventory.itens[self.inventory_index]
                 self.use_item_in_battle(item_selecionado)
             return
-        
+
         # 1. Se houver mensagens na tela, ENTER avança mensagem
         if self.logic.has_messages():
             if enter:
@@ -275,13 +275,13 @@ class SceneBattle(Scene):
             used = False
             if item.tipo == "cura":
                 heal_amount = 0
-                if "Pequena" in item.nome: 
+                if "Pequena" in item.nome:
                     heal_amount = 20
-                elif "Grande" in item.nome: 
+                elif "Grande" in item.nome:
                     heal_amount = 60
-                elif "Pocao" in item.nome: 
+                elif "Pocao" in item.nome:
                     heal_amount = 150
-                
+
                 player.hp += heal_amount
                 self.logic.add_message(f"Usou {item.nome} e Recuperou {heal_amount} HP.")
                 used = True
@@ -290,34 +290,33 @@ class SceneBattle(Scene):
                 if item.quantidade == 0:
                     player.inventory.itens.remove(item)
                     self.inventory_index = max(0, self.inventory_index - 1)
-                self.show_inventory = False 
-                
+                self.show_inventory = False
+
                 self.logic.turn = "enemy"
                 self.logic.pending_enemy_attack = True
         else:
             self.logic.add_message("Vazio!")
-            
+
     def _process_selection(self, selection):
         # Processa o que foi escolhido no menu
         # Menu Principal
         if selection == "Lutar":
             self.ui.enter_fight_menu()
         elif selection == "Bolsa":
-            if not player.inventory.itens:
-                self.logic.add_message("Mochila Vazia. ", "Sem itens")
-            else:
-                self.show_inventory = True
-                self.inventory_index = 0
+            self.ui.enter_bag_menu()
         elif selection == "Fugir":
             self.logic.run_away()
         elif selection == "Voltar":
             self.ui.enter_main_menu()
         # Seleção de Golpe (retornou um int)
         elif isinstance(selection, int):
-            hit_type, is_over = self.logic.player_attack(selection)
-            # Feedback Visual na UI baseado no resultado da Lógica
-            if hit_type == "hit":
-                self.ui.trigger_shake("enemy")
+            if self.ui.menu_mode == "fight":
+                hit_type, is_over = self.logic.player_attack(selection)
+                # Feedback Visual na UI baseado no resultado da Lógica
+                if hit_type == "hit":
+                    self.ui.trigger_shake("enemy")
+            elif self.ui.menu_mode == "bag":
+                self.logic.player_use_item(selection)
             self.ui.enter_main_menu() # Reseta para menu principal após atacar
 
     def handle_event(self):

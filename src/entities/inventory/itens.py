@@ -23,7 +23,7 @@ def criar_item_por_id(id_item, quantidade=1):
         dados = CATALOGO_ITENS[id_item]
 
         return Item(
-            tipo=dados["type"],       
+            tipo=dados["type"],
             nome=dados["name"],
             descricao=dados["description"],
             quantidade=quantidade

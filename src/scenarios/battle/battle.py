@@ -50,20 +50,21 @@ class BattleLogic:
             self.pending_enemy_attack = True
             return "miss", False
 
-    def use_item_in_battle(self,item):
+    def player_use_item(self, bag_index):
+        item = self.player.inventory.itens[bag_index]
         if item.quantidade > 0:
             used = False
             if item.tipo == "cura":
                 heal_amount = 0
-                if "Pequena" in item.nome: 
+                if "Pequena" in item.nome:
                     heal_amount = 20
-                elif "Grande" in item.nome: 
+                elif "Grande" in item.nome:
                     heal_amount = 60
-                elif "Pocao" in item.nome: 
+                elif "Pocao" in item.nome:
                     heal_amount = 150
-                
+
                 player.hp += heal_amount
-                self.logic.add_message(f"Usou {item.nome}! Recuperou {heal_amount} HP.")
+                self.add_message(f"Usou {item.nome}! Recuperou {heal_amount} HP.")
                 used = True
             if used:
                 item.usar()
@@ -71,11 +72,11 @@ class BattleLogic:
                     player.inventory.itens.remove(item)
                     self.inventory_index = max(0, self.inventory_index - 1)
 
-                self.show_inventory = False 
+                self.show_inventory = False
                 self.turn = "enemy"
                 self.pending_enemy_attack= True
         else:
-            self.logic.add_message("Vazio!")
+            self.add_message("Vazio!")
 
     def run_away(self):
         self.add_message("Voce fugiu da batalha!")

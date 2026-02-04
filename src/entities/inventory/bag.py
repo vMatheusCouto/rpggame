@@ -14,6 +14,7 @@ class Inventario:
         print(f"Item {novo_item.nome} adicionado ao inventário.")
 
     def listar(self):
+        return self.itens
         print("--- INVENTÁRIO ---")
         if not self.itens:
             print("Vazio.")
