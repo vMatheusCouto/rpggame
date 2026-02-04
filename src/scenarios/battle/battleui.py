@@ -14,6 +14,7 @@ class BattleUI:
         current_map = self.logic.player.map
         self.background_image = pygame.image.load(BATTLE_ASSETS / f"{current_map}/background.png")
         self.life_hud_img = pygame.image.load(BATTLE_ASSETS / "life_hud.png").convert_alpha()
+        self.life_hud_boss_img = pygame.image.load(BATTLE_ASSETS / "life_hud_boss.png").convert_alpha()
 
         # Timers visuais (Shake)
         self.shake_timer_player = 0
@@ -80,7 +81,7 @@ class BattleUI:
         if self.logic.player.map != "death":
             self._draw_hud(screen, self.logic.enemy, self.hud_pos_enemy)
         else:
-            self._draw_hud(screen, self.logic.enemy, (50, 50))
+            self._draw_hud(screen, self.logic.enemy, (25, 35))
         # 3. Interface (Menus ou Mensagens)
         if self.logic.has_messages():
             self._draw_message_box(screen)
@@ -117,16 +118,22 @@ class BattleUI:
     def _draw_hud(self, screen, entity, pos):
         # Desenha a barra preta/vermelha e o overlay
         x, y = pos[0] + 19, pos[1] + 12
-        pygame.draw.rect(screen, (0, 0, 0), (x, y, 132, 9))
-
         ratio = max(0, min(1, entity.hp / entity.max_hp))
-        pygame.draw.rect(screen, (170, 0, 7), (x, y, int(132 * ratio), 9))
 
-        screen.blit(self.life_hud_img, pos)
+        if entity.name == "Titã colossal":
+            pygame.draw.rect(screen, (0, 0, 0), (x, y, 250, 9))
+            pygame.draw.rect(screen, (170, 0, 7), (x, y, int(250 * ratio), 9))
+            screen.blit(self.life_hud_boss_img, pos)
+            self._draw_text(screen, f"{entity.hp}/{entity.max_hp}", x + 210, y + 14)
+
+        else:
+            pygame.draw.rect(screen, (0, 0, 0), (x, y, 132, 9))
+            pygame.draw.rect(screen, (170, 0, 7), (x, y, int(132 * ratio), 9))
+            screen.blit(self.life_hud_img, pos)
+            self._draw_text(screen, f"{entity.hp}/{entity.max_hp}", x + 100, y + 14)
 
         # Textos
         self._draw_text(screen, entity.name, x + 2, y - 25, big=True)
-        self._draw_text(screen, f"{entity.hp}/{entity.max_hp}", x + 100, y + 14)
 
         if entity == self.logic.player:
              self._draw_text(screen, f"Lv {entity.level}", x + 45, y - 25)

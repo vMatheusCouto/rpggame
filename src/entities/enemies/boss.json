@@ -1,15 +1,15 @@
 {
-  "name": "Boss",
+  "name": "Titã colossal",
   "hp": 800,
-  "damage": 100,
-  "drop_xp": 2000,
+  "damage": 90,
+  "drop_xp": 3000,
   "path": "boss",
   "map": "death",
   "position": [459, 97],
   "moves": [
-    "arcane_missiles",
-    "fireball",
-    "rajada_arcana",
-    "aniquilacao_magica"
+    "lamina_ossos",
+    "folego_da_morte",
+    "golpe_do_oblivio",
+    "pisoteio_colossal"
   ]
 }

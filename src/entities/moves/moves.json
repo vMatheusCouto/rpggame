@@ -159,5 +159,29 @@
     "name": "Aniquilação Mágica",
     "bonus": 36,
     "accuracy": 0.5
+  },
+
+  "pisoteio_colossal": {
+    "name": "Pisoteio Colossal",
+    "bonus": 40,
+    "accuracy": 0.45
+  },
+
+  "golpe_do_oblivio": {
+    "name": "Golpe do Oblívio",
+    "bonus": 55,
+    "accuracy": 0.35
+  },
+
+  "folego_da_morte": {
+    "name": "Fôlego da Morte",
+    "bonus": 18,
+    "accuracy": 0.95
+  },
+
+  "lamina_ossos": {
+    "name": "Lâmina de Ossos",
+    "bonus": 22,
+    "accuracy": 0.9
   }
 }

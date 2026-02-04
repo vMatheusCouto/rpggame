@@ -2,7 +2,7 @@
   "name": "Wizard",
   "hp": 520,
   "damage": 65,
-  "drop_xp": 280,
+  "drop_xp": 1600,
   "path": "wizard",
   "map": "dungeon",
   "position": [421, 210],
