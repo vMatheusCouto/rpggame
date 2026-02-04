@@ -1,37 +1,37 @@
 class Item:
     def __init__(self, tipo, nome, descricao, quantidade=1):
-        self.__tipo = tipo
-        self.__nome = nome
-        self.__descricao = descricao
-        self.quantidade = quantidade
+        self._tipo = tipo
+        self._nome = nome
+        self._descricao = descricao
+        self._quantidade = quantidade
 
     # Converter tudo para o inglês. Português apenas visual (menus, botões, golpes, etc.)
 
     @property
     def tipo(self):
-        return self.__tipo
+        return self._tipo
 
     @property
     def nome(self):
-        return self.__nome
+        return self._nome
 
     @property
     def descricao(self):
-        return self.__descricao
+        return self._descricao
 
     @property
     def quantidade(self):
-        return self.__quantidade
+        return self._quantidade
 
     @quantidade.setter
     def quantidade(self, valor):
-        self.__quantidade = max(0, valor)
+        self._quantidade = max(0, valor)
 
     def usar(self):
-        if self.__quantidade > 0:
-            self.__quantidade -= 1
+        if self._quantidade > 0:
+            self._quantidade -= 1
             return True
         return False
 
     def __str__(self):
-        return f"[{self.__nome}] x{self.__quantidade} - {self.__descricao}"
+        return f"[{self._nome}] x{self._quantidade} - {self._descricao}"
