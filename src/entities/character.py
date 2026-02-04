@@ -70,7 +70,7 @@ class Player(Character):
         self.xp = 0
         # Poções (temporário)
         self.inventory = Inventario()
-        self.inventory.adicionar(criar_item_por_id("Small_Potion", 3))
+        self.inventory.adicionar(criar_item_por_id("Small_Potion"))
         self.moves: list[Move] = []
         self.learnset = [
             (1,  Move.moves_list["investida"]),

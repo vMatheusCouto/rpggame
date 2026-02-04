@@ -1,6 +1,6 @@
 from src.entities.inventory.modeloItem import Item
 
-CATALOGO_ITENS = {
+CATALOGUE_ITEM = {
     "Small_Potion": {
         "type": "cura",
         "name": "Poção Pequena",
@@ -17,17 +17,3 @@ CATALOGO_ITENS = {
         "description": "recupera 350 hp"
     }
 }
-
-def criar_item_por_id(id_item, quantidade=1):
-    if id_item in CATALOGO_ITENS:
-        dados = CATALOGO_ITENS[id_item]
-
-        return Item(
-            tipo=dados["type"],
-            nome=dados["name"],
-            descricao=dados["description"],
-            quantidade=quantidade
-        )
-    else:
-        print(f"ERRO: O item '{id_item}' não existe no catálogo.")
-        return None

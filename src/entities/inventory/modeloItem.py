@@ -1,32 +1,38 @@
+from src.entities.inventory.itens import CATALOGUE_ITEM
 class Item:
-    def __init__(self, tipo, nome, descricao, quantidade=1):
-        self._tipo = tipo
-        self._nome = nome
-        self._descricao = descricao
-        self._quantidade = quantidade
+    def __init__(self, type, name, description):
+        self._type = type
+        self._name = name
+        self._description = description
 
     # Converter tudo para o inglês. Português apenas visual (menus, botões, golpes, etc.)
+    def Crete(id_item):
+        if id_item in CATALOGUE_ITEM:
+            dados = CATALOGUE_ITEM[id_item]
+
+            return Item(
+                tipo=dados["type"],
+                nome=dados["name"],
+                descricao=dados["description"],
+
+            )
+        else:
+            print(f"ERRO: O item '{id_item}' não existe no catálogo.")
+            return None
 
     @property
-    def tipo(self):
-        return self._tipo
+    def type(self):
+        return self._type
 
     @property
-    def nome(self):
-        return self._nome
+    def name(self):
+        return self._name
 
     @property
-    def descricao(self):
-        return self._descricao
+    def description(self):
+        return self._description
 
-    @property
-    def quantidade(self):
-        return self._quantidade
-
-    @quantidade.setter
-    def quantidade(self, valor):
-        self._quantidade = max(0, valor)
-
+   
     def usar(self):
         if self._quantidade > 0:
             self._quantidade -= 1
@@ -34,4 +40,6 @@ class Item:
         return False
 
     def __str__(self):
-        return f"[{self._nome}] x{self._quantidade} - {self._descricao}"
+        return f"[{self._name}]  - {self._description}"
+class Potion(Item):
+    super().__init__()
