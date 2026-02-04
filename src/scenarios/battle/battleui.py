@@ -79,7 +79,8 @@ class BattleUI:
         self._draw_hud(screen, self.logic.player, self.hud_pos_player)
         if self.logic.player.map != "death":
             self._draw_hud(screen, self.logic.enemy, self.hud_pos_enemy)
-
+        else:
+            self._draw_hud(screen, self.logic.enemy, (50, 50))
         # 3. Interface (Menus ou Mensagens)
         if self.logic.has_messages():
             self._draw_message_box(screen)

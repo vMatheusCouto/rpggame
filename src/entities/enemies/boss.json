@@ -1,0 +1,15 @@
+{
+  "name": "Boss",
+  "hp": 800,
+  "damage": 100,
+  "drop_xp": 2000,
+  "path": "boss",
+  "map": "death",
+  "position": [459, 97],
+  "moves": [
+    "arcane_missiles",
+    "fireball",
+    "rajada_arcana",
+    "aniquilacao_magica"
+  ]
+}
