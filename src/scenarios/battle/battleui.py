@@ -99,7 +99,7 @@ class BattleUI:
         scale = 192 if entity.status in ["death", "pierce", "hit", "slice", "slice2", "rush"] else 96
         sprite = pygame.transform.scale(sprite, (scale, scale))
 
-        # Shake 
+        # Shake
         timer = self.shake_timer_player if is_player else self.shake_timer_enemy
         dx = self.shake_strength if (timer % 2 == 0 and timer > 0) else -self.shake_strength if timer > 0 else 0
 
@@ -137,6 +137,7 @@ class BattleUI:
         start_y = self.screen_h - 86
 
         items = []
+        details = False
         current_idx = 0
 
         if self.menu_mode == "main":
@@ -144,11 +145,16 @@ class BattleUI:
             current_idx = self.menu_index
         else:
             items = [m.name for m in self.logic.player.moves] + ["Voltar"]
+            details = [[f"Acerto {m.accuracy * 100}%", f"Dano base {m.bonus}"] for m in self.logic.player.moves]
+            details.append(["", ""])
             current_idx = self.fight_index
-
         for i, item in enumerate(items):
             prefix = "> " if i == current_idx else "  "
+            if details and i == current_idx:
+                self._draw_text(screen, details[i][0], start_x - 200, start_y, big=True)
+                self._draw_text(screen, details[i][1], start_x - 200, start_y + 15, big=True)
             self._draw_text(screen, prefix + item, start_x + 50, start_y + i * 15, big=True)
+
 
     def _draw_message_box(self, screen):
         msg = self.logic.message_queue[0]

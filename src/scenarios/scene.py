@@ -165,6 +165,11 @@ class SceneWorld(Scene):
             running = True
             player.speed = 60
 
+        # Aumentar velocidade para a apresentação
+        if keys[pygame.K_RSHIFT]:
+            running = True
+            player.speed = 180
+
         if keys[pygame.K_w]:
             self.walk.up()
 
