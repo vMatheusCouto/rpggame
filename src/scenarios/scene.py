@@ -14,8 +14,8 @@ from src.scenarios.world.movement import Walk
 from src.entities.collision import entity_collision
 from src.scenarios.battle.battle import BattleLogic
 from src.scenarios.battle.battleui import BattleUI
-from src.entities.inventory.menuInventory import desenhar_inventario
-from src.entities.inventory.itens import CATALOGO_ITENS, criar_item_por_id
+from src.entities.inventory.itens import Item
+from src.entities.inventory.inventory import Inventory
 
 from src.save import Save
 
@@ -155,15 +155,11 @@ class SceneWorld(Scene):
 
         if self._edge("f2", keys[pygame.K_F2]):
             self.coordinates = not self.coordinates
-        if self._edge("i",keys[pygame.K_i]):
-            desenhar_inventario(context.screen, player.inventory, self.font_big, self.inventory_index)
         # Menu
         if self._edge("esc", keys[pygame.K_ESCAPE]):
             self.switch_scene(SceneMainMenu())
-
         # Redefinir velocidade
         player.speed = 35
-
         # Correr
         if keys[pygame.K_LSHIFT]:
             running = True
@@ -267,7 +263,7 @@ class SceneBattle(Scene):
         if f2:
             player.take_xp(2000)
         if f3:
-            for item_id in CATALOGO_ITENS.keys():
+            for item_id in Catalogue_itens.keys():
                 novo_item = criar_item_por_id(item_id, quantidade=2)
                 player.inventory.adicionar(novo_item)
     def use_item_in_battle(self,item):
@@ -276,7 +272,7 @@ class SceneBattle(Scene):
             if item.tipo == "cura":
                 heal_amount = 0
                 if "Pequena" in item.nome:
-                    heal_amount = 50
+                    heal_amount = 60
                 elif "Media" in item.nome:
                     heal_amount = 150
                 elif "Grande" in item.nome:

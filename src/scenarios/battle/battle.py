@@ -1,6 +1,6 @@
 import random
 from src.entities.character import player
-from src.entities.inventory.modeloItem import Item
+from src.entities.inventory.itens import Item
 
 class BattleLogic:
     def __init__(self, player_battler, enemy_battler):
