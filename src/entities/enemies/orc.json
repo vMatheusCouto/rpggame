@@ -7,5 +7,13 @@
   "map": "null",
   "position": [0, 0],
   "direction": "left",
-  "moves": ["club_swing", "quick_jab", "aimed_strike", "brutal_smash"]
+  "moves": ["club_swing", "quick_jab", "aimed_strike", "brutal_smash"],
+  "dialog": [
+    "~ Orc:",
+    "Voce entrou fundo demais, humano, esta caverna nao perdoa distraidos.",
+    "Sempre aparece outro como voce, e sempre deixamos ossos para tras.",
+    "~ Heroi:",
+    "Entao voce e so mais uma sombra perdida neste lugar.",
+    "Nao importa quantas vezes aparecam, eu vou derrubar todas."
+  ]
 }

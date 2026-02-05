@@ -30,5 +30,3 @@ class Walk():
         self.walk()
         player.position.x -= player.speed * context.delta
         player.direction = "left"
-
-walk = Walk()

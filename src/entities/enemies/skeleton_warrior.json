@@ -7,5 +7,13 @@
   "map": "cave",
   "position": [69, 77],
   "direction": "right",
-  "moves": ["shield_bash", "bone_crush", "reckless_chop", "bone_slash"]
+  "moves": ["shield_bash", "bone_crush", "reckless_chop", "bone_slash"],
+  "dialog": [
+    "~ Skeleton Warrior:",
+    "Caimos defendendo estas terras quando ainda havia esperanca.",
+    "Fomos erguidos apenas para destrui-las.",
+    "~ Heroi:",
+    "Entao sua batalha ainda nao terminou.",
+    "Deixe-me dar um fim digno a ela."
+  ]
 }

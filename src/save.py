@@ -35,6 +35,8 @@ class Save():
         cls.__selected = cls.save_list[index]
         if not cls.__selected.exist:
             cls.update_current_save()
+            return "new"
+        return "old"
 
     @classmethod
     def update_current_save(cls):

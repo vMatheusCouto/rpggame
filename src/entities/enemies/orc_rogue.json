@@ -7,5 +7,13 @@
   "map": "spawn",
   "position": [16, 232],
   "direction": "right",
-  "moves": ["quick_jab", "poison_stab", "backstab", "aimed_strike"]
+  "moves": ["quick_jab", "poison_stab", "backstab", "aimed_strike"],
+  "dialog": [
+    "~ Orc Rogue:",
+    "Voce anda pesado demais para esta floresta, cada passo seu ecoa entre as arvores.",
+    "Antes do Tita despertar, eu ja vivia e matava nas sombras.",
+    "~ Heroi:",
+    "Agora voce mata por medo do que acontece se parar.",
+    "E o medo sempre deixa rastros, mesmo nas sombras."
+  ]
 }

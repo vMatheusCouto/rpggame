@@ -1,7 +1,8 @@
 import random
 from src.entities.character import player
+from src.scenarios.dialog import DialogMixin
 
-class BattleLogic:
+class BattleLogic(DialogMixin):
     def __init__(self, player_battler, enemy_battler):
         self.player = player_battler
         self.enemy = enemy_battler
@@ -12,22 +13,6 @@ class BattleLogic:
         self.turn = "player" # player, enemy, victory, defeat, runaway
         self.message_queue = []
         self.pending_enemy_attack = False
-
-    def add_message(self, text):
-        self.message_queue.append(text)
-
-    def next_message(self):
-        if self.message_queue:
-            self.message_queue.pop(0)
-            if player.status != "death":
-                player.status = "idle"
-            # Se acabou as mensagens e tinha um ataque inimigo pendente
-            if not self.message_queue and self.pending_enemy_attack:
-                self.pending_enemy_attack = False
-                self.execute_enemy_turn()
-
-    def has_messages(self):
-        return len(self.message_queue) > 0
 
     def player_attack(self, move_index):
         move_name, damage, hit = self.player.use_move(move_index, self.enemy)
@@ -48,6 +33,14 @@ class BattleLogic:
             self.add_message("Mas errou!")
             self.pending_enemy_attack = True
             return "miss", False
+
+    def next_message_battle(self):
+        if player.status != "death":
+            player.status = "idle"
+        # Se acabou as mensagens e tinha um ataque inimigo pendente
+        if not self.message_queue and self.pending_enemy_attack:
+            self.pending_enemy_attack = False
+            self.execute_enemy_turn()
 
     def use_potion(self):
         if self.player.potions > 0:

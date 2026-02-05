@@ -11,5 +11,13 @@
     "fireball",
     "rajada_arcana",
     "aniquilacao_magica"
+  ],
+  "dialog": [
+    "~ Wizard:",
+    "Eu vi o futuro refletido nas chamas que consumiram a floresta.",
+    "Em todas as visoes, tudo termina com o Tita.",
+    "~ Heroi:",
+    "O futuro nao e fixo como voce acredita.",
+    "E eu vou provar isso."
   ]
 }

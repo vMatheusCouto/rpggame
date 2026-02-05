@@ -1,14 +1,11 @@
 import pygame
 from src.utils.paths import BATTLE_ASSETS, ASSETS_DIR
 from src.context import context
+from src.scenarios.text import TextMixin
 
-class BattleUI:
+class BattleUI(TextMixin):
     def __init__(self, logic):
         self.logic = logic
-
-        # Fontes
-        self.font = pygame.font.Font(ASSETS_DIR / "Pixeled.ttf", 5)
-        self.font_big = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
 
         # Imagens
         current_map = self.logic.player.map
@@ -86,7 +83,7 @@ class BattleUI:
         if self.logic.has_messages():
             self._draw_message_box(screen)
         elif self.logic.turn in ["victory", "defeat", "runaway"]:
-            self._draw_text(screen, "ENTER: sair", self.screen_w - 95, self.screen_h - 28)
+            self.render_text("ENTER: sair", False, (self.screen_w - 95, self.screen_h - 28))
         else:
             self._draw_menus(screen)
 
@@ -124,21 +121,21 @@ class BattleUI:
             pygame.draw.rect(screen, (0, 0, 0), (x, y, 250, 9))
             pygame.draw.rect(screen, (170, 0, 7), (x, y, int(250 * ratio), 9))
             screen.blit(self.life_hud_boss_img, pos)
-            self._draw_text(screen, f"{entity.hp}/{entity.max_hp}", x + 210, y + 14)
+            self.render_text(f"{entity.hp}/{entity.max_hp}", False, (x + 210, y + 14))
 
         else:
             pygame.draw.rect(screen, (0, 0, 0), (x, y, 132, 9))
             pygame.draw.rect(screen, (170, 0, 7), (x, y, int(132 * ratio), 9))
             screen.blit(self.life_hud_img, pos)
-            self._draw_text(screen, f"{entity.hp}/{entity.max_hp}", x + 100, y + 14)
+            self.render_text(f"{entity.hp}/{entity.max_hp}", False, (x + 100, y + 14))
 
         # Textos
-        self._draw_text(screen, entity.name, x + 2, y - 25, big=True)
+        self.render_text(entity.name, False, (x + 2, y - 25), "large")
 
         if entity == self.logic.player:
-             self._draw_text(screen, f"Lv {entity.level}", x + 45, y - 25)
+             self.render_text(f"Lv {entity.level}", False, (x + 45, y - 25))
              xp_y = 57 if entity.map == "death" else 26
-             self._draw_text(screen, f"XP: {entity.xp}/{entity.xp_to_next()}", 370 - 260, 75 + xp_y)
+             self.render_text(f"XP: {entity.xp}/{entity.xp_to_next()}", False, (370 - 260, 75 + xp_y))
 
     def _draw_menus(self, screen):
         start_x = self.screen_w - 240
@@ -159,16 +156,11 @@ class BattleUI:
         for i, item in enumerate(items):
             prefix = "> " if i == current_idx else "  "
             if details and i == current_idx:
-                self._draw_text(screen, details[i][0], start_x - 200, start_y, big=True)
-                self._draw_text(screen, details[i][1], start_x - 200, start_y + 15, big=True)
-            self._draw_text(screen, prefix + item, start_x + 50, start_y + i * 15, big=True)
-
+                self.render_text(details[i][0], False, (start_x - 200, start_y), "large")
+                self.render_text(details[i][1], False, (start_x - 200, start_y + 15), "large")
+            self.render_text(prefix + item, False, (start_x + 50, start_y + i * 15), "large")
 
     def _draw_message_box(self, screen):
         msg = self.logic.message_queue[0]
-        self._draw_text(screen, msg, 18, self.screen_h - 80, big=True)
-        self._draw_text(screen, "ENTER: continuar", self.screen_w - 110, self.screen_h - 28)
-
-    def _draw_text(self, screen, text, x, y, big=False):
-        surf = (self.font_big if big else self.font).render(str(text), True, (255, 255, 255))
-        screen.blit(surf, (x, y))
+        self.render_text(msg, False, (18, self.screen_h - 80), "large")
+        self.render_text("ENTER: continuar", False, (self.screen_w - 110, self.screen_h - 28))

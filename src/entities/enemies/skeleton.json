@@ -7,5 +7,13 @@
   "map": "null",
   "position": [0, 0],
   "direction": "left",
-  "moves": ["bone_slash", "quick_jab", "cursed_touch", "bone_crush"]
+  "moves": ["bone_slash", "quick_jab", "cursed_touch", "bone_crush"],
+  "dialog": [
+    "~ Skeleton:",
+    "A escuridao da caverna nos levanta sempre que alguem respira aqui.",
+    "Nao importa quantas vezes caiamos, sempre voltamos.",
+    "~ Heroi:",
+    "Entao esta caverna esta cheia de almas presas.",
+    "Vou libertar quantas forem necessarias."
+  ]
 }

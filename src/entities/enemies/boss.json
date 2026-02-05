@@ -11,5 +11,13 @@
     "folego_da_morte",
     "golpe_do_oblivio",
     "pisoteio_colossal"
+  ],
+  "dialog": [
+    "~ Tita Colossal:",
+    "A floresta foi apenas o primeiro sinal de um fim inevitavel.",
+    "Tudo que existe foi feito para cair.",
+    "~ Heroi:",
+    "Enquanto eu puder lutar, voce nao passara daqui.",
+    "Este mundo ainda resiste."
   ]
 }

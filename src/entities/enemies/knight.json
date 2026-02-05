@@ -6,5 +6,13 @@
   "path": "knight",
   "map": "lake",
   "position": [384, 345],
-  "moves": ["shield_bash", "investida", "golpe_pesado", "quebra_defesa"]
+  "moves": ["shield_bash", "investida", "golpe_pesado", "quebra_defesa"],
+  "dialog": [
+    "~ Knight:",
+    "A antiga ordem caiu no momento em que o Tita despertou.",
+    "Agora so resta impor uma nova, custe o que custar.",
+    "~ Heroi:",
+    "Uma ordem baseada no medo nao dura.",
+    "Voce esta defendendo apenas ruinas."
+  ]
 }

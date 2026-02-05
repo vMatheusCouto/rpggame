@@ -7,5 +7,13 @@
   "map": "village",
   "position": [468, 173],
   "direction": "left",
-  "moves": ["quick_jab", "bone_slash", "backstab", "cursed_touch"]
+  "moves": ["quick_jab", "bone_slash", "backstab", "cursed_touch"],
+  "dialog": [
+    "~ Skeleton Rogue:",
+    "Nas sombras profundas desta floresta, nem mesmo a morte consegue nos encontrar.",
+    "O silencio absoluto e nossa unica lealdade.",
+    "~ Heroi:",
+    "Nenhum silencio vai esconder o que foi feito aqui.",
+    "A floresta lembra e cobra cada crime."
+  ]
 }

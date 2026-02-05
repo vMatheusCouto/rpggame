@@ -7,5 +7,13 @@
   "map": "cave",
   "position": [84, 244],
   "direction": "right",
-  "moves": ["shield_bash", "aimed_strike", "reckless_chop", "brutal_smash"]
+  "moves": ["shield_bash", "aimed_strike", "reckless_chop", "brutal_smash"],
+  "dialog": [
+    "~ Orc Warrior:",
+    "Lutei com todas as forcas para proteger meu povo e estas terras, e falhei.",
+    "Agora luto apenas para que tudo isso termine logo.",
+    "~ Heroi:",
+    "Desistir do mundo nao vai curar a dor que voce carrega.",
+    "So vai espalhar esse sofrimento para outros."
+  ]
 }

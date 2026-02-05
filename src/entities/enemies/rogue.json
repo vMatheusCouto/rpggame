@@ -6,5 +6,13 @@
   "path": "rogue",
   "map": "lake",
   "position": [235, 41],
-  "moves": ["quick_jab", "backstab", "sombra_rapida", "execucao_silenciosa"]
+  "moves": ["quick_jab", "backstab", "sombra_rapida", "execucao_silenciosa"],
+  "dialog": [
+    "~ Rogue:",
+    "A floresta me ensinou que sobreviver significa escolher entre matar ou morrer.",
+    "Eu escolhi sobreviver, mesmo perdendo quem eu era.",
+    "~ Heroi:",
+    "Sobreviver sem humanidade nao e vitoria.",
+    "E hoje essa escolha chega ao fim."
+  ]
 }

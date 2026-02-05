@@ -120,9 +120,10 @@ class Player(Character):
 
 class Enemy(Character):
     enemy_list = {}
-    def __init__(self, name, hp, damage, drop_xp, path, map_name, position, moves=[]):
+    def __init__(self, name, hp, damage, drop_xp, path, map_name, position, moves=[], dialog=[]):
         super().__init__(name, hp, damage, path, moves, map_name, position)
         self.drop_xp = drop_xp
+        self.dialog = dialog
 
     @classmethod
     def load_enemies(cls):
@@ -142,7 +143,8 @@ class Enemy(Character):
                     path=f'enemies/{data["path"]}',
                     map_name=data["map"],
                     position=(data["position"][0], data["position"][1]),
-                    moves=current_moves
+                    moves=current_moves,
+                    dialog=data["dialog"]
                 )
                 cls.enemy_list[data["name"]] = current_enemy
 

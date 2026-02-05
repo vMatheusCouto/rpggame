@@ -7,5 +7,13 @@
   "map": "village",
   "position": [338, 189],
   "direction": "right",
-  "moves": ["dark_bolt", "cursed_touch", "shadow_blast", "aimed_strike"]
+  "moves": ["dark_bolt", "cursed_touch", "shadow_blast", "aimed_strike"],
+  "dialog": [
+    "~ Orc Shaman:",
+    "A floresta gritou de dor quando o Tita acordou de seu sono antigo.",
+    "Eu ouvi esse grito e obedeci.",
+    "~ Heroi:",
+    "Isso nao e sabedoria nem fe, e pura corrupcao.",
+    "Voce ajudou a trazer o fim para este mundo."
+  ]
 }

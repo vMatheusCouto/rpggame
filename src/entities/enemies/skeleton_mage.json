@@ -7,5 +7,13 @@
   "map": "snow",
   "position": [27, 135],
   "direction": "left",
-  "moves": ["arcane_missiles", "frost_spike", "fireball", "lightning_strike"]
+  "moves": ["arcane_missiles", "frost_spike", "fireball", "lightning_strike"],
+  "dialog": [
+    "~ Skeleton Mage:",
+    "A magia antiga foi despertada a forca, quebrando todo equilibrio.",
+    "Agora ela exige vidas para continuar existindo.",
+    "~ Heroi:",
+    "Magia sem equilibrio nao cria nada, so deixa ruinas.",
+    "E eu vou encerrar esse ciclo aqui."
+  ]
 }

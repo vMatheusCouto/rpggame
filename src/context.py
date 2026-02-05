@@ -1,4 +1,5 @@
 import pygame
+from src.utils.paths import ASSETS_DIR
 
 class Context:
     def __init__(self):
@@ -6,6 +7,11 @@ class Context:
         self.__clock = clock = pygame.time.Clock()
         self.__running = True
         self.delta = 0
+
+        pygame.font.init()
+        self.font_small = pygame.font.Font(ASSETS_DIR / "Pixeled.ttf", 5)
+        self.font_medium = pygame.font.Font(ASSETS_DIR / "dogicapixel.ttf", 8)
+        self.font_large = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
 
         self.__add_scene = None
 

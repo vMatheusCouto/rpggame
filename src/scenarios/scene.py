@@ -14,6 +14,8 @@ from src.scenarios.world.movement import Walk
 from src.entities.collision import entity_collision
 from src.scenarios.battle.battle import BattleLogic
 from src.scenarios.battle.battleui import BattleUI
+from src.scenarios.dialog import DialogMixin
+from src.scenarios.text import TextMixin
 
 from src.save import Save
 
@@ -54,7 +56,7 @@ class Scene(ABC):
     def __str__(self):
         return self.id
 
-class SceneWorld(Scene):
+class SceneWorld(Scene, DialogMixin, TextMixin):
 
     def __init__(self):
         super().__init__()
@@ -62,11 +64,13 @@ class SceneWorld(Scene):
         # Estado da cena
         self.__active = False
         self.map = Map.get_map_by_name(player.map)
+        self.enemy = None
 
         self.walk = Walk()
 
         # Elementos da tela
         self.coordinates = False
+        self.message_queue = []
 
         # Reinicializar player
         player.reset_status()
@@ -96,6 +100,13 @@ class SceneWorld(Scene):
             )
             context.screen.blit(text_surface, (10, 10))
 
+        # messagess
+        if self.has_messages():
+            context.screen.blit(pygame.image.load(ASSETS_DIR / "world/dialog_box.png"), (0, 0))
+            self.render_text(self.message_queue[0], False, (30, 330), "medium", (0,0,0))
+            self.render_text(self.message_queue[1], False, (30, 340), "medium", (0,0,0))
+            self.render_text(self.message_queue[2], False, (30, 350), "medium", (0,0,0))
+
     def switch_map(self, new_map, position):
         player.map = new_map.name
         player.position = pygame.Vector2(position[0], position[1])
@@ -118,6 +129,9 @@ class SceneWorld(Scene):
             self.walk.stopped("left")
 
     def handle_event(self):
+
+        if self.has_messages():
+            return
 
         # Iniciar batalha com inimigos pelo mapa
         for key, enemy in Enemy.enemy_list.items():
@@ -149,6 +163,16 @@ class SceneWorld(Scene):
                         self.start_battle(Enemy.enemy_list["Skeleton"])
 
     def handle_input(self, keys):
+
+        enter = self._edge("enter", keys[pygame.K_RETURN])
+        if self.has_messages():
+            if enter:
+                self.next_message()
+                self.next_message()
+                self.next_message()
+                if not self.has_messages():
+                    self.switch_scene(SceneBattle(self.enemy))
+            return
 
         if self._edge("f2", keys[pygame.K_F2]):
             self.coordinates = not self.coordinates
@@ -191,7 +215,12 @@ class SceneWorld(Scene):
             player.status = "running"
 
     def start_battle(self, enemy):
-        self.switch_scene(SceneBattle(enemy))
+        for message in enemy.dialog:
+            self.add_message(message)
+            self.enemy = enemy
+
+        if not self.has_messages():
+            self.switch_scene(SceneBattle(enemy))
 
 class SceneBattle(Scene):
     def __init__(self,enemy_battler):
@@ -221,6 +250,7 @@ class SceneBattle(Scene):
         if self.logic.has_messages():
             if enter:
                 self.logic.next_message()
+                self.logic.next_message_battle()
             return
 
         # 2. Se a batalha acabou, ENTER sai da cena
@@ -229,7 +259,10 @@ class SceneBattle(Scene):
                 if self.logic.turn == "defeat":
                     self.switch_scene(SceneGameOver())
                 else:
-                    self.switch_scene(SceneWorld())
+                    if self.logic.turn == "victory" and self.logic.enemy.name == "Titã colossal":
+                        self.switch_scene(SceneDialog())
+                    else:
+                        self.switch_scene(SceneWorld())
             return
 
         # 3. Navegação do Menu
@@ -310,40 +343,28 @@ class SceneGameOver(Scene):
         return self.id
 
 
-class SceneMainMenu(Scene):
+class SceneMainMenu(Scene, TextMixin):
 
     def __init__(self):
         super().__init__()
         self.selected = 0
         Save.load_saves()
 
-    def render_text(self, text, center, position):
-        surface = self.font.render(text, True, (255, 255, 255))
-        position_center = (0,0)
-        if center:
-            position_center = (context.screen.get_width() / 2, context.screen.get_height() / 2)
-
-            rect = surface.get_rect(
-                center=(position_center[0] + position[0], position_center[1] + position[1])
-            )
-            context.screen.blit(surface, rect)
-        else:
-            context.screen.blit(surface, position)
-
     def render(self):
 
         # Fundo preto
         context.screen.fill((0, 0, 0))
-        self.render_text("Trono de ossos", True, (0,-35))
-        self.render_text("Escolha seu save", True, (0,-25))
-        self.render_text("Aperte SPACE para começar", True, (0,45))
 
-        self.render_text("Aperte z para excluir o save", True, (0,135))
+        self.render_text("Trono de ossos", True, (0,-35), "medium")
+        self.render_text("Escolha seu save", True, (0,-25), "medium")
+        self.render_text("Aperte SPACE para começar", True, (0,45), "medium")
+
+        self.render_text("Aperte z para excluir o save", True, (0,135), "medium")
 
         # Lista de saves
         for index in range(3):
             prefix = "- " if index == self.selected else ""
-            self.render_text(f"{prefix}Save slot 0{index+1} - {Save.save_list[index]}", True, (0, -5 + 10 * (index+1)))
+            self.render_text(f"{prefix}Save slot 0{index+1} - {Save.save_list[index]}", True, (0, -5 + 10 * (index+1)), "medium")
         pygame.display.update()
 
     def handle_input(self, keys):
@@ -364,9 +385,12 @@ class SceneMainMenu(Scene):
         pass
 
     def load_save(self):
-        Save.select_save(self.selected)
+        selected_status = Save.select_save(self.selected)
         Save.load()
-        self.switch_scene(SceneWorld())
+        if selected_status == "new":
+            self.switch_scene(SceneDialog())
+        else:
+            self.switch_scene(SceneWorld())
         player._learn_moves_for_current_level()
 
     def delete_save(self):
@@ -375,3 +399,57 @@ class SceneMainMenu(Scene):
 
     def __str__(self):
         return self.id
+
+class SceneDialog(Scene, DialogMixin, TextMixin):
+    def __init__(self):
+        super().__init__()
+        if Enemy.enemy_list["Titã colossal"].dead:
+            self.message_queue = [
+                "",
+                "",
+                "",
+                "Com a queda do Tita Colossal, a terra treme e o silencio retorna.",
+                "A corrupcao que sufocava a floresta e as cavernas comeca a se dissipar.",
+                "O peso que dominava este mundo finalmente se rompe.",
+                "As criaturas restantes caem ou fogem, livres da vontade imposta.",
+                "A floresta respira novamente, mesmo marcada pelas cicatrizes.",
+                "O mundo nao esta salvo, mas ganhou mais uma chance.",
+                "",
+                "Fim de jogo. Voce venceu!",
+                "",
+            ]
+
+        else:
+            self.message_queue = [
+                "Apos o colapso dos reinos, a Floresta Sombria tornou-se o ultimo refugio.",
+                "Voce desperta entre arvores antigas, sem memorias e com uma sensacao de urgencia.",
+                "Criaturas corrompidas rondam a floresta, marcadas por uma forca desconhecida.",
+                "Antigos simbolos nas arvores indicam que algo terrivel despertou.",
+                "Sussurros falam de um Tita Colossal que avanca consumindo tudo.",
+                "A floresta nao e apenas o inicio, mas a ultima linha de defesa.",
+                "Para impedir a ruina, voce deve atravessar terras esquecidas.",
+                "Cada batalha o aproxima da verdade por tras da destruicao.",
+                "No centro do caos, o Tita Colossal guarda o destino do mundo."
+            ]
+
+    def render(self):
+        context.screen.fill((0, 0, 0))
+        if self.has_messages():
+            self.render_text(self.message_queue[0], True, (0,-10), "medium")
+            self.render_text(self.message_queue[1], True, (0,0), "medium")
+            self.render_text(self.message_queue[2], True, (0,10), "medium")
+
+    def handle_event(self):
+        pass
+
+    def handle_input(self, keys):
+        enter = self._edge("enter", keys[pygame.K_RETURN])
+
+        # Se houver mensagens na tela, ENTER avança mensagem
+        if self.has_messages():
+            if enter:
+                self.next_message()
+                self.next_message()
+                self.next_message()
+            return
+        self.switch_scene(SceneWorld())
