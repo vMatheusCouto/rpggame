@@ -14,6 +14,7 @@ from src.scenarios.world.movement import Walk
 from src.entities.collision import entity_collision
 from src.scenarios.battle.battle import BattleLogic
 from src.scenarios.battle.battleui import BattleUI
+from src.entities.inventory.inventory import Inventory
 from src.scenarios.dialog import DialogMixin
 from src.scenarios.text import TextMixin
 from src.save import Save
@@ -29,7 +30,7 @@ class Scene(ABC):
         self.font_big = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
 
         # Debounce
-        self._pressed = {"up": False, "down": False, "enter": False, "x": False, "F2": False, "space": False, "escape": False}
+        self._pressed = {"up": False, "down": False, "enter": False, "x": False, "F2": False, "space": False, "escape": False, "F3": False, "i": False}
 
     def switch_scene(self, scene):
         context.add_scene = scene
@@ -59,6 +60,7 @@ class SceneWorld(Scene, DialogMixin, TextMixin):
 
     def __init__(self):
         super().__init__()
+        self.inventory_index = 0
         context.add_music = SOUNDS_DIR / "world.mp3"
 
         # Estado da cena
@@ -176,14 +178,11 @@ class SceneWorld(Scene, DialogMixin, TextMixin):
 
         if self._edge("f2", keys[pygame.K_F2]):
             self.coordinates = not self.coordinates
-
         # Menu
         if self._edge("esc", keys[pygame.K_ESCAPE]):
             self.switch_scene(SceneMainMenu())
-
         # Redefinir velocidade
         player.speed = 35
-
         # Correr
         if keys[pygame.K_LSHIFT]:
             running = True
@@ -236,9 +235,13 @@ class SceneBattle(Scene):
         self.logic = BattleLogic(player, enemy_battler)
         self.ui = BattleUI(self.logic)
 
+        self.show_inventory = False
+        self.inventory_index = 0
     def render(self):
         # desenho feito na UI
         self.ui.draw()
+        if self.show_inventory:
+            desenhar_inventario(context.screen, player.inventory, self.font_big, self.inventory_index)
 
     def handle_input(self, keys):
         # Leitura dos Inputs básicos com debounce
@@ -295,18 +298,21 @@ class SceneBattle(Scene):
         if selection == "Lutar":
             self.ui.enter_fight_menu()
         elif selection == "Bolsa":
-            self.logic.use_potion()
+            self.ui.enter_bag_menu()
         elif selection == "Fugir":
             self.logic.run_away()
         elif selection == "Voltar":
             self.ui.enter_main_menu()
         # Seleção de Golpe (retornou um int)
         elif isinstance(selection, int):
-            hit_type, is_over = self.logic.player_attack(selection)
-            # Feedback Visual na UI baseado no resultado da Lógica
-            if hit_type == "hit":
-                context.add_sound_effect = SOUNDS_DIR / "hit.mp3"
+            if self.ui.menu_mode == "fight":
+                hit_type, is_over = self.logic.player_attack(selection)
+                # Feedback Visual na UI baseado no resultado da Lógica
+                if hit_type == "hit":
+                    context.add_sound_effect = SOUNDS_DIR / "hit.mp3"
                 self.ui.trigger_shake("enemy")
+            elif self.ui.menu_mode == "bag":
+                self.logic.player_use_item(selection)
             self.ui.enter_main_menu() # Reseta para menu principal após atacar
 
     def handle_event(self):

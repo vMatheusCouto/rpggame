@@ -8,6 +8,7 @@
   "position": [468, 173],
   "direction": "left",
   "moves": ["quick_jab", "bone_slash", "backstab", "cursed_touch"],
+  "items": [],
   "dialog": [
     "~ Skeleton Rogue:",
     "Nas sombras profundas desta floresta, nem mesmo a morte consegue nos encontrar.",

@@ -8,6 +8,7 @@
   "position": [69, 77],
   "direction": "right",
   "moves": ["shield_bash", "bone_crush", "reckless_chop", "bone_slash"],
+  "items": [],
   "dialog": [
     "~ Skeleton Warrior:",
     "Caimos defendendo estas terras quando ainda havia esperanca.",

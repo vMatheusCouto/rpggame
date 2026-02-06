@@ -22,6 +22,7 @@ class BattleUI(TextMixin):
         self.menu_mode = "main" # main, fight
         self.menu_index = 0
         self.fight_index = 0
+        self.bag_index = 0
         self.menu_items = ["Lutar", "Bolsa", "Fugir"]
 
         # Layout positions
@@ -46,6 +47,10 @@ class BattleUI(TextMixin):
         elif self.menu_mode == "fight":
             moves_count = len(self.logic.player.moves) + 1 # +1 para "Voltar"
             self.fight_index = (self.fight_index + direction) % moves_count
+        elif self.menu_mode == "bag":
+            items_count = len(self.logic.player.inventory.list_items()) + 1 # +1 para "Voltar"
+            self.bag_index = (self.bag_index + direction) % items_count
+
 
     def get_selection(self):
         # Retorna o que foi selecionado
@@ -58,12 +63,23 @@ class BattleUI(TextMixin):
                 return self.fight_index
             return "Voltar"
 
+        elif self.menu_mode == "bag":
+            # Retorna indice do item ou "Voltar"
+            items = self.logic.player.inventory.list_items()
+            if self.bag_index < len(items):
+                return self.bag_index
+            return "Voltar"
+
     def enter_fight_menu(self):
         self.menu_mode = "fight"
         self.fight_index = 0
 
     def enter_main_menu(self):
         self.menu_mode = "main"
+
+    def enter_bag_menu(self):
+        self.menu_mode = "bag"
+        self.bag_index = 0
 
     def draw(self):
         screen = context.screen
@@ -149,10 +165,14 @@ class BattleUI(TextMixin):
             items = self.menu_items
             current_idx = self.menu_index
         else:
-            items = [m.name for m in self.logic.player.moves] + ["Voltar"]
-            details = [[f"Acerto {m.accuracy * 100}%", f"Dano base {m.bonus}"] for m in self.logic.player.moves]
+            if self.menu_mode == "fight":
+                items = [m.name for m in self.logic.player.moves] + ["Voltar"]
+                details = [[f"Acerto {m.accuracy * 100}%", f"Dano base {m.bonus}"] for m in self.logic.player.moves]
             details.append(["", ""])
             current_idx = self.fight_index
+            elif self.menu_mode == "bag":
+                items = [f"{m[1]}x {m[0]}" for m in self.logic.player.inventory.list_items()] + ["Voltar"]
+                current_idx = self.bag_index
         for i, item in enumerate(items):
             prefix = "> " if i == current_idx else "  "
             if details and i == current_idx:

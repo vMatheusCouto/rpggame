@@ -7,6 +7,7 @@
   "map": "lake",
   "position": [235, 41],
   "moves": ["quick_jab", "backstab", "sombra_rapida", "execucao_silenciosa"],
+  "items": [],
   "dialog": [
     "~ Rogue:",
     "A floresta me ensinou que sobreviver significa escolher entre matar ou morrer.",

@@ -1,0 +1,23 @@
+{
+  "small_potion": {
+    "type": "cura",
+    "name": "Small Potion",
+    "display_name": "Poção Pequena",
+    "description": "Recupera 60 HP",
+    "heal_value": 60
+  },
+  "medium_potion": {
+    "type": "cura",
+    "name": "Medium Potion",
+    "display_name": "Poção Média",
+    "description": "Recupera 150 HP",
+    "heal_value": 150
+  },
+  "big_potion": {
+    "type": "cura",
+    "name": "Big Potion",
+    "display_name": "Poção Grande",
+    "description": "Recupera 350 HP",
+    "heal_value": 350
+  }
+}

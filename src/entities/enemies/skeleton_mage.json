@@ -8,6 +8,7 @@
   "position": [27, 135],
   "direction": "left",
   "moves": ["arcane_missiles", "frost_spike", "fireball", "lightning_strike"],
+  "items": [],
   "dialog": [
     "~ Skeleton Mage:",
     "A magia antiga foi despertada a forca, quebrando todo equilibrio.",

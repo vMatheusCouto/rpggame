@@ -8,6 +8,7 @@
   "position": [16, 232],
   "direction": "right",
   "moves": ["quick_jab", "poison_stab", "backstab", "aimed_strike"],
+  "items": [],
   "dialog": [
     "~ Orc Rogue:",
     "Voce anda pesado demais para esta floresta, cada passo seu ecoa entre as arvores.",

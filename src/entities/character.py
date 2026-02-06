@@ -7,6 +7,7 @@ from src.context import context
 from src.entities.sprites import entity_sprites
 from src.entities.moves.moves import Move
 from src.utils.paths import SRC_DIR
+from src.entities.inventory.inventory import Inventory
 
 class Character():
     def __init__(self, name, hp, damage, path, moves, map="null", position=(0,0)):
@@ -16,6 +17,8 @@ class Character():
         self.__hp = hp
         self.max_hp = hp
         self.damage = damage
+
+        self.inventory = Inventory()
 
         self.moves = moves
         self.dead = False
@@ -67,8 +70,7 @@ class Player(Character):
         # Progresso
         self.level = 1
         self.xp = 0
-        # Poções (temporário)
-        self.potions = 1
+
         self.moves: list[Move] = []
         self.learnset = [
             (1,  Move.moves_list["investida"]),
@@ -117,6 +119,7 @@ class Player(Character):
 
     def reset(self):
         self.__init__("Heroi", 100, 15)
+        self.inventory.add_item(Inventory.items["small_potion"])
 
 class Enemy(Character):
     enemy_list = {}
@@ -146,6 +149,8 @@ class Enemy(Character):
                     moves=current_moves,
                     dialog=data["dialog"]
                 )
+                for item in data["items"]:
+                    current_enemy.inventory.add_item(Inventory.items[item])
                 cls.enemy_list[data["name"]] = current_enemy
 
     def use_random_move(self, target):
@@ -156,4 +161,12 @@ class Enemy(Character):
         target.hp -= dano_total
         return move.name, dano_total, True
 
+    def drop_random_item(self, target):
+        if random.randint(1,4) == 3:
+            item = random.choice(self.inventory.list_items())[0]
+            target.inventory.add_item(item)
+            return f"{target.name} derrubou {item}. Você coloca em sua mochila."
+        return False
+
 player = Player("Heroi", 100, 15)
+player.inventory.add_item(Inventory.items["small_potion"])

@@ -8,6 +8,7 @@
   "position": [84, 244],
   "direction": "right",
   "moves": ["shield_bash", "aimed_strike", "reckless_chop", "brutal_smash"],
+  "items": [],
   "dialog": [
     "~ Orc Warrior:",
     "Lutei com todas as forcas para proteger meu povo e estas terras, e falhei.",

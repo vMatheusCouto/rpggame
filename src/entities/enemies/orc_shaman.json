@@ -8,6 +8,7 @@
   "position": [338, 189],
   "direction": "right",
   "moves": ["dark_bolt", "cursed_touch", "shadow_blast", "aimed_strike"],
+  "items": [],
   "dialog": [
     "~ Orc Shaman:",
     "A floresta gritou de dor quando o Tita acordou de seu sono antigo.",

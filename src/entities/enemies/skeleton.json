@@ -15,5 +15,14 @@
     "~ Heroi:",
     "Entao esta caverna esta cheia de almas presas.",
     "Vou libertar quantas forem necessarias."
+  ],
+  "items": [
+    "small_potion",
+    "small_potion",
+    "small_potion",
+    "small_potion",
+    "small_potion",
+    "small_potion",
+    "medium_potion"
   ]
 }

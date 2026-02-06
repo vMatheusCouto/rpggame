@@ -42,14 +42,14 @@ class BattleLogic(DialogMixin):
             self.pending_enemy_attack = False
             self.execute_enemy_turn()
 
-    def use_potion(self):
-        if self.player.potions > 0:
-            self.player.potions -= 1
-            self.player.hp += 30
-            self.add_message("Voce usou uma pocao! +30 HP")
-            self.pending_enemy_attack = True
-        else:
-            self.add_message("Sem pocoes!")
+    def player_use_item(self, bag_index):
+        item = self.player.inventory.list_items()[bag_index][0]
+        self.player.inventory.use_item(item, self.player)
+
+        if item.type == "cura":
+            self.add_message(f"Usou {item.display_name}! Recuperou {item.heal_value} HP.")
+        self.turn = "enemy"
+        self.pending_enemy_attack= True
 
     def run_away(self):
         self.add_message("Voce fugiu da batalha!")
@@ -76,6 +76,9 @@ class BattleLogic(DialogMixin):
         lvl_before = self.player.level
         self.player.take_xp(xp)
         self.add_message(f"Voce ganhou {xp} XP!")
+        drop_message = self.enemy.drop_random_item(self.player)
+        if drop_message:
+            self.add_message(drop_message)
 
         if self.player.level > lvl_before:
             self.add_message(f"SUBIU PARA O NIVEL {self.player.level}!")
