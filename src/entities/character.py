@@ -163,9 +163,10 @@ class Enemy(Character):
 
     def drop_random_item(self, target):
         if random.randint(1,4) == 3:
-            item = random.choice(self.inventory.list_items())[0]
-            target.inventory.add_item(item)
-            return f"{target.name} derrubou {item}. Você coloca em sua mochila."
+            if len(self.inventory.list_items()) > 0:
+                item = random.choice(self.inventory.list_items())[0]
+                target.inventory.add_item(item)
+                return f"{target.name} derrubou {item}. Você coloca em sua mochila."
         return False
 
 player = Player("Heroi", 100, 15)

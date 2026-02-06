@@ -168,8 +168,8 @@ class BattleUI(TextMixin):
             if self.menu_mode == "fight":
                 items = [m.name for m in self.logic.player.moves] + ["Voltar"]
                 details = [[f"Acerto {m.accuracy * 100}%", f"Dano base {m.bonus}"] for m in self.logic.player.moves]
-            details.append(["", ""])
-            current_idx = self.fight_index
+                details.append(["", ""])
+                current_idx = self.fight_index
             elif self.menu_mode == "bag":
                 items = [f"{m[1]}x {m[0]}" for m in self.logic.player.inventory.list_items()] + ["Voltar"]
                 current_idx = self.bag_index
