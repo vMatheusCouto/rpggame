@@ -18,6 +18,8 @@ class Character():
         self.max_hp = hp
         self.damage = damage
 
+        self.inventory = Inventory()
+
         self.moves = moves
         self.dead = False
 
@@ -68,12 +70,6 @@ class Player(Character):
         # Progresso
         self.level = 1
         self.xp = 0
-        #instanciando o inventario assim que o player e criado
-        self.inventory = Inventory()
-        print(Inventory.items)
-        self.inventory.add_item(Inventory.items["medium_potion"])
-        self.inventory.add_item(Inventory.items["medium_potion"])
-        self.inventory.add_item(Inventory.items["big_potion"])
 
         self.moves: list[Move] = []
         self.learnset = [
@@ -123,6 +119,7 @@ class Player(Character):
 
     def reset(self):
         self.__init__("Heroi", 100, 15)
+        self.inventory.add_item(Inventory.items["small_potion"])
 
 class Enemy(Character):
     enemy_list = {}
@@ -150,6 +147,8 @@ class Enemy(Character):
                     position=(data["position"][0], data["position"][1]),
                     moves=current_moves
                 )
+                for item in data["items"]:
+                    current_enemy.inventory.add_item(Inventory.items[item])
                 cls.enemy_list[data["name"]] = current_enemy
 
     def use_random_move(self, target):
@@ -160,4 +159,12 @@ class Enemy(Character):
         target.hp -= dano_total
         return move.name, dano_total, True
 
+    def drop_random_item(self, target):
+        if random.randint(1,4) == 3:
+            item = random.choice(self.inventory.list_items())[0]
+            target.inventory.add_item(item)
+            return f"{target.name} derrubou {item}. Você coloca em sua mochila."
+        return False
+
 player = Player("Heroi", 100, 15)
+player.inventory.add_item(Inventory.items["small_potion"])

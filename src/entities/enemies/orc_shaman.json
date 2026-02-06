@@ -7,5 +7,6 @@
   "map": "village",
   "position": [338, 189],
   "direction": "right",
-  "moves": ["dark_bolt", "cursed_touch", "shadow_blast", "aimed_strike"]
+  "moves": ["dark_bolt", "cursed_touch", "shadow_blast", "aimed_strike"],
+  "items": []
 }

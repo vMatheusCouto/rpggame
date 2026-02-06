@@ -7,5 +7,14 @@
   "map": "null",
   "position": [0, 0],
   "direction": "left",
-  "moves": ["bone_slash", "quick_jab", "cursed_touch", "bone_crush"]
+  "moves": ["bone_slash", "quick_jab", "cursed_touch", "bone_crush"],
+  "items": [
+    "small_potion",
+    "small_potion",
+    "small_potion",
+    "small_potion",
+    "small_potion",
+    "small_potion",
+    "medium_potion"
+  ]
 }

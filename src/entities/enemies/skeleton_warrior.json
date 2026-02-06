@@ -7,5 +7,6 @@
   "map": "cave",
   "position": [69, 77],
   "direction": "right",
-  "moves": ["shield_bash", "bone_crush", "reckless_chop", "bone_slash"]
+  "moves": ["shield_bash", "bone_crush", "reckless_chop", "bone_slash"],
+  "items": []
 }

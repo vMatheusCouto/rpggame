@@ -84,6 +84,9 @@ class BattleLogic:
         lvl_before = self.player.level
         self.player.take_xp(xp)
         self.add_message(f"Voce ganhou {xp} XP!")
+        drop_message = self.enemy.drop_random_item(self.player)
+        if drop_message:
+            self.add_message(drop_message)
 
         if self.player.level > lvl_before:
             self.add_message(f"SUBIU PARA O NIVEL {self.player.level}!")

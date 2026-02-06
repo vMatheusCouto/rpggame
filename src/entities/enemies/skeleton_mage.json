@@ -7,5 +7,6 @@
   "map": "snow",
   "position": [27, 135],
   "direction": "left",
-  "moves": ["arcane_missiles", "frost_spike", "fireball", "lightning_strike"]
+  "moves": ["arcane_missiles", "frost_spike", "fireball", "lightning_strike"],
+  "items": []
 }

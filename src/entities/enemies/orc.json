@@ -7,5 +7,6 @@
   "map": "null",
   "position": [0, 0],
   "direction": "left",
-  "moves": ["club_swing", "quick_jab", "aimed_strike", "brutal_smash"]
+  "moves": ["club_swing", "quick_jab", "aimed_strike", "brutal_smash"],
+  "items": ["small_potion"]
 }

@@ -6,5 +6,6 @@
   "path": "knight",
   "map": "lake",
   "position": [384, 345],
-  "moves": ["shield_bash", "investida", "golpe_pesado", "quebra_defesa"]
+  "moves": ["shield_bash", "investida", "golpe_pesado", "quebra_defesa"],
+  "items": []
 }
