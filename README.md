@@ -15,6 +15,10 @@ Assets desenvolvidos a partir de tiles, sprites e previews do pack **Pixel Crawl
 - Subir de nível
 - Usar diferentes ataques com animações próprias
 
+# Gerenciamento de tiles / criação de mapas
+Ferramenta própria criada através do V0 para seleção de tiles e eventos (retorna um json com cada tile e o "type" dele)
+> https://v0-grid-map-tool.vercel.app/
+
 # Steps
 
 Funcionamento garantido para o Python 3.13.11. 3.14.\* pode ocasionar problemas e impedir que o app inicie.
@@ -49,3 +53,4 @@ rpggame/
 ├── README.md
 └── package.json
 ```
+
