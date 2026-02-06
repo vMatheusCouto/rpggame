@@ -14,7 +14,6 @@ from src.scenarios.world.movement import Walk
 from src.entities.collision import entity_collision
 from src.scenarios.battle.battle import BattleLogic
 from src.scenarios.battle.battleui import BattleUI
-from src.entities.inventory.itens import Item
 from src.entities.inventory.inventory import Inventory
 
 from src.save import Save
@@ -215,21 +214,6 @@ class SceneBattle(Scene):
         enter = self._edge("enter", keys[pygame.K_RETURN])
         x_key = self._edge("x", keys[pygame.K_x])
         f2 = self._edge("f2", keys[pygame.K_F2])
-        f3 = self._edge("f3", keys[pygame.K_F3])
-        if self.show_inventory:
-            if x_key:
-                self.show_inventory = False # Fecha o inventário
-                return
-            if up:
-                self.inventory_index = max(0, self.inventory_index - 1)
-            if down:
-                self.inventory_index = min(len(player.inventory.itens) - 1, self.inventory_index + 1)
-
-            if enter and player.inventory.itens:
-                # Seleciona o item atual
-                item_selecionado = player.inventory.itens[self.inventory_index]
-                self.use_item_in_battle(item_selecionado)
-            return
 
         # 1. Se houver mensagens na tela, ENTER avança mensagem
         if self.logic.has_messages():
@@ -262,36 +246,6 @@ class SceneBattle(Scene):
             self._process_selection(selection)
         if f2:
             player.take_xp(2000)
-        if f3:
-            for item_id in Catalogue_itens.keys():
-                novo_item = criar_item_por_id(item_id, quantidade=2)
-                player.inventory.adicionar(novo_item)
-    def use_item_in_battle(self,item):
-        if item.quantidade > 0:
-            used = False
-            if item.tipo == "cura":
-                heal_amount = 0
-                if "Pequena" in item.nome:
-                    heal_amount = 60
-                elif "Media" in item.nome:
-                    heal_amount = 150
-                elif "Grande" in item.nome:
-                    heal_amount = 350
-
-                player.hp += heal_amount
-                self.logic.add_message(f"Usou {item.nome} e Recuperou {heal_amount} HP.")
-                used = True
-            if used:
-                item.usar()
-                if item.quantidade == 0:
-                    player.inventory.itens.remove(item)
-                    self.inventory_index = max(0, self.inventory_index - 1)
-                self.show_inventory = False
-
-                self.logic.turn = "enemy"
-                self.logic.pending_enemy_attack = True
-        else:
-            self.logic.add_message("Vazio!")
 
     def _process_selection(self, selection):
         # Processa o que foi escolhido no menu

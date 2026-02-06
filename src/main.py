@@ -5,6 +5,9 @@ import pygame
 from src.entities.moves.moves import Move
 Move.load_attacks()
 
+from src.entities.inventory.inventory import Inventory
+Inventory.load_items()
+
 from src.scenarios.world.map import Map
 from src.entities.character import Enemy
 Map.load_maps()

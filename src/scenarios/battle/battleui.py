@@ -50,7 +50,7 @@ class BattleUI:
             moves_count = len(self.logic.player.moves) + 1 # +1 para "Voltar"
             self.fight_index = (self.fight_index + direction) % moves_count
         elif self.menu_mode == "bag":
-            items_count = len(self.logic.player.inventory.listar()) + 1 # +1 para "Voltar"
+            items_count = len(self.logic.player.inventory.list_items()) + 1 # +1 para "Voltar"
             self.bag_index = (self.bag_index + direction) % items_count
 
 
@@ -67,7 +67,7 @@ class BattleUI:
 
         elif self.menu_mode == "bag":
             # Retorna indice do item ou "Voltar"
-            items = self.logic.player.inventory.listar()
+            items = self.logic.player.inventory.list_items()
             if self.bag_index < len(items):
                 return self.bag_index
             return "Voltar"
@@ -163,7 +163,7 @@ class BattleUI:
                 items = [m.name for m in self.logic.player.moves] + ["Voltar"]
                 current_idx = self.fight_index
             elif self.menu_mode == "bag":
-                items = [f"{m.quantidade}x {m.nome}" for m in self.logic.player.inventory.listar()] + ["Voltar"]
+                items = [f"{m[1]}x {m[0]}" for m in self.logic.player.inventory.list_items()] + ["Voltar"]
                 current_idx = self.bag_index
 
         for i, item in enumerate(items):

@@ -7,8 +7,8 @@ from src.context import context
 from src.entities.sprites import entity_sprites
 from src.entities.moves.moves import Move
 from src.utils.paths import SRC_DIR
-from src.entities.inventory.itens import Item
 from src.entities.inventory.inventory import Inventory
+
 class Character():
     def __init__(self, name, hp, damage, path, moves, map="null", position=(0,0)):
 
@@ -69,10 +69,12 @@ class Player(Character):
         self.level = 1
         self.xp = 0
         #instanciando o inventario assim que o player e criado
-        self.inventory = Inventory(auto_loand=False)
-        pocao_inicial = Item.Create("small_Potion")
-        if pocao_inicial:
-            Inventory.add(pocao_inicial)
+        self.inventory = Inventory()
+        print(Inventory.items)
+        self.inventory.add_item(Inventory.items["medium_potion"])
+        self.inventory.add_item(Inventory.items["medium_potion"])
+        self.inventory.add_item(Inventory.items["big_potion"])
+
         self.moves: list[Move] = []
         self.learnset = [
             (1,  Move.moves_list["investida"]),

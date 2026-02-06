@@ -1,6 +1,5 @@
 import random
 from src.entities.character import player
-from src.entities.inventory.itens import Item
 
 class BattleLogic:
     def __init__(self, player_battler, enemy_battler):
@@ -51,32 +50,14 @@ class BattleLogic:
             return "miss", False
 
     def player_use_item(self, bag_index):
-        item = self.player.inventory.itens[bag_index]
-        if item.quantidade > 0:
-            used = False
-            if item.tipo == "cura":
-                heal_amount = 0
-                if "Pequena" in item.nome:
-                    heal_amount = 50
-                elif "Media" in item.nome:
-                    heal_amount = 150
-                elif "Grande" in item.nome:
-                    heal_amount = 350
+        item = self.player.inventory.list_items()[bag_index][0]
+        self.player.inventory.use_item(item, self.player)
 
-                player.hp += heal_amount
-                self.add_message(f"Usou {item.nome}! Recuperou {heal_amount} HP.")
-                used = True
-            if used:
-                item.usar()
-                if item.quantidade == 0:
-                    player.inventory.itens.remove(item)
-                    self.inventory_index = max(0, self.inventory_index - 1)
-
-                self.show_inventory = False
-                self.turn = "enemy"
-                self.pending_enemy_attack= True
-        else:
-            self.add_message("Vazio!")
+        if item.type == "cura":
+            self.add_message(f"Usou {item.display_name}! Recuperou {item.heal_value} HP.")
+        self.show_inventory = False
+        self.turn = "enemy"
+        self.pending_enemy_attack= True
 
     def run_away(self):
         self.add_message("Voce fugiu da batalha!")
