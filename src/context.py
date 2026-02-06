@@ -1,5 +1,5 @@
 import pygame
-from src.utils.paths import ASSETS_DIR
+from src.utils.paths import ASSETS_DIR, SOUNDS_DIR
 
 class Context:
     def __init__(self):
@@ -13,6 +13,8 @@ class Context:
         self.font_medium = pygame.font.Font(ASSETS_DIR / "dogicapixel.ttf", 8)
         self.font_large = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
 
+        self.add_music = SOUNDS_DIR / "start.wav"
+        self.add_sound_effect = None
         self.__add_scene = None
 
         GAME_RESOLUTION = (640, 384)

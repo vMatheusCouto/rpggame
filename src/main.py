@@ -21,6 +21,7 @@ pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 0)
 
 clock = pygame.time.Clock()
 pygame.font.init()
+pygame.mixer.init()
 
 frames = Frames()
 
@@ -44,4 +45,5 @@ while context.running:
     dt = clock.tick(12) / 1000
     context.delta = dt
 
+pygame.mixer.music.stop()
 pygame.quit()

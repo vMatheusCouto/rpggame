@@ -6,12 +6,15 @@ from src.scenarios.world.map import Map
 from src.scenarios.scene import SceneWorld, SceneBattle, SceneMainMenu
 from src.scenarios.world.movement import *
 from src.context import context
+from src.sound import sound
 
 class Frames:
     def __init__(self):
         self.__current_scene = SceneMainMenu()
 
     def current_frame(self, keys):
+        sound.load_music()
+        sound.load_effect()
 
         # Gerencia ações da cena e a renderiza em seguida
         self.__current_scene.handle_input(keys)

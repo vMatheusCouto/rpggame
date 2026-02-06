@@ -6,7 +6,7 @@ import os
 from abc import ABC, abstractmethod
 from src.scenarios.world.movement import *
 from src.entities.character import player, Enemy
-from src.utils.paths import BATTLE_ASSETS, CHARACTER_ASSETS, ASSETS_DIR
+from src.utils.paths import BATTLE_ASSETS, CHARACTER_ASSETS, ASSETS_DIR, SOUNDS_DIR
 from src.context import context
 from src.entities.sprites import entity_sprites
 from src.scenarios.world.map import Map
@@ -16,7 +16,6 @@ from src.scenarios.battle.battle import BattleLogic
 from src.scenarios.battle.battleui import BattleUI
 from src.scenarios.dialog import DialogMixin
 from src.scenarios.text import TextMixin
-
 from src.save import Save
 
 class Scene(ABC):
@@ -60,6 +59,7 @@ class SceneWorld(Scene, DialogMixin, TextMixin):
 
     def __init__(self):
         super().__init__()
+        context.add_music = SOUNDS_DIR / "world.mp3"
 
         # Estado da cena
         self.__active = False
@@ -225,6 +225,8 @@ class SceneWorld(Scene, DialogMixin, TextMixin):
 class SceneBattle(Scene):
     def __init__(self,enemy_battler):
         super().__init__()
+        context.add_music = SOUNDS_DIR / "battle.wav"
+
         player.direction = "right"
         player.status = "idle" # Reseta animação para evitar bugs visuais
         # Define que o Inimigo olha para a Esquerda
@@ -258,7 +260,12 @@ class SceneBattle(Scene):
             if enter:
                 if self.logic.turn == "defeat":
                     self.switch_scene(SceneGameOver())
+
+                    context.add_music = "stop"
+                    context.add_sound_effect = SOUNDS_DIR / "over.mp3"
                 else:
+                    context.add_sound_effect = SOUNDS_DIR / "battle_end.wav"
+                    context.add_music = SOUNDS_DIR / "world.mp3"
                     if self.logic.turn == "victory" and self.logic.enemy.name == "Titã colossal":
                         self.switch_scene(SceneDialog())
                     else:
@@ -298,6 +305,7 @@ class SceneBattle(Scene):
             hit_type, is_over = self.logic.player_attack(selection)
             # Feedback Visual na UI baseado no resultado da Lógica
             if hit_type == "hit":
+                context.add_sound_effect = SOUNDS_DIR / "hit.mp3"
                 self.ui.trigger_shake("enemy")
             self.ui.enter_main_menu() # Reseta para menu principal após atacar
 
@@ -330,7 +338,7 @@ class SceneGameOver(Scene):
         player.position = pygame.Vector2(140,260)
         player.dead = False
 
-        pygame.time.wait(3000)
+        pygame.time.wait(5000)
         self.switch_scene(SceneWorld())
 
     def handle_input(self, keys):
@@ -391,6 +399,7 @@ class SceneMainMenu(Scene, TextMixin):
             self.switch_scene(SceneDialog())
         else:
             self.switch_scene(SceneWorld())
+            context.add_sound_effect = SOUNDS_DIR / "start_end.wav"
         player._learn_moves_for_current_level()
 
     def delete_save(self):
@@ -453,3 +462,4 @@ class SceneDialog(Scene, DialogMixin, TextMixin):
                 self.next_message()
             return
         self.switch_scene(SceneWorld())
+        context.add_sound_effect = SOUNDS_DIR / "start_end.wav"
