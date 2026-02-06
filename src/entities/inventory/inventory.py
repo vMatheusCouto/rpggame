@@ -1,4 +1,6 @@
-from src.entities.inventory.catalogue import CATALOGUE_ITEM
+import json
+import os
+from src.utils.paths import SRC_DIR
 from src.entities.inventory.item import Item, Potion
 
 class Inventory:
@@ -9,14 +11,19 @@ class Inventory:
 
     @classmethod
     def load_items(cls):
-        for key, data in CATALOGUE_ITEM.items():
-            if data["type"] == "cura":
+        path = SRC_DIR / "entities/inventory/items.json"
+
+        with open(path, "r") as file:
+            data = json.load(file)
+
+        for key, value in data.items():
+            if value["type"] == "cura":
                 cls.items[key] = Potion(
-                    type=data["type"],
-                    name=data["name"],
-                    display_name=data["display_name"],
-                    description=data["description"],
-                    heal_value=data["heal_value"]
+                    type=value["type"],
+                    name=value["name"],
+                    display_name=value["display_name"],
+                    description=value["description"],
+                    heal_value=value["heal_value"]
                 )
 
     def add_item(self, item):
