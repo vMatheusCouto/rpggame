@@ -20,6 +20,8 @@ class Save():
 
         # Carrega todos os saves e identifica se existem ou não
         for index in range(3):
+            if not os.path.exists(SAVES_DIR):
+                os.mkdir(SAVES_DIR)
             try:
                 with open(SAVES_DIR / f"save_{index+1}.json", 'r') as file:
                     current_save = Save(True, SAVES_DIR / f"save_{index+1}.json")
