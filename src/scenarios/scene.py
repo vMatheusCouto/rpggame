@@ -314,7 +314,7 @@ class SceneGameOver(Scene):
         context.screen.fill((0, 0, 0))
 
         # Game over na tela
-        game_over = self.font.render("GAME OVER", True, (255, 255, 255))
+        game_over = context.font_small.render("GAME OVER", True, (255, 255, 255))
         rect = game_over.get_rect(
             center=(context.screen.get_width() / 2, context.screen.get_height() / 2)
         )
