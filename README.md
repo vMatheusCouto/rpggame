@@ -1,5 +1,7 @@
 # RPG Game
 
+⚠️ Suporte PARCIAL ao Windows, pode ocorrer erro no carregamento de fontes, saves e ocasionar crash.
+
 Um rpg de **top down** em pixel art (16x + 32x) construído através da biblioteca **pygame** e com base em conceitos de POO.
 
 Assets desenvolvidos a partir de tiles, sprites e previews do pack **Pixel Crawler**, de _Anokolisa_.
@@ -53,4 +55,5 @@ rpggame/
 ├── README.md
 └── package.json
 ```
+
 
