@@ -18,7 +18,7 @@ class Sound:
         if context.add_sound_effect:
             self.__current_sound_effect = context.add_sound_effect
             sound_effect = pygame.mixer.Sound(self.__current_sound_effect)
-            sound_effect.set_volume(1)
+            sound_effect.set_volume(0.6)
             sound_effect.play()
             context.add_sound_effect = None
 

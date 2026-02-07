@@ -24,11 +24,6 @@ class Scene(ABC):
     def __init__(self):
         self.id = random.randint(100000, 999999)
 
-        # Gerenciamento de fontes
-        pygame.font.init()
-        self.font = pygame.font.Font(ASSETS_DIR / "Pixeled.ttf", 5)
-        self.font_big = pygame.font.Font(ASSETS_DIR / "Pixellari.ttf", 16)
-
         # Debounce
         self._pressed = {"up": False, "down": False, "enter": False, "x": False, "F2": False, "space": False, "escape": False, "F3": False, "i": False}
 
@@ -96,7 +91,7 @@ class SceneWorld(Scene, DialogMixin, TextMixin):
         # Renderiza as coordenadas
         if self.coordinates:
             (tileX, tileY) = player.get_tile_pos()
-            text_surface = self.font.render(
+            text_surface = context.font_small.render(
                 f"x = {int(player.position.x)} ({int(tileX)}) z = {int(player.position.y)} ({int(tileY)})",
                 True, (255, 255, 255)
             )
@@ -240,15 +235,12 @@ class SceneBattle(Scene):
     def render(self):
         # desenho feito na UI
         self.ui.draw()
-        if self.show_inventory:
-            desenhar_inventario(context.screen, player.inventory, self.font_big, self.inventory_index)
 
     def handle_input(self, keys):
         # Leitura dos Inputs básicos com debounce
         up = self._edge("up", keys[pygame.K_w])
         down = self._edge("down", keys[pygame.K_s])
         enter = self._edge("enter", keys[pygame.K_RETURN])
-        x_key = self._edge("x", keys[pygame.K_x])
         f2 = self._edge("f2", keys[pygame.K_F2])
 
         # 1. Se houver mensagens na tela, ENTER avança mensagem
@@ -281,14 +273,10 @@ class SceneBattle(Scene):
         if down:
             self.ui.navigate(1)
 
-        # 4. Seleção e Voltar
-        if x_key and self.ui.menu_mode == "fight":
-            self.ui.enter_main_menu()
-            return
-
         if enter:
             selection = self.ui.get_selection()
             self._process_selection(selection)
+
         if f2:
             player.take_xp(2000)
 
